@@ -266,7 +266,7 @@
   <div class="card__media">
     ${p.badge ? `<span class="card__badge">${esc(p.badge)}</span>` : ''}
     <span class="card__cat">${esc(catLabel(p.cat))}</span>
-    ${artFor(p)}
+    ${p.img ? `<img class="card__img" src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" decoding="async">` : artFor(p)}
   </div>
   <div class="card__body">
     <h3 class="card__name">${esc(p.name)}</h3>
