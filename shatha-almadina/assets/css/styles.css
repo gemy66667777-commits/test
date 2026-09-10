@@ -150,7 +150,8 @@ p{margin:0 0 1rem}
 }
 
 /* ------------------------- المنتجات ------------------------- */
-.shop{display:grid; grid-template-columns:216px 1fr; gap:46px; align-items:start}
+.shop{display:grid; grid-template-columns:216px minmax(0,1fr); gap:46px; align-items:start}
+.shop > *{min-width:0}
 .depts{position:sticky; top:96px}
 .depts h3{font-size:.76rem; font-family:var(--body); font-weight:700; letter-spacing:.2em; color:var(--muted); margin-bottom:14px}
 .depts button{
@@ -163,7 +164,7 @@ p{margin:0 0 1rem}
 .depts .count{float:inline-end; font-size:.78rem; color:var(--muted); font-weight:400}
 
 @media (max-width:880px){
-  .shop{grid-template-columns:1fr; gap:22px}
+  .shop{grid-template-columns:minmax(0,1fr); gap:22px}
   .depts{position:static}
   .depts h3{display:none}
   .depts .depts__list{display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; scrollbar-width:thin}
