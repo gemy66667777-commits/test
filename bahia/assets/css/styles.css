@@ -319,3 +319,12 @@ html[dir="rtl"] .cart{--slide:100%}
   .rev,.rev.is-wait{opacity:1;transform:none}
   .card__add{opacity:1;transform:none}
 }
+
+/* ---------------------------- مفتاح اللغة والوضع الإنجليزي ---------------------------- */
+.lang-btn{width:auto;padding:0 15px;font-size:.82rem;font-weight:700;letter-spacing:.08em}
+html[lang="en"]{--disp:'Playfair Display',Georgia,serif}
+html[lang="en"] .card__sub,
+html[lang="en"] .hero__lead,
+html[lang="en"] .p-sec{letter-spacing:0}
+html[lang="en"] .card__sub{font-family:var(--body);text-transform:none;letter-spacing:.06em}
+html[lang="en"] body{font-weight:400}

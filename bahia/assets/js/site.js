@@ -12,6 +12,14 @@
 
   const wa = msg => 'https://wa.me/' + BRAND.whatsapp + '?text=' + encodeURIComponent(msg);
 
+  /* ------------------------------ اللغة ------------------------------ */
+  const LKEY = 'bahia_lang';
+  let lang = 'ar';
+  try { const v = localStorage.getItem(LKEY); if (v === 'ar' || v === 'en') lang = v; } catch (e) {}
+  const t  = k => T[lang][k];                    // نص واجهة
+  const tx = v => (v && typeof v === 'object') ? (v[lang] || v.ar) : v;   // حقل ثنائي اللغة
+  const cur = () => tx(BRAND.currency);
+
   /* ------------------------------ الشعار ------------------------------ */
   const LOGO = `
 <svg viewBox="0 0 252 58" style="direction:ltr" role="img" aria-label="باهية BAHIA">
@@ -48,8 +56,10 @@
   /* ------------------------------ المنتجات ------------------------------ */
   function renderTabs() {
     const box = $('#tabs');
-    box.innerHTML = CATEGORIES.map((c, i) =>
-      `<button class="tab${i === 0 ? ' is-on' : ''}" data-cat="${c.id}" role="tab">${esc(c.label)}</button>`
+    const active = $('#tabs .tab.is-on');
+    const on = active ? active.dataset.cat : 'all';
+    box.innerHTML = CATEGORIES.map(c =>
+      `<button class="tab${c.id === on ? ' is-on' : ''}" data-cat="${c.id}" role="tab">${esc(tx(c.label))}</button>`
     ).join('');
     box.addEventListener('click', e => {
       const b = e.target.closest('.tab');
@@ -67,16 +77,16 @@
     $('#grid').innerHTML = list.map(p => `
 <article class="card rev">
   <div class="card__shot">
-    ${p.badge ? `<span class="card__badge">${esc(p.badge)}</span>` : ''}
-    <img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" decoding="async">
-    <button class="card__add" data-add="${p.id}">${ico('plus')} أضيفي للسلة</button>
+    ${p.badge ? `<span class="card__badge">${esc(tx(p.badge))}</span>` : ''}
+    <img src="${esc(p.img)}" alt="${esc(tx(p.name))}" loading="lazy" decoding="async">
+    <button class="card__add" data-add="${p.id}">${ico('plus')} ${esc(t('add'))}</button>
   </div>
   <div class="card__body">
-    <span class="card__sub">${esc(p.sub)}</span>
-    <h3 class="card__name">${esc(p.name)}</h3>
-    <p class="card__desc">${esc(p.desc)}</p>
+    <span class="card__sub">${esc(lang === 'ar' ? p.name.en : p.name.ar)}</span>
+    <h3 class="card__name">${esc(tx(p.name))}</h3>
+    <p class="card__desc">${esc(tx(p.desc))}</p>
     <div class="card__foot">
-      <span class="card__price"><span class="num">${money(p.price)}</span><small>${esc(BRAND.currency)}</small></span>
+      <span class="card__price"><span class="num">${money(p.price)}</span><small>${esc(cur())}</small></span>
       ${p.was ? `<span class="card__was num">${money(p.was)}</span>` : ''}
     </div>
   </div>
@@ -88,8 +98,8 @@
     $('#perks').innerHTML = PERKS.map(p => `
 <div class="perk rev">
   <span class="perk__ic">${ico(p.icon)}</span>
-  <h3>${esc(p.title)}</h3>
-  <p>${esc(p.text)}</p>
+  <h3>${esc(tx(p.title))}</h3>
+  <p>${esc(tx(p.text))}</p>
 </div>`).join('');
   }
 
@@ -99,11 +109,11 @@
     const badge = $('#cartCount');
     badge.textContent = n;
     badge.classList.toggle('is-on', n > 0);
-    $('#cartSub').textContent = n ? n + ' قطعة في السلة' : 'لا توجد منتجات بعد';
+    $('#cartSub').textContent = n ? n + ' ' + t('pieces') : t('cartEmptySub');
 
     const body = $('#cartBody'), foot = $('#cartFoot');
     if (!n) {
-      body.innerHTML = `<div class="cart__empty">${ico('bag')}<p>سلتك فارغة.</p><p style="font-size:.85rem">أضيفي منتجاتك المفضلة وابدئي الطلب.</p></div>`;
+      body.innerHTML = `<div class="cart__empty">${ico('bag')}<p>${esc(t('cartEmpty'))}</p><p style="font-size:.85rem">${esc(t('cartEmptyHint'))}</p></div>`;
       foot.hidden = true;
       return;
     }
@@ -113,19 +123,19 @@
       if (!p) return '';
       return `
 <div class="li">
-  <img src="${esc(p.img)}" alt="${esc(p.name)}">
+  <img src="${esc(p.img)}" alt="${esc(tx(p.name))}">
   <div>
-    <div class="li__name">${esc(p.name)}</div>
-    <div class="li__unit"><span class="num">${money(p.price)}</span> ${esc(BRAND.currency)} للقطعة</div>
+    <div class="li__name">${esc(tx(p.name))}</div>
+    <div class="li__unit"><span class="num">${money(p.price)}</span> ${esc(cur())} / ${esc(t('each'))}</div>
     <div class="li__row">
       <div class="qty">
         <button data-dec="${p.id}" aria-label="إنقاص الكمية">−</button>
         <span class="num">${q}</span>
         <button data-inc="${p.id}" aria-label="زيادة الكمية">+</button>
       </div>
-      <span class="li__sum"><span class="num">${money(p.price * q)}</span> ${esc(BRAND.currency)}</span>
+      <span class="li__sum"><span class="num">${money(p.price * q)}</span> ${esc(cur())}</span>
     </div>
-    <button class="li__del" data-del="${p.id}">إزالة</button>
+    <button class="li__del" data-del="${p.id}">${esc(t('remove'))}</button>
   </div>
 </div>`;
     }).join('');
@@ -136,10 +146,10 @@
     const ship = $('#ship'), left = BRAND.freeShipFrom - sum;
     if (!BRAND.freeShipFrom || left <= 0) {
       ship.className = 'ship is-free';
-      ship.innerHTML = ico('check') + '<span>مبروك! الشحن مجاني على هذا الطلب.</span>';
+      ship.innerHTML = ico('check') + '<span>' + t('shipFree') + '</span>';
     } else {
       ship.className = 'ship';
-      ship.innerHTML = ico('truck') + `<span>أضيفي بـ <b class="num">${money(left)}</b> ${esc(BRAND.currency)} واحصلي على شحن مجاني.</span>`;
+      ship.innerHTML = ico('truck') + '<span>' + t('shipLeft')(money(left), esc(cur())) + '</span>';
     }
   }
 
@@ -155,13 +165,13 @@
   function add(id, btn) {
     cart[id] = (cart[id] || 0) + 1;
     save(); renderCart();
-    toast('تمت الإضافة إلى السلة');
+    toast(t('addedToast'));
     if (btn) {
       btn.classList.add('is-added');
-      btn.innerHTML = ico('check') + ' تمت الإضافة';
+      btn.innerHTML = ico('check') + ' ' + t('added');
       setTimeout(() => {
         btn.classList.remove('is-added');
-        btn.innerHTML = ico('plus') + ' أضيفي للسلة';
+        btn.innerHTML = ico('plus') + ' ' + t('add');
       }, 1400);
     }
   }
@@ -177,20 +187,20 @@
   /* رسالة الطلب التي تُرسل إلى واتساب */
   function orderMessage() {
     const lines = [];
-    lines.push('مرحباً ' + BRAND.ar + '، أرغب في تأكيد الطلب التالي:', '');
+    lines.push(t('orderHi'), '');
     let i = 1;
     for (const [id, q] of Object.entries(cart)) {
       const p = byId(id);
       if (!p) continue;
-      lines.push(i++ + '. ' + p.name);
-      lines.push('   ' + q + ' × ' + money(p.price) + ' = ' + money(p.price * q) + ' ' + BRAND.currency);
+      lines.push(i++ + '. ' + tx(p.name));
+      lines.push('   ' + q + ' × ' + money(p.price) + ' = ' + money(p.price * q) + ' ' + cur());
     }
     const sum = total();
     lines.push('', '— — — — —');
-    lines.push('عدد القطع: ' + count());
-    lines.push('الإجمالي: ' + money(sum) + ' ' + BRAND.currency);
-    if (BRAND.freeShipFrom && sum >= BRAND.freeShipFrom) lines.push('الشحن: مجاني');
-    lines.push('', 'الاسم:', 'المدينة:', 'العنوان:');
+    lines.push(t('orderCount') + ': ' + count());
+    lines.push(t('orderTotal') + ': ' + money(sum) + ' ' + cur());
+    if (BRAND.freeShipFrom && sum >= BRAND.freeShipFrom) lines.push(t('orderShip') + ': ' + t('orderShipFree'));
+    lines.push('', t('orderName'), t('orderCity'), t('orderAddr'));
     return lines.join('\n');
   }
 
@@ -238,24 +248,67 @@
     onScroll();
   }
 
+  /* ------------------------------ تطبيق اللغة ------------------------------ */
+  function applyLang() {
+    const d = document.documentElement;
+    d.setAttribute('lang', lang);
+    d.setAttribute('dir', t('dir'));
+
+    /* النصوص الثابتة */
+    $$('[data-t]').forEach(el => {
+      const v = t(el.dataset.t);
+      if (typeof v !== 'string') return;
+      if (el.hasAttribute('data-html')) el.innerHTML = v; else el.textContent = v;
+    });
+
+    /* روابط أقسام الفوتر */
+    $$('[data-cat-label]').forEach(a => {
+      const c = CATEGORIES.find(x => x.id === a.dataset.cat);
+      if (c) a.textContent = tx(c.label);
+    });
+
+    /* تسميات الوصول والعملة وزر اللغة */
+    $('#langTxt').textContent = t('other');
+    $('#langBtn').setAttribute('aria-label', t('otherLabel'));
+    $('#cartBtn').setAttribute('aria-label', t('cartAria'));
+    $('#cartClose').setAttribute('aria-label', t('close'));
+    $('#burger').setAttribute('aria-label', t('menu'));
+    $('#cart').setAttribute('aria-label', t('cartAria'));
+    $('#curLabel').textContent = cur();
+
+    /* روابط واتساب */
+    [['#ctaWa', 'ctaWa'], ['#waLink', 'askWa']].forEach(([sel, key]) => {
+      const el = $(sel);
+      if (!el) return;
+      el.href = wa(t(key));
+      el.target = '_blank';
+      el.rel = 'noopener';
+    });
+
+    /* إعادة بناء كل ما يحمل نصاً */
+    renderTabs();
+    renderGrid(($('#tabs .tab.is-on') || {}).dataset ? $('#tabs .tab.is-on').dataset.cat : 'all');
+    renderPerks();
+    renderCart();
+    reveal();
+  }
+
+  function toggleLang() {
+    lang = lang === 'ar' ? 'en' : 'ar';
+    try { localStorage.setItem(LKEY, lang); } catch (e) {}
+    applyLang();
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     $('#logo').innerHTML = LOGO;
     $('#logoFtr').innerHTML = LOGO;
     $('#year').textContent = new Date().getFullYear();
     $('#waShow').textContent = BRAND.whatsappShow;
 
-    renderTabs();
-    renderGrid('all');
-    renderPerks();
-    renderCart();
+    applyLang();
     wireNav();
-    reveal();
 
-    $$('[data-wa]').forEach(el => {
-      el.setAttribute('href', wa(el.dataset.wa));
-      el.setAttribute('target', '_blank');
-      el.setAttribute('rel', 'noopener');
-    });
+    $('#langBtn').addEventListener('click', toggleLang);
 
     /* أزرار الإضافة داخل الشبكة */
     $('#grid').addEventListener('click', e => {
