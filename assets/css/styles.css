@@ -335,11 +335,12 @@ p{margin:0 0 1rem}
 @media (max-width:560px){ .fab{padding:15px; inset-block-end:16px; inset-inline-start:16px} .fab__label{display:none} }
 
 /* ---------------------------- ظهور تدريجي ---------------------------- */
-.reveal{opacity:0; transform:translateY(22px); transition:opacity .7s var(--ease), transform .7s var(--ease)}
+.reveal{transition:opacity .7s var(--ease), transform .7s var(--ease)}
+.reveal.is-pending{opacity:0; transform:translateY(22px)}
 .reveal.is-in{opacity:1; transform:none}
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important; transition:none !important; scroll-behavior:auto !important}
-  .reveal{opacity:1; transform:none}
+  .reveal, .reveal.is-pending{opacity:1; transform:none}
 }
 
 /* ---------------------------- هوية الروقي: تفاصيل إضافية ---------------------------- */

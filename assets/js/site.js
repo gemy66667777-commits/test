@@ -339,7 +339,7 @@
      ============================================================ */
   let io;
   function observe() {
-    const items = $$('.reveal:not(.is-in)');
+    const items = $$('.reveal:not(.is-in):not(.is-pending)');
     if (!('IntersectionObserver' in window)) { items.forEach(i => i.classList.add('is-in')); return; }
     if (!io) {
       io = new IntersectionObserver((entries) => {
@@ -348,7 +348,13 @@
         });
       }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
     }
-    items.forEach((el, i) => { el.style.transitionDelay = Math.min(i % 8, 6) * 55 + 'ms'; io.observe(el); });
+    /* ما يبدأ مخفياً إلا العناصر الموجودة تحت الشاشة — الصفحة تظهر كاملة عند التحميل */
+    items.forEach((el, i) => {
+      if (el.getBoundingClientRect().top < window.innerHeight * .95) { el.classList.add('is-in'); return; }
+      el.classList.add('is-pending');
+      el.style.transitionDelay = Math.min(i % 8, 6) * 55 + 'ms';
+      io.observe(el);
+    });
   }
 
   function wireNav() {
