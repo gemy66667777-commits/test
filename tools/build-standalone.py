@@ -1,34 +1,69 @@
 # -*- coding: utf-8 -*-
-"""يبني ملف HTML واحد قائم بذاته: يحتفظ بالـ <head> كاملاً (charset + viewport)
-   ويضمّن CSS و JS والصور داخل الملف."""
+"""يبني من مجلد موقع ملف HTML واحد قائم بذاته يصلح للإرسال أو الفتح بدون إنترنت.
+
+يحتفظ بالـ <head> كاملاً (meta charset و meta viewport)، ويضمّن CSS و JS
+وكل الصور داخل الملف، ثم يتحقق من سلامة الناتج قبل الكتابة.
+
+    python3 tools/build-standalone.py <مجلد الموقع> <ملف الخرج>
+"""
 import re, sys, base64, os
 
-root, out_path = sys.argv[1], sys.argv[2]
-html = open(os.path.join(root, 'index.html'), encoding='utf-8').read()
-css  = open(os.path.join(root, 'assets/css/styles.css'), encoding='utf-8').read()
-data = open(os.path.join(root, 'assets/js/data.js'), encoding='utf-8').read()
-site = open(os.path.join(root, 'assets/js/site.js'), encoding='utf-8').read()
+def main(root, out_path):
+    html = read(os.path.join(root, 'index.html'))
+    css  = read(os.path.join(root, 'assets/css/styles.css'))
+    data = read(os.path.join(root, 'assets/js/data.js'))
+    site = read(os.path.join(root, 'assets/js/site.js'))
 
-def to_data_uri(m):
-    with open(os.path.join(root, m.group(1)), 'rb') as f:
-        return 'data:image/jpeg;base64,' + base64.b64encode(f.read()).decode()
-data = re.sub(r'(assets/img/[A-Za-z0-9_\-]+\.jpg)', to_data_uri, data)
+    # تضمين الصور أولاً في كل جزء على حدة، حتى تبقى المقارنة النهائية دقيقة
+    css, data, site, html = (embed_images(root, t) for t in (css, data, site, html))
+    js = data + '\n</script>\n<script>\n' + site
 
-# استبدال وسم الـ CSS الخارجي بـ <style> مضمّن
-html = html.replace(
-    '<link rel="stylesheet" href="assets/css/styles.css">',
-    '<style>\n' + css + '\n</style>'
-)
-# استبدال وسوم الـ JS الخارجية بسكربت مضمّن
-html = re.sub(
-    r'<script src="assets/js/data\.js"></script>\s*<script src="assets/js/site\.js"></script>',
-    '<script>\n' + data + '\n</script>\n<script>\n' + site + '\n</script>',
-    html
-)
-assert 'assets/css' not in html and 'assets/js' not in html, 'بقي مرجع خارجي'
-assert '<meta charset="utf-8">' in html, 'ناقص charset'
-assert 'name="viewport"' in html, 'ناقص viewport'
+    # ملاحظة مهمة: كل استبدال يمرّ عبر دالة (lambda) وليس نصاً مباشراً،
+    # لأن re.sub يفسّر تسلسلات مثل \n و \g داخل نص الاستبدال فيُفسد الكود.
+    html = sub_once(html, r'<link rel="stylesheet" href="assets/css/styles\.css">',
+                    '<style>\n' + css + '\n</style>', 'وسم CSS')
+    html = sub_once(html, r'<script src="assets/js/data\.js"></script>\s*<script src="assets/js/site\.js"></script>',
+                    '<script>\n' + js + '\n</script>', 'وسمَي JS')
 
-with open(out_path, 'w', encoding='utf-8') as f:
-    f.write(html)
-print('%s -> %.2f MB' % (os.path.basename(out_path), os.path.getsize(out_path)/1048576))
+    check(html, css, data, site)
+    with open(out_path, 'w', encoding='utf-8') as f:
+        f.write(html)
+    print('%s -> %.2f ميجابايت' % (os.path.basename(out_path), os.path.getsize(out_path)/1048576))
+
+def embed_images(root, text):
+    return re.sub(r'assets/img/([A-Za-z0-9_\-.]+\.(?:jpg|jpeg|png|webp))',
+                  lambda m: data_uri(os.path.join(root, 'assets/img', m.group(1))), text)
+
+def read(p):
+    with open(p, encoding='utf-8') as f:
+        return f.read()
+
+def sub_once(html, pattern, replacement, what):
+    new, n = re.subn(pattern, lambda m: replacement, html, count=1)
+    if n != 1:
+        raise SystemExit('لم يُعثر على %s في index.html' % what)
+    return new
+
+def data_uri(path):
+    ext = os.path.splitext(path)[1].lower()
+    mime = {'.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.png':'image/png', '.webp':'image/webp'}[ext]
+    with open(path, 'rb') as f:
+        return 'data:%s;base64,%s' % (mime, base64.b64encode(f.read()).decode())
+
+def check(html, css, data, site):
+    """يمنع تكرار الأخطاء التي وقعت سابقاً."""
+    if '<meta charset="utf-8">' not in html:
+        raise SystemExit('ناقص meta charset — سيظهر النص العربي رموزاً غير مفهومة')
+    if 'name="viewport"' not in html:
+        raise SystemExit('ناقص meta viewport — ستظهر الصفحة مصغّرة على الجوال')
+    if 'assets/' in html:
+        raise SystemExit('بقي مرجع خارجي لملف داخل assets/')
+    # يجب أن يظهر كل ملف مضمّن كما هو حرفاً بحرف، بلا أي تحويل للتسلسلات
+    for name, src in (('styles.css', css), ('data.js', data), ('site.js', site)):
+        if src not in html:
+            raise SystemExit('محتوى %s تغيّر أثناء التضمين — تحقّق من الاستبدال' % name)
+
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        raise SystemExit('الاستخدام: build-standalone.py <مجلد الموقع> <ملف الخرج>')
+    main(sys.argv[1], sys.argv[2])
