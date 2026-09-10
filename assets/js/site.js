@@ -266,7 +266,7 @@
         ? esc(p.price) + '<span>' + esc(BRAND.currency) + '</span>'
         : '<span class="card__ask">السعر عبر واتساب</span>';
       return `
-<article class="card reveal">
+<article class="card reveal${p.img ? ' card--photo' : ''}">
   <div class="card__media">
     ${p.badge ? `<span class="card__badge">${esc(p.badge)}</span>` : ''}
     <span class="card__cat">${esc(catLabel(p.cat))}</span>

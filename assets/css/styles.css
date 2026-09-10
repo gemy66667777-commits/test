@@ -391,3 +391,10 @@ p{margin:0 0 1rem}
 .phone-row__go{margin-inline-start:auto; font-size:.82rem; font-weight:700; color:var(--gold-2)}
 
 .card__ask{font-family:var(--sans); font-size:.84rem; font-weight:700; color:var(--gold-2); white-space:nowrap}
+
+/* تدرّج خفيف أعلى الصورة يفصل الشارات عن خلفية الصورة */
+.card--photo .card__media::after{
+  content:''; position:absolute; inset-block-start:0; inset-inline:0; height:96px; z-index:1;
+  background:linear-gradient(180deg, rgba(10,18,14,.40), rgba(10,18,14,0)); pointer-events:none;
+}
+.card--photo .card__cat{background:rgba(255,255,255,.92); border-color:transparent}

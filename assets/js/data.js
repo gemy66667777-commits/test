@@ -40,49 +40,64 @@ const CATEGORIES = [
    -------------------------------------------------------------- */
 const PRODUCTS = [
   { id:'p01', cat:'gifts', name:'نفحة الروقي — بوكس هدية', desc:'البوكس الأشهر لدينا؛ تشكيلة مختارة داخل علبة خضراء فاخرة جاهزة للإهداء مباشرة.',
-    size:'بوكس كامل', price:'7.000', badge:'الأكثر مبيعاً', art:'box', tone:['#1f5040','#0f2b22'] },
+    size:'بوكس كامل', price:'7.000', badge:'الأكثر مبيعاً', art:'box', tone:['#1f5040','#0f2b22'],
+    img:'assets/img/nafha-box.jpg' },
 
   { id:'p02', cat:'gifts', name:'بوكس الروقي الأسود', desc:'علبة سوداء أنيقة بهوية الروقي تضم مجموعة عطور ومعمول — هدية جاهزة لكل مناسبة.',
-    size:'بوكس كامل', price:'7.000', art:'box', tone:['#3b4040','#15181a'] },
+    size:'بوكس كامل', price:'7.000', art:'box', tone:['#3b4040','#15181a'],
+    img:'assets/img/black-box.jpg' },
 
   { id:'p03', cat:'gifts', name:'توزيعات الروقي للمناسبات', desc:'توزيعات مغلّفة بذوق للأعراس والتخرّج والمناسبات — تُجهّز بالكمية المطلوبة.',
-    size:'حسب الكمية', price:'5.000', badge:'حسب الطلب', art:'gift', tone:['#d9b959','#8a6a1e'] },
+    size:'حسب الكمية', price:'5.000', badge:'حسب الطلب', art:'gift', tone:['#d9b959','#8a6a1e'],
+    img:'assets/img/tawzeeat.jpg' },
 
   { id:'p04', cat:'maamoul', name:'معمول معجون الروقي مع مثبت البخور', desc:'خلطتنا الأصلية من معجون الروقي ومعها مثبت البخور — رائحة دافئة تدوم في المكان.',
-    size:'العلبة + المثبت', price:'5.000', badge:'خلطة البيت', art:'jar', tone:['#c8873a','#6b3f16'] },
+    size:'العلبة + المثبت', price:'5.000', badge:'خلطة البيت', art:'jar', tone:['#c8873a','#6b3f16'],
+    img:'assets/img/maamoul-mothbit.jpg' },
 
   { id:'p05', cat:'maamoul', name:'عرض المعمول + بخاخين', desc:'عرض متكامل: معمول معجون الروقي مع بخاخين لتثبيت الرائحة على الملابس والفرش.',
-    size:'عرض كامل', price:'11.000', badge:'عرض', art:'jar', tone:['#b07434','#5a3312'] },
+    size:'عرض كامل', price:'11.000', badge:'عرض', art:'jar', tone:['#b07434','#5a3312'],
+    img:'assets/img/maamoul-offer.jpg' },
 
   { id:'p06', cat:'oud', name:'١٠٠ حبة دهن عود', desc:'مئة حبة من دهن العود بتغليف محكم — كمية تكفي المواسم والمناسبات الطويلة.',
-    size:'١٠٠ حبة', price:'25.000', badge:'الأوفر', art:'pearls', tone:['#dcb877','#7a5620'] },
+    size:'١٠٠ حبة', price:'25.000', badge:'الأوفر', art:'pearls', tone:['#dcb877','#7a5620'],
+    img:'assets/img/dahn-100.jpg' },
 
   { id:'p07', cat:'oud', name:'بخور قشر هندي', desc:'قشر هندي أصلي بدخان نقي ورائحة عميقة يعرفها أهل الذوق. متوفر بالتولة.',
-    size:'التولة', price:'3.000', art:'chips', tone:['#8a5a2b','#3c2412'] },
+    size:'التولة', price:'3.000', art:'chips', tone:['#8a5a2b','#3c2412'],
+    img:'assets/img/qishr-hindi.jpg' },
 
   { id:'p08', cat:'oud', name:'عود الروقي — عرض اليوم', desc:'قطع عود مختارة بعرض يومي متجدد؛ تُباع بالتولة وتناسب المجالس والدواوين.',
-    size:'التولة', price:'3.500', badge:'عرض اليوم', art:'chips', tone:['#9a6a3a','#432a14'] },
+    size:'التولة', price:'3.500', badge:'عرض اليوم', art:'chips', tone:['#9a6a3a','#432a14'],
+    img:'assets/img/oud-today.jpg' },
 
   { id:'p09', cat:'oud', name:'أقراص البخور', desc:'أقراص بخور جاهزة سهلة الاستخدام، تُشعل مباشرة وتعطي رائحة متزنة تدوم.',
-    size:'العلبة', price:'2.500', art:'pearls', tone:['#e6d3ab','#b08f55'] },
+    size:'العلبة', price:'2.500', art:'pearls', tone:['#e6d3ab','#b08f55'],
+    img:'assets/img/aqras-bakhoor.jpg' },
 
   { id:'p10', cat:'oud', name:'تشكيلة ٤ أنواع بخور', desc:'أربعة أنواع بخور مختلفة في عرض واحد — تجربة كاملة لمن يريد اختيار المفضّل لديه.',
-    size:'٤ أنواع', price:'10.000', badge:'عرض', art:'chips', tone:['#a4703c','#3a2311'] },
+    size:'٤ أنواع', price:'10.000', badge:'عرض', art:'chips', tone:['#a4703c','#3a2311'],
+    img:'assets/img/bakhoor-4.jpg' },
 
   { id:'p11', cat:'perfume', name:'مجموعة رويال كلكشن', desc:'ثلاث عطرات فاخرة بأغطية ذهبية داخل علبة رويال — المجموعة الأرقى لدينا.',
-    size:'٣ عطور', price:'14.000', badge:'رويال', art:'flacon', tone:['#7d1f36','#3d0f1c'] },
+    size:'٣ عطور', price:'14.000', badge:'رويال', art:'flacon', tone:['#7d1f36','#3d0f1c'],
+    img:'assets/img/royal-collection.jpg' },
 
   { id:'p12', cat:'perfume', name:'عطر الشمر', desc:'عطر بتوقيع الروقي برائحة نظيفة وثبات ممتاز، من الأكثر طلباً للاستخدام اليومي.',
-    size:'العبوة', price:'5.000', art:'flacon', tone:['#e9e3d5','#a89a80'] },
+    size:'العبوة', price:'5.000', art:'flacon', tone:['#e9e3d5','#a89a80'],
+    img:'assets/img/shammar.jpg' },
 
   { id:'p13', cat:'perfume', name:'عطر غنائي', desc:'عطر شرقي بعلبة أرجوانية مميّزة — حضور واضح يليق بالمساء والمناسبات.',
-    size:'العبوة', price:null, art:'flacon', tone:['#5e2440','#2c1020'] },
+    size:'العبوة', price:null, art:'flacon', tone:['#5e2440','#2c1020'],
+    img:'assets/img/ghinai.jpg' },
 
   { id:'p14', cat:'perfume', name:'RM — أو دو بارفان', desc:'إصدار RM بتركيز أو دو بارفان وتغليف عنّابي فاخر يصلح للإهداء كما هو.',
-    size:'العبوة', price:null, art:'flacon', tone:['#6e1c33','#320d19'] },
+    size:'العبوة', price:null, art:'flacon', tone:['#6e1c33','#320d19'],
+    img:'assets/img/rm-parfum.jpg' },
 
   { id:'p15', cat:'perfume', name:'مرشّات البخور — الحبتين', desc:'مرشّات لتثبيت رائحة البخور على الملابس والمفروش؛ العرض على حبتين معاً.',
-    size:'حبتين', price:'7.000', badge:'عرض الحبتين', art:'dropper', tone:['#3f4449','#15181b'] }
+    size:'حبتين', price:'7.000', badge:'عرض الحبتين', art:'dropper', tone:['#3f4449','#15181b'],
+    img:'assets/img/mirshat-2.jpg' }
 ];
 
 /* ------------------------- لماذا الروقي ------------------------- */
