@@ -389,3 +389,5 @@ p{margin:0 0 1rem}
 .phone-row strong{font-size:1.02rem; direction:ltr; letter-spacing:.04em}
 .phone-row small{display:block; font-size:.76rem; color:var(--ink-3)}
 .phone-row__go{margin-inline-start:auto; font-size:.82rem; font-weight:700; color:var(--gold-2)}
+
+.card__ask{font-family:var(--sans); font-size:.84rem; font-weight:700; color:var(--gold-2); white-space:nowrap}

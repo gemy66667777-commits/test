@@ -260,7 +260,11 @@
   function renderProducts(cat) {
     const list = (!cat || cat === 'all') ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
     $('#grid').innerHTML = list.map(p => {
-      const msg = 'مرحباً، أرغب في طلب: ' + p.name + ' (' + p.size + ') — السعر ' + p.price + ' ' + BRAND.currency;
+      const msg = 'مرحباً، أرغب في طلب: ' + p.name + ' (' + p.size + ')' +
+                  (p.price ? ' — السعر ' + p.price + ' ' + BRAND.currency : ' — أرجو إفادتي بالسعر');
+      const priceHtml = p.price
+        ? esc(p.price) + '<span>' + esc(BRAND.currency) + '</span>'
+        : '<span class="card__ask">السعر عبر واتساب</span>';
       return `
 <article class="card reveal">
   <div class="card__media">
@@ -273,7 +277,7 @@
     <p class="card__desc">${esc(p.desc)}</p>
     <div class="card__meta">
       <span class="card__size">${esc(p.size)}</span>
-      <span class="card__price">${esc(p.price)}<span>${esc(BRAND.currency)}</span></span>
+      <span class="card__price">${priceHtml}</span>
     </div>
     <a class="card__order" href="${waLink(msg)}" target="_blank" rel="noopener">
       ${ico('whatsapp', 'ico')} اطلب عبر واتساب
