@@ -218,12 +218,17 @@
     if (open) $('#cartClose').focus();
   }
   function scrim(on) {
-    const any = on || $('#authModal').classList.contains('is-on') || $('#editModal').classList.contains('is-on');
+    const any = on || $('#authModal').classList.contains('is-on') ||
+                $('#editModal').classList.contains('is-on') || $('#orderModal').classList.contains('is-on');
     $('#scrim').classList.toggle('is-on', any);
     document.body.classList.toggle('is-locked', any);
   }
 
-  function orderMessage() {
+  const GOVS = ['القاهرة','الجيزة','الإسكندرية','القليوبية','الشرقية','الدقهلية','الغربية','المنوفية',
+    'البحيرة','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','شمال سيناء','جنوب سيناء',
+    'الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','مطروح','الوادي الجديد'];
+
+  function orderMessage(info) {
     const L = ['طلب جديد من موقع V.I.P SILVER', ''];
     let i = 1;
     for (const [id, q] of Object.entries(cart)) {
@@ -235,9 +240,59 @@
     const sum = total();
     L.push('', '— — — — —', 'عدد القطع: ' + count(), 'الإجمالي: ' + money(sum) + ' ' + BRAND.currency);
     if (BRAND.freeShipFrom && sum >= BRAND.freeShipFrom) L.push('الشحن: مجاني');
-    if (me) L.push('رقم العميل: ' + me);
-    L.push('', 'الاسم:', 'المحافظة:', 'العنوان:');
+    L.push('', 'بيانات العميل:', 'الاسم: ' + info.name, 'الموبايل: ' + info.phone,
+           'المحافظة: ' + info.gov, 'العنوان: ' + info.addr);
+    if (info.note) L.push('ملاحظات: ' + info.note);
     return L.join('\n');
+  }
+
+  /* ------------------------------ نافذة بيانات الطلب ------------------------------ */
+  const OKEY = 'vip_customer_v1';
+
+  function orderMsgBox(text, kind) {
+    const el = $('#orderMsg');
+    el.className = 'msg' + (text ? ' is-on msg--' + (kind || 'err') : '');
+    el.textContent = text || '';
+  }
+  function openOrder(on) { $('#orderModal').classList.toggle('is-on', on); scrim(on); }
+
+  function orderView() {
+    const saved = store.get(OKEY, {});
+    const phone = saved.phone || me || '';
+    orderMsgBox('');
+    $('#orderBody').innerHTML = `
+      <div class="row2">
+        <div class="field"><label>الاسم بالكامل *</label><input id="o_name" value="${esc(saved.name || '')}" placeholder="الاسم زي ما هو في البطاقة"></div>
+        <div class="field"><label>رقم الموبايل *</label><input id="o_phone" type="tel" inputmode="numeric" maxlength="11" value="${esc(phone)}" placeholder="01xxxxxxxxx"></div>
+      </div>
+      <div class="field"><label>المحافظة *</label><select id="o_gov">
+        <option value="">اختر المحافظة</option>
+        ${GOVS.map(g => `<option${g === saved.gov ? ' selected' : ''}>${esc(g)}</option>`).join('')}
+      </select></div>
+      <div class="field"><label>العنوان بالتفصيل *</label><textarea id="o_addr" placeholder="المدينة، الشارع، رقم العمارة والدور والشقة">${esc(saved.addr || '')}</textarea></div>
+      <div class="field"><label>ملاحظات (اختياري)</label><input id="o_note" placeholder="مثال: النقش المطلوب، أو ميعاد التسليم"></div>
+      <button class="btn btn--wa btn--wide" id="o_send">${ico('wa')} تأكيد وإرسال الطلب على واتساب</button>
+      <p class="cart__note">هيفتح واتساب برسالة فيها الطلب وبياناتك — راجعها وابعتها.</p>`;
+
+    $('#o_send').onclick = sendOrder;
+  }
+
+  function sendOrder() {
+    const info = {
+      name: $('#o_name').value.trim(),
+      phone: normPhone($('#o_phone').value),
+      gov: $('#o_gov').value,
+      addr: $('#o_addr').value.trim(),
+      note: $('#o_note').value.trim()
+    };
+    if (info.name.length < 3) return orderMsgBox('اكتب اسمك بالكامل.');
+    if (!validPhone(info.phone)) return orderMsgBox('اكتب رقم موبايل مصري صحيح — ١١ رقم يبدأ بـ 010 أو 011 أو 012 أو 015.');
+    if (!info.gov) return orderMsgBox('اختر المحافظة.');
+    if (info.addr.length < 10) return orderMsgBox('اكتب العنوان بالتفصيل عشان نقدر نوصّل.');
+    store.set(OKEY, info);
+    window.open(wa(orderMessage(info)), '_blank', 'noopener');
+    openOrder(false);
+    toast('تمام! راجع الرسالة في واتساب وابعتها');
   }
 
   /* ============================================================
@@ -316,8 +371,8 @@
     }
 
     if (pending.step === 'login') {       /* حساب موجود */
-      $('#authTitle').textContent = 'أهلاً بعودتك';
-      $('#authSub').textContent = 'اكتب كلمة المرور الخاصة بـ ' + pending.phone;
+      $('#authTitle').textContent = pending.admin ? 'دخول الأدمن' : 'أهلاً بعودتك';
+      $('#authSub').textContent = (pending.admin ? 'حساب أدمن — اكتب كلمة المرور الخاصة بـ ' : 'اكتب كلمة المرور الخاصة بـ ') + pending.phone;
       b.innerHTML = `
         <div class="field"><label>كلمة المرور</label><input type="password" id="p1" autocomplete="current-password"></div>
         <button class="btn btn--gold btn--wide" id="go">دخول</button>
@@ -332,6 +387,8 @@
     const v = normPhone($('#ph').value);
     if (!validPhone(v)) return authMsg('اكتب رقم موبايل مصري صحيح — ١١ رقم يبدأ بـ 010 أو 011 أو 012 أو 015.');
     authMsg('');
+    /* أرقام الأدمن حسابات جاهزة بكلمة مرور ثابتة — تدخل مباشرة بلا رمز تحقق */
+    if (isAdminPhone(v)) { pending = { phone: v, step: 'login', admin: true }; return authView(); }
     if (users[v]) { pending = { phone: v, step: 'login' }; return authView(); }
     pending = { phone: v, step: 'otp', otp: String(Math.floor(100000 + Math.random() * 900000)), tries: 0 };
     authView();
@@ -363,9 +420,13 @@
   }
 
   async function stepLogin() {
-    const u = users[pending.phone];
-    const h = await hashPw($('#p1').value, u.salt);
-    if (h !== u.hash) return authMsg('كلمة المرور غلط.');
+    if (pending.admin) {                       /* حساب أدمن بكلمة مرور ثابتة */
+      if ($('#p1').value !== String(BRAND.adminPass)) return authMsg('كلمة المرور غلط.');
+    } else {
+      const u = users[pending.phone];
+      const h = await hashPw($('#p1').value, u.salt);
+      if (h !== u.hash) return authMsg('كلمة المرور غلط.');
+    }
     me = pending.phone; store.set(SKEY, me);
     pending = null; authMsg('');
     refreshAuthUI(); renderGrid(); openAuth(false);
@@ -554,7 +615,12 @@
 
     $('#cartBtn').addEventListener('click', () => openCart(true));
     $('#cartClose').addEventListener('click', () => openCart(false));
-    $('#checkout').addEventListener('click', () => { if (count()) window.open(wa(orderMessage()), '_blank', 'noopener'); });
+    $('#checkout').addEventListener('click', () => {
+      if (!count()) return;
+      openCart(false); orderView(); openOrder(true);
+      setTimeout(() => { const f = $('#o_name'); if (f && !f.value) f.focus(); }, 140);
+    });
+    $('#orderClose').addEventListener('click', () => openOrder(false));
 
     $('#accBtn').addEventListener('click', () => { pending = null; authView(); openAuth(true); });
     $('#authClose').addEventListener('click', () => openAuth(false));
@@ -566,9 +632,9 @@
       store.del(PKEY); renderGrid(); renderCart(); toast('رجعت القائمة الأصلية');
     });
 
-    $('#scrim').addEventListener('click', () => { openCart(false); openAuth(false); openEdit(false); });
+    $('#scrim').addEventListener('click', () => { openCart(false); openAuth(false); openEdit(false); openOrder(false); });
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { openCart(false); openAuth(false); openEdit(false); }
+      if (e.key === 'Escape') { openCart(false); openAuth(false); openEdit(false); openOrder(false); }
     });
 
     $$('.ftr__nav [data-cat]').forEach(a => a.addEventListener('click', () => {
