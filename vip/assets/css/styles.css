@@ -171,12 +171,12 @@ p{margin:0 0 1rem}
 }
 .card__edit{
   position:absolute;inset-block-start:11px;inset-inline-end:11px;z-index:3;
-  width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
-  background:rgba(13,13,15,.82);border:1px solid var(--line-2);color:var(--gold);
-  opacity:0;transition:.25s var(--ease);
+  display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;
+  background:rgba(13,13,15,.88);border:1px solid var(--gold);color:var(--gold);
+  font-size:.76rem;font-weight:600;backdrop-filter:blur(6px);transition:.24s var(--ease);
 }
-.card:hover .card__edit{opacity:1}
-.card__edit svg{width:16px;height:16px}
+.card__edit:hover{background:var(--gold);color:#141010}
+.card__edit svg{width:15px;height:15px}
 .card__body{padding:17px 17px 19px;display:flex;flex-direction:column;flex:1}
 .card__sub{font-family:var(--latin);font-size:.64rem;letter-spacing:.2em;color:var(--gold-2);text-transform:uppercase;direction:ltr;text-align:start}
 .card__name{font-size:1.02rem;margin:6px 0 7px;font-weight:500}
@@ -332,4 +332,5 @@ html[dir="rtl"] .cart{--slide:100%}
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .rev,.rev.is-wait{opacity:1;transform:none}
   .card__edit{opacity:1}
+  .card__add{opacity:1}
 }

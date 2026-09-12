@@ -122,7 +122,7 @@
 <article class="card rev">
   <div class="card__shot">
     ${p.badge ? `<span class="card__tag">${esc(p.badge)}</span>` : ''}
-    ${isAdmin() ? `<button class="card__edit" data-edit="${p.id}" aria-label="تعديل المنتج">${ico('edit')}</button>` : ''}
+    ${isAdmin() ? `<button class="card__edit" data-edit="${p.id}">${ico('edit')} تعديل</button>` : ''}
     <img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" decoding="async">
   </div>
   <div class="card__body">
@@ -438,6 +438,7 @@
     $('#accTxt').textContent = me ? (admin ? 'الأدمن' : 'حسابي') : 'تسجيل الدخول';
     $('#accBtn').classList.toggle('ib--admin', admin);
     $('#adminBar').hidden = !admin;
+    document.body.classList.toggle('is-admin', admin);
   }
 
   /* ============================================================
