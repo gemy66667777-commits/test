@@ -13,23 +13,27 @@ _s = import_module('build-standalone')
 def main(root, out_path, title):
     html = _s.read(os.path.join(root, 'index.html'))
     css  = _s.read(os.path.join(root, 'assets/css/styles.css'))
-    data = _s.read(os.path.join(root, 'assets/js/data.js'))
-    site = _s.read(os.path.join(root, 'assets/js/site.js'))
-    css, data, site, html = (_s.embed_images(root, t) for t in (css, data, site, html))
+    js_names = re.findall(r'<script src="assets/js/([^"]+)"></script>', html)
+    js_src = {n: _s.embed_images(root, _s.read(os.path.join(root, 'assets/js', n))) for n in js_names}
+    css  = _s.embed_images(root, css)
+    html = _s.embed_images(root, html)
 
     fonts = re.search(r'<link href="https://fonts\.googleapis[^>]*>', html).group(0)
     body  = re.search(r'<body>(.*)</body>', html, re.S).group(1)
+    cdn   = re.findall(r'<script src="https://[^"]*"></script>', body)
     body  = re.sub(r'<script src="[^"]*"></script>\s*', '', body)
 
     parts = ['<title>', title, '</title>\n', fonts,
              '\n<style>\n', css, '\n.site{background:inherit}\n</style>\n\n',
              '<div class="site" dir="rtl" lang="ar">\n', body, '\n</div>\n\n',
              "<script>\ndocument.documentElement.setAttribute('dir','rtl');\n",
-             "document.documentElement.setAttribute('lang','ar');\n</script>\n",
-             '<script>\n', data, '\n</script>\n<script>\n', site, '\n</script>\n']
+             "document.documentElement.setAttribute('lang','ar');\n</script>\n"]
+    parts += [c + '\n' for c in cdn]
+    for n in js_names:
+        parts += ['<script>\n', js_src[n], '\n</script>\n']
     out = ''.join(parts)
 
-    for name, src in (('styles.css', css), ('data.js', data), ('site.js', site)):
+    for name, src in [('styles.css', css)] + sorted(js_src.items()):
         if src not in out:
             raise SystemExit('محتوى %s تغيّر أثناء التجميع' % name)
     with open(out_path, 'w', encoding='utf-8') as f:

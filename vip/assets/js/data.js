@@ -99,7 +99,9 @@ const T = {
     savedNew:'تم إضافة المنتج', savedEdit:'تم حفظ التعديلات', deleted:'تم حذف المنتج',
     confirmDel:p=>'متأكد إنك عايز تحذف «'+p+'»؟',
     confirmReset:'هيرجع كل المنتجات لحالتها الأصلية ويلغي تعديلاتك. تمام؟',
-    resetDone:'رجعت القائمة الأصلية', emptyCat:'مفيش منتجات في القسم ده حالياً.'
+    resetDone:'رجعت القائمة الأصلية', emptyCat:'مفيش منتجات في القسم ده حالياً.',
+    newHere:'الرقم ده مالوش حساب — اختار كلمة مرور وهنعمله لك.',
+    imgUploading:'بيرفع الصورة…'
   },
   en:{
     dir:'ltr', other:'ع', otherLabel:'العربية',
@@ -176,7 +178,9 @@ const T = {
     savedNew:'Product added', savedEdit:'Changes saved', deleted:'Product deleted',
     confirmDel:p=>'Delete “'+p+'”?',
     confirmReset:'This restores all products and discards your edits. Continue?',
-    resetDone:'Original list restored', emptyCat:'No products in this category yet.'
+    resetDone:'Original list restored', emptyCat:'No products in this category yet.',
+    newHere:'No account for this number yet — pick a password and we will create one.',
+    imgUploading:'Uploading image…'
   }
 };
 

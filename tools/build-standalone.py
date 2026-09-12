@@ -11,21 +11,28 @@ import re, sys, base64, os
 def main(root, out_path):
     html = read(os.path.join(root, 'index.html'))
     css  = read(os.path.join(root, 'assets/css/styles.css'))
-    data = read(os.path.join(root, 'assets/js/data.js'))
-    site = read(os.path.join(root, 'assets/js/site.js'))
+
+    # كل ملفات الجافاسكريبت المحلية بالترتيب الذي وردت به في الصفحة
+    js_names = re.findall(r'<script src="assets/js/([^"]+)"></script>', html)
+    if not js_names:
+        raise SystemExit('لم يُعثر على أي وسم <script> محلي في index.html')
+    js_src = {n: read(os.path.join(root, 'assets/js', n)) for n in js_names}
 
     # تضمين الصور أولاً في كل جزء على حدة، حتى تبقى المقارنة النهائية دقيقة
-    css, data, site, html = (embed_images(root, t) for t in (css, data, site, html))
-    js = data + '\n</script>\n<script>\n' + site
+    css = embed_images(root, css)
+    for n in js_src:
+        js_src[n] = embed_images(root, js_src[n])
+    html = embed_images(root, html)
 
     # ملاحظة مهمة: كل استبدال يمرّ عبر دالة (lambda) وليس نصاً مباشراً،
     # لأن re.sub يفسّر تسلسلات مثل \n و \g داخل نص الاستبدال فيُفسد الكود.
     html = sub_once(html, r'<link rel="stylesheet" href="assets/css/styles\.css">',
                     '<style>\n' + css + '\n</style>', 'وسم CSS')
-    html = sub_once(html, r'<script src="assets/js/data\.js"></script>\s*<script src="assets/js/site\.js"></script>',
-                    '<script>\n' + js + '\n</script>', 'وسمَي JS')
+    for n in js_names:
+        html = sub_once(html, r'<script src="assets/js/' + re.escape(n) + r'"></script>',
+                        '<script>\n' + js_src[n] + '\n</script>', 'وسم ' + n)
 
-    check(html, css, data, site)
+    check(html, css, js_src)
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print('%s -> %.2f ميجابايت' % (os.path.basename(out_path), os.path.getsize(out_path)/1048576))
@@ -50,16 +57,16 @@ def data_uri(path):
     with open(path, 'rb') as f:
         return 'data:%s;base64,%s' % (mime, base64.b64encode(f.read()).decode())
 
-def check(html, css, data, site):
+def check(html, css, js_src):
     """يمنع تكرار الأخطاء التي وقعت سابقاً."""
     if '<meta charset="utf-8">' not in html:
         raise SystemExit('ناقص meta charset — سيظهر النص العربي رموزاً غير مفهومة')
     if 'name="viewport"' not in html:
         raise SystemExit('ناقص meta viewport — ستظهر الصفحة مصغّرة على الجوال')
-    if 'assets/' in html:
+    if re.search(r'(src|href)="assets/', html):
         raise SystemExit('بقي مرجع خارجي لملف داخل assets/')
     # يجب أن يظهر كل ملف مضمّن كما هو حرفاً بحرف، بلا أي تحويل للتسلسلات
-    for name, src in (('styles.css', css), ('data.js', data), ('site.js', site)):
+    for name, src in [('styles.css', css)] + sorted(js_src.items()):
         if src not in html:
             raise SystemExit('محتوى %s تغيّر أثناء التضمين — تحقّق من الاستبدال' % name)
 

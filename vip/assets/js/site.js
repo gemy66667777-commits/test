@@ -15,6 +15,8 @@
     del(k) { try { localStorage.removeItem(k); } catch (e) {} }
   };
 
+  const DB = window.VIPDB || { on:false, admin:false };
+
   /* ------------------------------ اللغة ------------------------------ */
   const LKEY = 'vip_lang';
   let lang = 'ar';
@@ -80,7 +82,7 @@
   const normPhone = v => String(v || '').replace(/[^\d]/g, '');
   const validPhone = v => /^01[0125]\d{8}$/.test(normPhone(v));
   const isAdminPhone = v => BRAND.admins.map(normPhone).includes(normPhone(v));
-  const isAdmin = () => !!(me && isAdminPhone(me));
+  const isAdmin = () => DB.on ? DB.admin : !!(me && isAdminPhone(me));
 
   async function hashPw(pw, salt) {
     const txt = salt + '|' + pw;
@@ -253,7 +255,8 @@
         <div class="field"><label>${esc(t('phoneLabel'))}</label><input type="tel" value="${esc(me)}" disabled></div>
         ${admin ? `<div class="msg is-on msg--note">${esc(t('adminNote'))}</div>` : ''}
         <button class="btn btn--ghost btn--wide" id="logout">${esc(t('logout'))}</button>`;
-      $('#logout').onclick = () => {
+      $('#logout').onclick = async () => {
+        await DB.signOut();
         me = null; store.del(SKEY);
         refreshAuthUI(); renderGrid(); openAuth(false); toast(t('loggedOut'));
       };
@@ -306,9 +309,10 @@
     const v = normPhone($('#ph').value);
     if (!validPhone(v)) return authMsg(t('badPhone'));
     authMsg('');
-    if (isAdminPhone(v)) pending = { phone: v, step: 'login', admin: true };
-    else if (users[v])   pending = { phone: v, step: 'login' };
-    else                 pending = { phone: v, step: 'pass' };
+    if (DB.on)                pending = { phone: v, step: 'login', db: true };
+    else if (isAdminPhone(v)) pending = { phone: v, step: 'login', admin: true };
+    else if (users[v])        pending = { phone: v, step: 'login' };
+    else                      pending = { phone: v, step: 'pass' };
     authView();
   }
 
@@ -316,6 +320,16 @@
     const a = $('#p1').value, b2 = $('#p2').value;
     if (a.length < 6) return authMsg(t('passShort'));
     if (a !== b2) return authMsg(t('passMismatch'));
+    if (DB.on) {
+      const btn = $('#go'); btn.disabled = true;
+      const r = await DB.signUp(pending.phone, a);
+      btn.disabled = false;
+      if (r.error) return authMsg(/already registered/i.test(r.error) ? t('passWrong') : r.error);
+      me = pending.phone; store.set(SKEY, me);
+      pending = null; authMsg('');
+      await afterAuth();
+      return;
+    }
     const salt = newSalt();
     users[pending.phone] = { salt, hash: await hashPw(a, salt), at: Date.now() };
     store.set(UKEY, users);
@@ -326,6 +340,24 @@
   }
 
   async function stepLogin() {
+    if (pending.db) {
+      const btn = $('#go'); btn.disabled = true;
+      const r = await DB.signIn(pending.phone, $('#p1').value);
+      btn.disabled = false;
+      if (r.error) {
+        /* رقم بلا حساب: ننتقل إلى إنشاء كلمة مرور */
+        if (/invalid login credentials/i.test(r.error)) {
+          pending.step = 'pass';
+          authView();
+          return authMsg(t('newHere'), 'note');
+        }
+        return authMsg(r.error);
+      }
+      me = pending.phone; store.set(SKEY, me);
+      pending = null; authMsg('');
+      await afterAuth();
+      return;
+    }
     if (pending.admin) {
       if ($('#p1').value !== String(BRAND.adminPass)) return authMsg(t('passWrong'));
     } else {
@@ -337,6 +369,22 @@
     pending = null; authMsg('');
     refreshAuthUI(); renderGrid(); openAuth(false);
     toast(isAdmin() ? t('welcomeAdmin') : t('welcome'));
+  }
+
+  async function afterAuth() {
+    if (DB.on) await loadFromDB();
+    refreshAuthUI(); renderGrid(); openAuth(false);
+    toast(isAdmin() ? t('welcomeAdmin') : t('welcome'));
+  }
+
+  async function loadFromDB() {
+    const r = await DB.loadProducts();
+    if (r.products && r.products.length) PRODUCTS = r.products;
+    else if (r.products && DB.admin) {           /* أول مرة: نرفع القائمة الأصلية */
+      await DB.seedProducts(DEFAULT_PRODUCTS);
+      const again = await DB.loadProducts();
+      if (again.products) PRODUCTS = again.products;
+    }
   }
 
   function refreshAuthUI() {
@@ -411,6 +459,13 @@
     if (!info.gov) return orderMsgBox(t('errGov'));
     if (info.addr.length < 10) return orderMsgBox(t('errAddr'));
     store.set(OKEY, info);
+    if (DB.on) {
+      const items = Object.entries(cart).map(([id, q]) => {
+        const p = byId(id);
+        return p ? { id, name: tx(p.name), qty: q, price: p.price } : null;
+      }).filter(Boolean);
+      DB.saveOrder(info, items, total(), lang).catch(() => {});
+    }
     window.open(wa(orderMessage(info)), '_blank', 'noopener');
     openOrder(false);
     toast(t('orderSent'));
@@ -467,11 +522,21 @@
       </div>`;
 
     let newImg = null;
-    $('#f_img').onchange = e => {
+    $('#f_img').onchange = async e => {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
-      shrink(file, 560).then(d => { newImg = d; editMsg(t('imgReady'), 'ok'); })
-                       .catch(() => editMsg(t('imgFail')));
+      try {
+        const out = await shrink(file, 560);
+        if (DB.on) {
+          editMsg(t('imgUploading'), 'note');
+          const r = await DB.uploadImage(out.blob, 'jpg');
+          if (r.error) return editMsg(r.error);
+          newImg = r.url;
+        } else {
+          newImg = out.dataUrl;
+        }
+        editMsg(t('imgReady'), 'ok');
+      } catch (err) { editMsg(t('imgFail')); }
     };
 
     $('#f_save').onclick = () => {
@@ -488,18 +553,36 @@
         badge: { ar: $('#f_badge_ar').value.trim(), en: $('#f_badge_en').value.trim() }
       };
       const i = PRODUCTS.findIndex(x => x.id === p.id);
-      if (i >= 0) PRODUCTS[i] = rec; else PRODUCTS.push(rec);
-      if (!saveProducts()) return editMsg(t('errFull'));
-      renderGrid(); renderCart(); openEdit(false);
-      toast(isNew ? t('savedNew') : t('savedEdit'));
+      const save = async () => {
+        if (DB.on) {
+          const btn = $('#f_save'); btn.disabled = true;
+          const r = await DB.saveProduct(rec, i >= 0 ? i : PRODUCTS.length);
+          btn.disabled = false;
+          if (r.error) return editMsg(r.error);
+          await loadFromDB();
+        } else {
+          if (i >= 0) PRODUCTS[i] = rec; else PRODUCTS.push(rec);
+          if (!saveProducts()) return editMsg(t('errFull'));
+        }
+        renderGrid(); renderCart(); openEdit(false);
+        toast(isNew ? t('savedNew') : t('savedEdit'));
+      };
+      save();
     };
 
     const del = $('#f_del');
-    if (del) del.onclick = () => {
+    if (del) del.onclick = async () => {
       if (!confirm(t('confirmDel')(tx(p.name)))) return;
-      PRODUCTS = PRODUCTS.filter(x => x.id !== p.id);
+      if (DB.on) {
+        const r = await DB.deleteProduct(p.id);
+        if (r.error) return editMsg(r.error);
+        await loadFromDB();
+      } else {
+        PRODUCTS = PRODUCTS.filter(x => x.id !== p.id);
+        saveProducts();
+      }
       delete cart[p.id];
-      saveProducts(); saveCart(); renderGrid(); renderCart(); openEdit(false);
+      saveCart(); renderGrid(); renderCart(); openEdit(false);
       toast(t('deleted'));
     };
   }
@@ -516,7 +599,8 @@
           const c = document.createElement('canvas');
           c.width = c.height = size;
           c.getContext('2d').drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size);
-          res(c.toDataURL('image/jpeg', 0.82));
+          const dataUrl = c.toDataURL('image/jpeg', 0.82);
+          c.toBlob(blob => res({ dataUrl, blob }), 'image/jpeg', 0.82);
         };
         img.src = fr.result;
       };
@@ -606,7 +690,14 @@
     onScroll();
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    if (DB.on) {
+      try {
+        const phone = await DB.session();
+        if (phone) { me = phone; store.set(SKEY, me); } else { me = null; store.del(SKEY); }
+        await loadFromDB();
+      } catch (e) { /* تعذّر الاتصال: نكمل بالبيانات المحلية */ }
+    }
     $('#logo').innerHTML = LOGO;
     $('#logoFtr').innerHTML = LOGO;
     $('#heroLogo').innerHTML = LOGO;
@@ -653,10 +744,17 @@
     $('#authClose').addEventListener('click', () => openAuth(false));
     $('#editClose').addEventListener('click', () => openEdit(false));
     $('#addProduct').addEventListener('click', () => { editView(null); openEdit(true); });
-    $('#resetProducts').addEventListener('click', () => {
+    $('#resetProducts').addEventListener('click', async () => {
       if (!confirm(t('confirmReset'))) return;
-      PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-      store.del(PKEY); renderGrid(); renderCart(); toast(t('resetDone'));
+      if (DB.on) {
+        const r = await DB.seedProducts(DEFAULT_PRODUCTS);
+        if (r.error) return toast(r.error);
+        await loadFromDB();
+      } else {
+        PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+        store.del(PKEY);
+      }
+      renderGrid(); renderCart(); toast(t('resetDone'));
     });
 
     $('#scrim').addEventListener('click', () => { openCart(false); openAuth(false); openEdit(false); openOrder(false); });
