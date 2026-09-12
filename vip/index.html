@@ -27,7 +27,7 @@
 
 <div class="top">
   <div class="wrap top__in">
-    <span>شحن لكل المحافظات · <b>مجاناً للطلبات فوق ٣٠٠٠ ج.م</b> · نقش بالاسم مجاناً</span>
+    <span data-t="announce" data-html></span>
   </div>
 </div>
 
@@ -36,16 +36,17 @@
     <a href="#" class="logo" id="logo" aria-label="V.I.P SILVER"></a>
 
     <nav class="nav" id="nav">
-      <a href="#shop">المنتجات</a>
-      <a href="#about">عن المحل</a>
-      <a href="#perks">لماذا احنا</a>
-      <a href="#contact">تواصل معنا</a>
+      <a href="#shop" data-t="navShop"></a>
+      <a href="#about" data-t="navAbout"></a>
+      <a href="#perks" data-t="navPerks"></a>
+      <a href="#contact" data-t="navContact"></a>
     </nav>
 
     <div class="act">
+      <button class="ib ib--txt" id="langBtn" aria-label="Switch language"><span id="langTxt">EN</span></button>
       <button class="ib ib--txt" id="accBtn">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 20.5c0-3.6 3.4-6 7.5-6s7.5 2.4 7.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <span id="accTxt">تسجيل الدخول</span>
+        <span id="accTxt"></span>
       </button>
       <button class="ib" id="cartBtn" aria-label="سلة المشتريات">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16l-1.3 12.1a2 2 0 0 1-2 1.9H7.3a2 2 0 0 1-2-1.9Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.6 7V5.9a3.4 3.4 0 0 1 6.8 0V7" stroke="currentColor" stroke-width="1.5"/></svg>
@@ -61,19 +62,16 @@
 <section class="hero">
   <div class="wrap hero__in">
     <div class="hero__logo" id="heroLogo" aria-hidden="true"></div>
-    <h1 class="hero__t">هدية تتقال عنها<em>«دي حاجة مميزة»</em></h1>
-    <p class="hero__lead">
-      فضة ٩٢٥ بالنقش على الطلب، بوكسات هدايا جاهزة، ساعات وشنط وأحذية —
-      كل حاجة تليق بالمناسبة، وبسعر عادل.
-    </p>
+    <h1 class="hero__t"><span data-t="heroT"></span><em data-t="heroEm"></em></h1>
+    <p class="hero__lead" data-t="heroLead"></p>
     <div class="hero__cta">
-      <a href="#shop" class="btn btn--gold">اتفرّج على المنتجات</a>
-      <a class="btn btn--line" data-wa="السلام عليكم، عايز أستفسر عن منتجات V.I.P SILVER.">اسأل على واتساب</a>
+      <a href="#shop" class="btn btn--gold" data-t="heroCta1"></a>
+      <a class="btn btn--line" id="askWaBtn" data-t="heroCta2"></a>
     </div>
     <div class="marks">
-      <div><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> فضة ٩٢٥ مختومة</div>
-      <div><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> نقش بالاسم مجاناً</div>
-      <div><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> الدفع عند الاستلام</div>
+      <div><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-t="m1"></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-t="m2"></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-t="m3"></span></div>
     </div>
   </div>
 </section>
@@ -81,15 +79,15 @@
 <section class="section" id="shop">
   <div class="wrap">
     <div class="head">
-      <span class="kick">المعروضات</span>
-      <h2 class="h2">منتجاتنا</h2>
-      <p class="lead">ضيف اللي عاجبك للسلة، ولما تضغط إتمام الطلب هيوصلنا طلبك كامل على واتساب.</p>
+      <span class="kick" data-t="shopKick"></span>
+      <h2 class="h2" data-t="shopTitle"></h2>
+      <p class="lead" data-t="shopLead"></p>
     </div>
 
     <div class="admin-bar" id="adminBar" hidden>
-      <span>👑 أنت داخل كـ <b>أدمن</b> — تقدر تعدّل أي منتج أو تضيف جديد.</span>
-      <button class="btn btn--gold" id="addProduct">+ إضافة منتج</button>
-      <button class="btn btn--ghost" id="resetProducts">استرجاع القائمة الأصلية</button>
+      <span data-t="adminBar" data-html></span>
+      <button class="btn btn--gold" id="addProduct" data-t="addProduct"></button>
+      <button class="btn btn--ghost" id="resetProducts" data-t="resetProducts"></button>
     </div>
 
     <div class="tabs" id="tabs" role="tablist" aria-label="أقسام المتجر"></div>
@@ -99,8 +97,8 @@
 
 <section class="section section--dark" id="about">
   <div class="wrap head head--c">
-    <span class="kick">عن المحل</span>
-    <h2 class="h2">اسم بنيناه قطعة قطعة</h2>
+    <span class="kick" data-t="aboutKick"></span>
+    <h2 class="h2" data-t="aboutTitle"></h2>
     <p class="lead" style="margin-inline:auto">
       <strong>V.I.P SILVER</strong> بدأ من فكرة إن الهدية مش بس حاجة بتتشترى — دي حاجة بتفضل مع صاحبها سنين.
       عشان كده بنشتغل على الفضة عيار ٩٢٥ وبننقشها بإيدينا، وبنختار كل قطعة قبل ما تتعرض.
@@ -112,8 +110,8 @@
 <section class="section" id="perks">
   <div class="wrap">
     <div class="head head--c">
-      <span class="kick">ليه احنا</span>
-      <h2 class="h2">اللي بيفرّقنا</h2>
+      <span class="kick" data-t="perksKick"></span>
+      <h2 class="h2" data-t="perksTitle"></h2>
     </div>
     <div class="perks" id="perks"></div>
   </div>
@@ -121,12 +119,12 @@
 
 <section class="cta" id="contact">
   <div class="wrap">
-    <span class="kick" style="justify-content:center">تواصل معنا</span>
-    <h2>محتار تجيب إيه؟</h2>
-    <p>قولنا المناسبة والميزانية، ونرشّحلك أنسب هدية — من غير أي التزام بالشراء.</p>
-    <a class="btn btn--wa" data-wa="السلام عليكم، محتار في اختيار هدية وعايز ترشيح.">
+    <span class="kick" style="justify-content:center" data-t="ctaKick"></span>
+    <h2 data-t="ctaTitle"></h2>
+    <p data-t="ctaBody"></p>
+    <a class="btn btn--wa" id="ctaWaBtn">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.48 1.34 5L2 22l5.2-1.36a9.9 9.9 0 0 0 4.84 1.24h.01c5.5 0 9.96-4.46 9.96-9.96C22.01 6.46 17.54 2 12.04 2Zm5.8 14.06c-.24.68-1.4 1.32-1.94 1.36-.5.05-.96.23-3.24-.68-2.74-1.08-4.46-3.88-4.6-4.06-.13-.18-1.1-1.46-1.1-2.78 0-1.32.7-1.97.94-2.24.25-.27.54-.34.72-.34h.52c.16 0 .4-.06.62.48.24.58.8 2 .87 2.14.07.14.12.3.02.48-.1.18-.15.3-.29.46-.14.16-.3.36-.43.48-.14.14-.29.29-.12.57.17.28.75 1.24 1.6 2 1.11.98 2.04 1.29 2.32 1.43.28.14.45.12.62-.07.17-.2.72-.83.91-1.12.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.68-.17 1.36Z"/></svg>
-      كلّمنا على واتساب
+      <span data-t="ctaBtn"></span>
     </a>
   </div>
 </section>
@@ -137,36 +135,36 @@
   <div class="wrap ftr__in">
     <div class="ftr__col">
       <span class="logo" id="logoFtr" aria-hidden="true"></span>
-      <p>هدايا وفضة ٩٢٥ بالنقش على الطلب. الطلب عبر واتساب والتوصيل لكل المحافظات.</p>
+      <p data-t="ftrAbout"></p>
     </div>
     <div>
-      <h4>المتجر</h4>
+      <h4 data-t="ftrShop"></h4>
       <nav class="ftr__nav">
-        <a href="#shop">كل المنتجات</a>
-        <a href="#shop" data-cat="silver">الفضة</a>
-        <a href="#shop" data-cat="shoes">الأحذية</a>
-        <a href="#shop" data-cat="gifts">الهدايا والإكسسوار</a>
+        <a href="#shop" data-t="ftrAll"></a>
+        <a href="#shop" data-cat="silver" data-cat-label></a>
+        <a href="#shop" data-cat="shoes" data-cat-label></a>
+        <a href="#shop" data-cat="gifts" data-cat-label></a>
       </nav>
     </div>
     <div>
-      <h4>المحل</h4>
+      <h4 data-t="ftrStore"></h4>
       <nav class="ftr__nav">
-        <a href="#about">عن المحل</a>
-        <a href="#perks">ليه احنا</a>
-        <a href="#contact">تواصل معنا</a>
+        <a href="#about" data-t="navAbout"></a>
+        <a href="#perks" data-t="navPerks"></a>
+        <a href="#contact" data-t="navContact"></a>
       </nav>
     </div>
     <div>
-      <h4>الطلب</h4>
+      <h4 data-t="ftrOrder"></h4>
       <nav class="ftr__nav">
-        <a id="waLink">واتساب <span class="num" id="waShow"></span></a>
-        <a href="#shop">تصفّح المنتجات</a>
+        <a id="waLink"><span data-t="ftrWa"></span> <span class="num" id="waShow"></span></a>
+        <a href="#shop" data-t="ftrBrowse"></a>
       </nav>
     </div>
   </div>
   <div class="wrap ftr__base">
-    <span>© <span class="num" id="year"></span> V.I.P SILVER — جميع الحقوق محفوظة.</span>
-    <span>مصر</span>
+    <span>© <span class="num" id="year"></span> <span data-t="rights"></span></span>
+    <span data-t="country"></span>
   </div>
 </footer>
 
@@ -174,7 +172,7 @@
 <div class="scrim" id="scrim"></div>
 <aside class="cart" id="cart" aria-label="سلة المشتريات" aria-hidden="true">
   <div class="cart__top">
-    <h2>السلة <small id="cartSub">مفيش منتجات لسه</small></h2>
+    <h2><span data-t="cart"></span> <small id="cartSub"></small></h2>
     <button class="ib" id="cartClose" aria-label="إغلاق السلة">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
@@ -182,12 +180,12 @@
   <div class="cart__body" id="cartBody"></div>
   <div class="cart__foot" id="cartFoot" hidden>
     <div class="ship" id="ship"></div>
-    <div class="total"><span>الإجمالي</span><b><span class="num" id="cartTotal">0</span> ج.م</b></div>
+    <div class="total"><span data-t="totalLabel"></span><b><span class="num" id="cartTotal">0</span> <span id="curLabel"></span></b></div>
     <button class="btn btn--wa btn--wide" id="checkout">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.48 1.34 5L2 22l5.2-1.36a9.9 9.9 0 0 0 4.84 1.24h.01c5.5 0 9.96-4.46 9.96-9.96C22.01 6.46 17.54 2 12.04 2Zm5.8 14.06c-.24.68-1.4 1.32-1.94 1.36-.5.05-.96.23-3.24-.68-2.74-1.08-4.46-3.88-4.6-4.06-.13-.18-1.1-1.46-1.1-2.78 0-1.32.7-1.97.94-2.24.25-.27.54-.34.72-.34h.52c.16 0 .4-.06.62.48.24.58.8 2 .87 2.14.07.14.12.3.02.48-.1.18-.15.3-.29.46-.14.16-.3.36-.43.48-.14.14-.29.29-.12.57.17.28.75 1.24 1.6 2 1.11.98 2.04 1.29 2.32 1.43.28.14.45.12.62-.07.17-.2.72-.83.91-1.12.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.68-.17 1.36Z"/></svg>
-      إتمام الطلب عبر واتساب
+      <span data-t="checkout"></span>
     </button>
-    <p class="cart__note">هيفتح واتساب برسالة فيها طلبك كامل — راجعها وابعتها.</p>
+    <p class="cart__note" data-t="cartNote"></p>
   </div>
 </aside>
 
@@ -197,8 +195,8 @@
     <button class="ib modal__x" id="authClose" aria-label="إغلاق">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
-    <h3 id="authTitle">تسجيل الدخول</h3>
-    <p class="modal__sub" id="authSub">التسجيل اختياري — تقدر تطلب من غيره عادي.</p>
+    <h3 id="authTitle"></h3>
+    <p class="modal__sub" id="authSub"></p>
     <div class="msg" id="authMsg"></div>
     <div id="authBody"></div>
   </div>
@@ -210,8 +208,8 @@
     <button class="ib modal__x" id="editClose" aria-label="إغلاق">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
-    <h3 id="editTitle">تعديل المنتج</h3>
-    <p class="modal__sub">التعديلات بتتحفظ على المتصفح ده — راجع ملاحظة README.</p>
+    <h3 id="editTitle"></h3>
+    <p class="modal__sub" id="editSubText"></p>
     <div class="msg" id="editMsg"></div>
     <div id="editBody"></div>
   </div>
@@ -223,8 +221,8 @@
     <button class="ib modal__x" id="orderClose" aria-label="إغلاق">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
-    <h3 id="orderTitle">بيانات الطلب</h3>
-    <p class="modal__sub">اكتب بياناتك عشان نقدر نوصّل الطلب — كلها مطلوبة.</p>
+    <h3 id="orderTitle" data-t="orderTitle"></h3>
+    <p class="modal__sub" data-t="orderSub"></p>
     <div class="msg" id="orderMsg"></div>
     <div id="orderBody"></div>
   </div>

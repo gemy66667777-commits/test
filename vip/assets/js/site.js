@@ -1,5 +1,5 @@
 /* =============================================================
-   V.I.P SILVER — السلة + الحساب + لوحة الأدمن
+   V.I.P SILVER — اللغة + السلة + الحساب + لوحة الأدمن
    ============================================================= */
 (function () {
   'use strict';
@@ -14,6 +14,14 @@
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
     del(k) { try { localStorage.removeItem(k); } catch (e) {} }
   };
+
+  /* ------------------------------ اللغة ------------------------------ */
+  const LKEY = 'vip_lang';
+  let lang = 'ar';
+  try { const v = localStorage.getItem(LKEY); if (v === 'ar' || v === 'en') lang = v; } catch (e) {}
+  const t   = k => T[lang][k];
+  const tx  = v => (v && typeof v === 'object') ? (v[lang] || v.ar || v.en || '') : (v || '');
+  const cur = () => tx(BRAND.currency);
 
   /* ------------------------------ الشعار ------------------------------ */
   const LOGO = `
@@ -55,23 +63,19 @@
   };
   const ico = n => '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">' + (ICONS[n] || '') + '</svg>';
 
-  /* ============================================================
-     المنتجات — الافتراضية أو المعدَّلة من الأدمن
-     ============================================================ */
-  const PKEY = 'vip_products_v1';
+  /* ------------------------------ المنتجات ------------------------------ */
+  const PKEY = 'vip_products_v2';
   let PRODUCTS = store.get(PKEY, null) || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
   const saveProducts = () => store.set(PKEY, PRODUCTS);
   const byId = id => PRODUCTS.find(p => p.id === id);
-  const catLabel = id => (CATEGORIES.find(c => c.id === id) || {}).label || '';
+  const catLabel = id => { const c = CATEGORIES.find(x => x.id === id); return c ? tx(c.label) : ''; };
+  const otherName = p => (p.name && typeof p.name === 'object') ? (lang === 'ar' ? p.name.en : p.name.ar) : '';
 
-  /* ============================================================
-     الحساب — هاتف ثم رمز تحقق ثم كلمة مرور
-     ⚠️ تحقق تجريبي داخل المتصفح. لا يُرسل رسائل SMS حقيقية،
-        ولا يصلح حماية فعلية. راجع README.
-     ============================================================ */
+  /* ------------------------------ الحساب ------------------------------ */
   const UKEY = 'vip_users_v1', SKEY = 'vip_session_v1';
   let users = store.get(UKEY, {});
   let me = store.get(SKEY, null);
+  let pending = null;
 
   const normPhone = v => String(v || '').replace(/[^\d]/g, '');
   const validPhone = v => /^01[0125]\d{8}$/.test(normPhone(v));
@@ -84,15 +88,13 @@
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
-    let h = 0;                                   // بديل بسيط لو التشفير غير متاح
-    for (let i = 0; i < txt.length; i++) { h = (h * 31 + txt.charCodeAt(i)) | 0; }
+    let h = 0;
+    for (let i = 0; i < txt.length; i++) h = (h * 31 + txt.charCodeAt(i)) | 0;
     return 'x' + (h >>> 0).toString(16);
   }
   const newSalt = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
 
-  /* ============================================================
-     السلة
-     ============================================================ */
+  /* ------------------------------ السلة ------------------------------ */
   const CKEY = 'vip_cart_v1';
   let cart = store.get(CKEY, {});
   const saveCart = () => store.set(CKEY, cart);
@@ -103,38 +105,37 @@
      العرض
      ============================================================ */
   function renderTabs() {
-    const box = $('#tabs');
-    const on = ($('#tabs .tab.is-on') || {}).dataset ? $('#tabs .tab.is-on').dataset.cat : 'all';
-    box.innerHTML = CATEGORIES.map(c =>
-      `<button class="tab${c.id === on ? ' is-on' : ''}" data-cat="${c.id}" role="tab">${esc(c.label)}</button>`
+    const el = $('#tabs .tab.is-on');
+    const on = el ? el.dataset.cat : 'all';
+    $('#tabs').innerHTML = CATEGORIES.map(c =>
+      `<button class="tab${c.id === on ? ' is-on' : ''}" data-cat="${c.id}" role="tab">${esc(tx(c.label))}</button>`
     ).join('');
   }
-
-  function currentCat() {
-    const el = $('#tabs .tab.is-on');
-    return el ? el.dataset.cat : 'all';
-  }
+  const currentCat = () => { const el = $('#tabs .tab.is-on'); return el ? el.dataset.cat : 'all'; };
 
   function renderGrid(cat) {
     cat = cat || currentCat();
     const list = (cat === 'all') ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
-    $('#grid').innerHTML = list.map(p => `
+    $('#grid').innerHTML = list.map(p => {
+      const sub = otherName(p);
+      return `
 <article class="card rev">
   <div class="card__shot">
-    ${p.badge ? `<span class="card__tag">${esc(p.badge)}</span>` : ''}
-    ${isAdmin() ? `<button class="card__edit" data-edit="${p.id}">${ico('edit')} تعديل</button>` : ''}
-    <img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" decoding="async">
+    ${p.badge && tx(p.badge) ? `<span class="card__tag">${esc(tx(p.badge))}</span>` : ''}
+    ${isAdmin() ? `<button class="card__edit" data-edit="${p.id}">${ico('edit')} ${esc(t('edit'))}</button>` : ''}
+    <img src="${esc(p.img)}" alt="${esc(tx(p.name))}" loading="lazy" decoding="async">
   </div>
   <div class="card__body">
-    <span class="card__sub">${esc(p.sub || '')}</span>
-    <h3 class="card__name">${esc(p.name)}</h3>
-    <p class="card__desc">${esc(p.desc)}</p>
+    ${sub ? `<span class="card__sub">${esc(sub)}</span>` : ''}
+    <h3 class="card__name">${esc(tx(p.name))}</h3>
+    <p class="card__desc">${esc(tx(p.desc))}</p>
     <div class="card__foot">
-      <span class="card__price"><span class="num">${money(p.price)}</span><small>${esc(BRAND.currency)}</small></span>
-      <button class="card__add" data-add="${p.id}">${ico('plus')} أضف للسلة</button>
+      <span class="card__price"><span class="num">${money(p.price)}</span><small>${esc(cur())}</small></span>
+      <button class="card__add" data-add="${p.id}">${ico('plus')} ${esc(t('add'))}</button>
     </div>
   </div>
-</article>`).join('') || '<p class="lead">مفيش منتجات في القسم ده حالياً.</p>';
+</article>`;
+    }).join('') || `<p class="lead">${esc(t('emptyCat'))}</p>`;
     reveal();
   }
 
@@ -142,8 +143,8 @@
     $('#perks').innerHTML = PERKS.map(p => `
 <div class="perk rev">
   <span class="perk__ic">${ico(p.icon)}</span>
-  <h3>${esc(p.title)}</h3>
-  <p>${esc(p.text)}</p>
+  <h3>${esc(tx(p.title))}</h3>
+  <p>${esc(tx(p.text))}</p>
 </div>`).join('');
   }
 
@@ -152,11 +153,11 @@
     const badge = $('#cartCount');
     badge.textContent = n;
     badge.classList.toggle('is-on', n > 0);
-    $('#cartSub').textContent = n ? n + ' قطعة في السلة' : 'مفيش منتجات لسه';
+    $('#cartSub').textContent = n ? n + ' ' + t('pieces') : t('cartEmptySub');
 
     const body = $('#cartBody'), foot = $('#cartFoot');
     if (!n) {
-      body.innerHTML = `<div class="cart__empty">${ico('bag')}<p>السلة فاضية.</p><p style="font-size:.84rem">ضيف اللي عاجبك وابدأ الطلب.</p></div>`;
+      body.innerHTML = `<div class="cart__empty">${ico('bag')}<p>${esc(t('cartEmpty'))}</p><p style="font-size:.84rem">${esc(t('cartEmptyHint'))}</p></div>`;
       foot.hidden = true;
       return;
     }
@@ -165,88 +166,190 @@
       if (!p) return '';
       return `
 <div class="li">
-  <img src="${esc(p.img)}" alt="${esc(p.name)}">
+  <img src="${esc(p.img)}" alt="${esc(tx(p.name))}">
   <div>
-    <div class="li__n">${esc(p.name)}</div>
-    <div class="li__u"><span class="num">${money(p.price)}</span> ${esc(BRAND.currency)} للقطعة</div>
+    <div class="li__n">${esc(tx(p.name))}</div>
+    <div class="li__u"><span class="num">${money(p.price)}</span> ${esc(cur())} / ${esc(t('each'))}</div>
     <div class="li__r">
       <div class="qty">
-        <button data-dec="${p.id}" aria-label="إنقاص">−</button><span class="num">${q}</span><button data-inc="${p.id}" aria-label="زيادة">+</button>
+        <button data-dec="${p.id}" aria-label="−">−</button><span class="num">${q}</span><button data-inc="${p.id}" aria-label="+">+</button>
       </div>
-      <span class="li__s"><span class="num">${money(p.price * q)}</span> ${esc(BRAND.currency)}</span>
+      <span class="li__s"><span class="num">${money(p.price * q)}</span> ${esc(cur())}</span>
     </div>
-    <button class="li__d" data-del="${p.id}">إزالة</button>
+    <button class="li__d" data-del="${p.id}">${esc(t('remove'))}</button>
   </div>
 </div>`;
     }).join('');
     foot.hidden = false;
     $('#cartTotal').textContent = money(sum);
+    $('#curLabel').textContent = cur();
 
     const ship = $('#ship'), left = BRAND.freeShipFrom - sum;
     if (!BRAND.freeShipFrom || left <= 0) {
       ship.className = 'ship is-free';
-      ship.innerHTML = ico('check') + '<span>مبروك! الشحن مجاني على الطلب ده.</span>';
+      ship.innerHTML = ico('check') + '<span>' + t('shipFree') + '</span>';
     } else {
       ship.className = 'ship';
-      ship.innerHTML = ico('truck') + `<span>ضيف بـ <b class="num">${money(left)}</b> ${esc(BRAND.currency)} وتاخد شحن مجاني.</span>`;
+      ship.innerHTML = ico('truck') + '<span>' + t('shipLeft')(money(left), esc(cur())) + '</span>';
     }
   }
 
   let toastT;
   function toast(msg) {
-    const t = $('#toast');
-    t.innerHTML = ico('check') + '<span>' + esc(msg) + '</span>';
-    t.classList.add('is-on');
+    const el = $('#toast');
+    el.innerHTML = ico('check') + '<span>' + esc(msg) + '</span>';
+    el.classList.add('is-on');
     clearTimeout(toastT);
-    toastT = setTimeout(() => t.classList.remove('is-on'), 2400);
+    toastT = setTimeout(() => el.classList.remove('is-on'), 2400);
   }
 
   function add(id, btn) {
     cart[id] = (cart[id] || 0) + 1;
-    saveCart(); renderCart(); toast('اتضاف للسلة');
+    saveCart(); renderCart(); toast(t('addedToast'));
     if (btn) {
       btn.classList.add('is-added');
-      btn.innerHTML = ico('check') + ' اتضاف';
-      setTimeout(() => { btn.classList.remove('is-added'); btn.innerHTML = ico('plus') + ' أضف للسلة'; }, 1400);
+      btn.innerHTML = ico('check') + ' ' + t('added');
+      setTimeout(() => { btn.classList.remove('is-added'); btn.innerHTML = ico('plus') + ' ' + t('add'); }, 1400);
     }
   }
 
-  function openCart(open) {
-    $('#cart').classList.toggle('is-on', open);
-    $('#cart').setAttribute('aria-hidden', String(!open));
-    scrim(open);
-    if (open) $('#cartClose').focus();
-  }
+  /* ------------------------------ النوافذ ------------------------------ */
   function scrim(on) {
-    const any = on || $('#authModal').classList.contains('is-on') ||
-                $('#editModal').classList.contains('is-on') || $('#orderModal').classList.contains('is-on');
+    const any = on || ['#authModal', '#editModal', '#orderModal'].some(s => $(s).classList.contains('is-on'))
+                || $('#cart').classList.contains('is-on');
     $('#scrim').classList.toggle('is-on', any);
     document.body.classList.toggle('is-locked', any);
   }
+  function openCart(on) {
+    $('#cart').classList.toggle('is-on', on);
+    $('#cart').setAttribute('aria-hidden', String(!on));
+    scrim(on);
+    if (on) $('#cartClose').focus();
+  }
+  function openAuth(on) {
+    $('#authModal').classList.toggle('is-on', on);
+    scrim(on);
+    if (on) { authMsg(''); setTimeout(() => { const f = $('#authModal input'); if (f) f.focus(); }, 120); }
+  }
+  function openEdit(on) { $('#editModal').classList.toggle('is-on', on); scrim(on); }
+  function openOrder(on) { $('#orderModal').classList.toggle('is-on', on); scrim(on); }
 
-  const GOVS = ['القاهرة','الجيزة','الإسكندرية','القليوبية','الشرقية','الدقهلية','الغربية','المنوفية',
-    'البحيرة','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','شمال سيناء','جنوب سيناء',
-    'الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','مطروح','الوادي الجديد'];
-
-  function orderMessage(info) {
-    const L = ['طلب جديد من موقع V.I.P SILVER', ''];
-    let i = 1;
-    for (const [id, q] of Object.entries(cart)) {
-      const p = byId(id);
-      if (!p) continue;
-      L.push(i++ + '. ' + p.name);
-      L.push('   ' + q + ' × ' + money(p.price) + ' = ' + money(p.price * q) + ' ' + BRAND.currency);
-    }
-    const sum = total();
-    L.push('', '— — — — —', 'عدد القطع: ' + count(), 'الإجمالي: ' + money(sum) + ' ' + BRAND.currency);
-    if (BRAND.freeShipFrom && sum >= BRAND.freeShipFrom) L.push('الشحن: مجاني');
-    L.push('', 'بيانات العميل:', 'الاسم: ' + info.name, 'الموبايل: ' + info.phone,
-           'المحافظة: ' + info.gov, 'العنوان: ' + info.addr);
-    if (info.note) L.push('ملاحظات: ' + info.note);
-    return L.join('\n');
+  /* ============================================================
+     الحساب — رقم ثم كلمة مرور (بلا رمز تحقق)
+     ============================================================ */
+  function authMsg(text, kind) {
+    const el = $('#authMsg');
+    el.className = 'msg' + (text ? ' is-on msg--' + (kind || 'err') : '');
+    el.textContent = text || '';
   }
 
-  /* ------------------------------ نافذة بيانات الطلب ------------------------------ */
+  function authView() {
+    const b = $('#authBody');
+    if (me) {
+      const admin = isAdmin();
+      $('#authTitle').textContent = t('yourAcc');
+      $('#authSub').textContent = admin ? t('adminAccSub') : t('clientAccSub');
+      b.innerHTML = `
+        <div class="field"><label>${esc(t('phoneLabel'))}</label><input type="tel" value="${esc(me)}" disabled></div>
+        ${admin ? `<div class="msg is-on msg--note">${esc(t('adminNote'))}</div>` : ''}
+        <button class="btn btn--ghost btn--wide" id="logout">${esc(t('logout'))}</button>`;
+      $('#logout').onclick = () => {
+        me = null; store.del(SKEY);
+        refreshAuthUI(); renderGrid(); openAuth(false); toast(t('loggedOut'));
+      };
+      return;
+    }
+
+    if (!pending) {
+      $('#authTitle').textContent = t('signIn');
+      $('#authSub').textContent = t('authSub');
+      b.innerHTML = `
+        <div class="field">
+          <label>${esc(t('phoneLabel'))}</label>
+          <input type="tel" id="ph" inputmode="numeric" placeholder="01xxxxxxxxx" maxlength="11" autocomplete="tel">
+          <small>${esc(t('phoneHint'))}</small>
+        </div>
+        <button class="btn btn--gold btn--wide" id="go">${esc(t('next'))}</button>`;
+      $('#go').onclick = stepPhone;
+      $('#ph').onkeydown = e => { if (e.key === 'Enter') stepPhone(); };
+      return;
+    }
+
+    if (pending.step === 'pass') {
+      $('#authTitle').textContent = t('pickPass');
+      $('#authSub').textContent = t('pickPassSub') + pending.phone + t('pickPassSub2');
+      b.innerHTML = `
+        <div class="field"><label>${esc(t('pass'))}</label><input type="password" id="p1" minlength="6" placeholder="${esc(t('passPh'))}"></div>
+        <div class="field"><label>${esc(t('passConfirm'))}</label><input type="password" id="p2" minlength="6"></div>
+        <button class="btn btn--gold btn--wide" id="go">${esc(t('createAcc'))}</button>
+        <div class="modal__foot"><button class="link-btn" id="back">${esc(t('changePhone'))}</button></div>`;
+      $('#go').onclick = stepPass;
+      $('#p2').onkeydown = e => { if (e.key === 'Enter') stepPass(); };
+      $('#back').onclick = () => { pending = null; authMsg(''); authView(); };
+      return;
+    }
+
+    if (pending.step === 'login') {
+      $('#authTitle').textContent = pending.admin ? t('adminLogin') : t('welcomeBack');
+      $('#authSub').textContent = (pending.admin ? t('adminLoginSub') : t('loginSub')) + pending.phone;
+      b.innerHTML = `
+        <div class="field"><label>${esc(t('pass'))}</label><input type="password" id="p1" autocomplete="current-password"></div>
+        <button class="btn btn--gold btn--wide" id="go">${esc(t('login'))}</button>
+        <div class="modal__foot"><button class="link-btn" id="back">${esc(t('changePhone'))}</button></div>`;
+      $('#go').onclick = stepLogin;
+      $('#p1').onkeydown = e => { if (e.key === 'Enter') stepLogin(); };
+      $('#back').onclick = () => { pending = null; authMsg(''); authView(); };
+    }
+  }
+
+  function stepPhone() {
+    const v = normPhone($('#ph').value);
+    if (!validPhone(v)) return authMsg(t('badPhone'));
+    authMsg('');
+    if (isAdminPhone(v)) pending = { phone: v, step: 'login', admin: true };
+    else if (users[v])   pending = { phone: v, step: 'login' };
+    else                 pending = { phone: v, step: 'pass' };
+    authView();
+  }
+
+  async function stepPass() {
+    const a = $('#p1').value, b2 = $('#p2').value;
+    if (a.length < 6) return authMsg(t('passShort'));
+    if (a !== b2) return authMsg(t('passMismatch'));
+    const salt = newSalt();
+    users[pending.phone] = { salt, hash: await hashPw(a, salt), at: Date.now() };
+    store.set(UKEY, users);
+    me = pending.phone; store.set(SKEY, me);
+    pending = null; authMsg('');
+    refreshAuthUI(); renderGrid(); openAuth(false);
+    toast(t('accCreated'));
+  }
+
+  async function stepLogin() {
+    if (pending.admin) {
+      if ($('#p1').value !== String(BRAND.adminPass)) return authMsg(t('passWrong'));
+    } else {
+      const u = users[pending.phone];
+      const h = await hashPw($('#p1').value, u.salt);
+      if (h !== u.hash) return authMsg(t('passWrong'));
+    }
+    me = pending.phone; store.set(SKEY, me);
+    pending = null; authMsg('');
+    refreshAuthUI(); renderGrid(); openAuth(false);
+    toast(isAdmin() ? t('welcomeAdmin') : t('welcome'));
+  }
+
+  function refreshAuthUI() {
+    const admin = isAdmin();
+    $('#accTxt').textContent = me ? (admin ? t('adminAcc') : t('myAcc')) : t('signIn');
+    $('#accBtn').classList.toggle('ib--admin', admin);
+    $('#adminBar').hidden = !admin;
+    document.body.classList.toggle('is-admin', admin);
+  }
+
+  /* ============================================================
+     بيانات الطلب
+     ============================================================ */
   const OKEY = 'vip_customer_v1';
 
   function orderMsgBox(text, kind) {
@@ -254,27 +357,45 @@
     el.className = 'msg' + (text ? ' is-on msg--' + (kind || 'err') : '');
     el.textContent = text || '';
   }
-  function openOrder(on) { $('#orderModal').classList.toggle('is-on', on); scrim(on); }
 
   function orderView() {
     const saved = store.get(OKEY, {});
-    const phone = saved.phone || me || '';
     orderMsgBox('');
     $('#orderBody').innerHTML = `
       <div class="row2">
-        <div class="field"><label>الاسم بالكامل *</label><input id="o_name" value="${esc(saved.name || '')}" placeholder="الاسم زي ما هو في البطاقة"></div>
-        <div class="field"><label>رقم الموبايل *</label><input id="o_phone" type="tel" inputmode="numeric" maxlength="11" value="${esc(phone)}" placeholder="01xxxxxxxxx"></div>
+        <div class="field"><label>${esc(t('fName'))} *</label><input id="o_name" value="${esc(saved.name || '')}" placeholder="${esc(t('fNamePh'))}"></div>
+        <div class="field"><label>${esc(t('fPhone'))} *</label><input id="o_phone" type="tel" inputmode="numeric" maxlength="11" value="${esc(saved.phone || me || '')}" placeholder="01xxxxxxxxx"></div>
       </div>
-      <div class="field"><label>المحافظة *</label><select id="o_gov">
-        <option value="">اختر المحافظة</option>
-        ${GOVS.map(g => `<option${g === saved.gov ? ' selected' : ''}>${esc(g)}</option>`).join('')}
+      <div class="field"><label>${esc(t('fGov'))} *</label><select id="o_gov">
+        <option value="">${esc(t('fGovPick'))}</option>
+        ${GOVS.map(g => `<option value="${esc(g.ar)}"${g.ar === saved.gov ? ' selected' : ''}>${esc(tx(g))}</option>`).join('')}
       </select></div>
-      <div class="field"><label>العنوان بالتفصيل *</label><textarea id="o_addr" placeholder="المدينة، الشارع، رقم العمارة والدور والشقة">${esc(saved.addr || '')}</textarea></div>
-      <div class="field"><label>ملاحظات (اختياري)</label><input id="o_note" placeholder="مثال: النقش المطلوب، أو ميعاد التسليم"></div>
-      <button class="btn btn--wa btn--wide" id="o_send">${ico('wa')} تأكيد وإرسال الطلب على واتساب</button>
-      <p class="cart__note">هيفتح واتساب برسالة فيها الطلب وبياناتك — راجعها وابعتها.</p>`;
-
+      <div class="field"><label>${esc(t('fAddr'))} *</label><textarea id="o_addr" placeholder="${esc(t('fAddrPh'))}">${esc(saved.addr || '')}</textarea></div>
+      <div class="field"><label>${esc(t('fNote'))}</label><input id="o_note" placeholder="${esc(t('fNotePh'))}"></div>
+      <button class="btn btn--wa btn--wide" id="o_send">${ico('wa')} ${esc(t('sendOrder'))}</button>
+      <p class="cart__note">${esc(t('orderNote'))}</p>`;
     $('#o_send').onclick = sendOrder;
+  }
+
+  const govLabel = ar => { const g = GOVS.find(x => x.ar === ar); return g ? tx(g) : ar; };
+
+  function orderMessage(info) {
+    const L = [t('msgHead'), ''];
+    let i = 1;
+    for (const [id, q] of Object.entries(cart)) {
+      const p = byId(id);
+      if (!p) continue;
+      L.push(i++ + '. ' + tx(p.name));
+      L.push('   ' + q + ' × ' + money(p.price) + ' = ' + money(p.price * q) + ' ' + cur());
+    }
+    const sum = total();
+    L.push('', '— — — — —', t('msgCount') + ': ' + count(), t('msgTotal') + ': ' + money(sum) + ' ' + cur());
+    if (BRAND.freeShipFrom && sum >= BRAND.freeShipFrom) L.push(t('msgShip') + ': ' + t('msgFree'));
+    L.push('', t('msgCustomer'),
+      t('msgName') + ': ' + info.name, t('msgPhone') + ': ' + info.phone,
+      t('msgGov') + ': ' + govLabel(info.gov), t('msgAddr') + ': ' + info.addr);
+    if (info.note) L.push(t('msgNote') + ': ' + info.note);
+    return L.join('\n');
   }
 
   function sendOrder() {
@@ -285,160 +406,14 @@
       addr: $('#o_addr').value.trim(),
       note: $('#o_note').value.trim()
     };
-    if (info.name.length < 3) return orderMsgBox('اكتب اسمك بالكامل.');
-    if (!validPhone(info.phone)) return orderMsgBox('اكتب رقم موبايل مصري صحيح — ١١ رقم يبدأ بـ 010 أو 011 أو 012 أو 015.');
-    if (!info.gov) return orderMsgBox('اختر المحافظة.');
-    if (info.addr.length < 10) return orderMsgBox('اكتب العنوان بالتفصيل عشان نقدر نوصّل.');
+    if (info.name.length < 3) return orderMsgBox(t('errName'));
+    if (!validPhone(info.phone)) return orderMsgBox(t('badPhone'));
+    if (!info.gov) return orderMsgBox(t('errGov'));
+    if (info.addr.length < 10) return orderMsgBox(t('errAddr'));
     store.set(OKEY, info);
     window.open(wa(orderMessage(info)), '_blank', 'noopener');
     openOrder(false);
-    toast('تمام! راجع الرسالة في واتساب وابعتها');
-  }
-
-  /* ============================================================
-     نافذة الحساب
-     ============================================================ */
-  let pending = null;   // { phone, otp, tries }
-
-  function authMsg(text, kind) {
-    const el = $('#authMsg');
-    el.className = 'msg' + (text ? ' is-on msg--' + (kind || 'err') : '');
-    el.textContent = text || '';
-  }
-
-  function openAuth(on) {
-    $('#authModal').classList.toggle('is-on', on);
-    scrim(on);
-    if (on) { authMsg(''); setTimeout(() => { const f = $('#authModal input'); if (f) f.focus(); }, 120); }
-  }
-
-  function authView() {
-    const b = $('#authBody');
-    if (me) {
-      const admin = isAdmin();
-      $('#authTitle').textContent = 'حسابك';
-      $('#authSub').textContent = admin ? 'حساب أدمن — تقدر تعدّل المنتجات والأسعار.' : 'حساب عميل.';
-      b.innerHTML = `
-        <div class="field"><label>رقم الموبايل</label><input type="tel" value="${esc(me)}" disabled></div>
-        ${admin ? '<div class="msg is-on msg--note">👑 صلاحيات أدمن مفعّلة. هتلاقي زرار تعديل على كل منتج.</div>' : ''}
-        <button class="btn btn--ghost btn--wide" id="logout">تسجيل الخروج</button>`;
-      $('#logout').onclick = () => { me = null; store.del(SKEY); refreshAuthUI(); renderGrid(); openAuth(false); toast('تم تسجيل الخروج'); };
-      return;
-    }
-
-    if (!pending) {                       /* خطوة ١: الرقم */
-      $('#authTitle').textContent = 'تسجيل الدخول';
-      $('#authSub').textContent = 'التسجيل اختياري — تقدر تطلب من غيره عادي.';
-      b.innerHTML = `
-        <div class="field">
-          <label>رقم الموبايل</label>
-          <input type="tel" id="ph" inputmode="numeric" placeholder="01xxxxxxxxx" maxlength="11" autocomplete="tel">
-          <small>هنبعتلك رمز تأكيد على الرقم ده.</small>
-        </div>
-        <button class="btn btn--gold btn--wide" id="go">متابعة</button>`;
-      $('#go').onclick = stepPhone;
-      $('#ph').onkeydown = e => { if (e.key === 'Enter') stepPhone(); };
-      return;
-    }
-
-    if (pending.step === 'otp') {         /* خطوة ٢: رمز التحقق */
-      $('#authTitle').textContent = 'رمز التأكيد';
-      $('#authSub').textContent = 'اكتب الرمز المكوّن من ٦ أرقام المرسل إلى ' + pending.phone;
-      b.innerHTML = `
-        <div class="field"><input class="otp" id="otp" inputmode="numeric" maxlength="6" placeholder="······"></div>
-        <button class="btn btn--gold btn--wide" id="go">تأكيد</button>
-        <div class="demo-otp">
-          نسخة تجريبية: مفيش رسالة SMS بتتبعت فعلاً، والرمز بيظهر هنا.
-          <b>${pending.otp}</b>
-        </div>
-        <div class="modal__foot"><button class="link-btn" id="back">تغيير الرقم</button></div>`;
-      $('#go').onclick = stepOtp;
-      $('#otp').onkeydown = e => { if (e.key === 'Enter') stepOtp(); };
-      $('#back').onclick = () => { pending = null; authMsg(''); authView(); };
-      return;
-    }
-
-    if (pending.step === 'pass') {        /* خطوة ٣: كلمة المرور */
-      $('#authTitle').textContent = 'اختر كلمة المرور';
-      $('#authSub').textContent = 'دي هتبقى كلمة السر لحسابك في المرات الجاية.';
-      b.innerHTML = `
-        <div class="field"><label>كلمة المرور</label><input type="password" id="p1" minlength="6" placeholder="٦ أحرف على الأقل"></div>
-        <div class="field"><label>تأكيد كلمة المرور</label><input type="password" id="p2" minlength="6"></div>
-        <button class="btn btn--gold btn--wide" id="go">إنشاء الحساب</button>`;
-      $('#go').onclick = stepPass;
-      $('#p2').onkeydown = e => { if (e.key === 'Enter') stepPass(); };
-      return;
-    }
-
-    if (pending.step === 'login') {       /* حساب موجود */
-      $('#authTitle').textContent = pending.admin ? 'دخول الأدمن' : 'أهلاً بعودتك';
-      $('#authSub').textContent = (pending.admin ? 'حساب أدمن — اكتب كلمة المرور الخاصة بـ ' : 'اكتب كلمة المرور الخاصة بـ ') + pending.phone;
-      b.innerHTML = `
-        <div class="field"><label>كلمة المرور</label><input type="password" id="p1" autocomplete="current-password"></div>
-        <button class="btn btn--gold btn--wide" id="go">دخول</button>
-        <div class="modal__foot"><button class="link-btn" id="back">تغيير الرقم</button></div>`;
-      $('#go').onclick = stepLogin;
-      $('#p1').onkeydown = e => { if (e.key === 'Enter') stepLogin(); };
-      $('#back').onclick = () => { pending = null; authMsg(''); authView(); };
-    }
-  }
-
-  function stepPhone() {
-    const v = normPhone($('#ph').value);
-    if (!validPhone(v)) return authMsg('اكتب رقم موبايل مصري صحيح — ١١ رقم يبدأ بـ 010 أو 011 أو 012 أو 015.');
-    authMsg('');
-    /* أرقام الأدمن حسابات جاهزة بكلمة مرور ثابتة — تدخل مباشرة بلا رمز تحقق */
-    if (isAdminPhone(v)) { pending = { phone: v, step: 'login', admin: true }; return authView(); }
-    if (users[v]) { pending = { phone: v, step: 'login' }; return authView(); }
-    pending = { phone: v, step: 'otp', otp: String(Math.floor(100000 + Math.random() * 900000)), tries: 0 };
-    authView();
-  }
-
-  function stepOtp() {
-    const v = normPhone($('#otp').value);
-    pending.tries++;
-    if (v !== pending.otp) {
-      if (pending.tries >= 5) { pending = null; authMsg('حاولت كتير. ابدأ من الأول.'); return authView(); }
-      return authMsg('الرمز غلط. فاضل لك ' + (5 - pending.tries) + ' محاولات.');
-    }
-    authMsg('');
-    pending.step = 'pass';
-    authView();
-  }
-
-  async function stepPass() {
-    const a = $('#p1').value, b2 = $('#p2').value;
-    if (a.length < 6) return authMsg('كلمة المرور لازم ٦ أحرف على الأقل.');
-    if (a !== b2) return authMsg('كلمتا المرور مش متطابقتين.');
-    const salt = newSalt();
-    users[pending.phone] = { salt, hash: await hashPw(a, salt), at: Date.now() };
-    store.set(UKEY, users);
-    me = pending.phone; store.set(SKEY, me);
-    pending = null; authMsg('');
-    refreshAuthUI(); renderGrid(); openAuth(false);
-    toast(isAdmin() ? 'أهلاً بيك يا أدمن 👑' : 'تم إنشاء حسابك');
-  }
-
-  async function stepLogin() {
-    if (pending.admin) {                       /* حساب أدمن بكلمة مرور ثابتة */
-      if ($('#p1').value !== String(BRAND.adminPass)) return authMsg('كلمة المرور غلط.');
-    } else {
-      const u = users[pending.phone];
-      const h = await hashPw($('#p1').value, u.salt);
-      if (h !== u.hash) return authMsg('كلمة المرور غلط.');
-    }
-    me = pending.phone; store.set(SKEY, me);
-    pending = null; authMsg('');
-    refreshAuthUI(); renderGrid(); openAuth(false);
-    toast(isAdmin() ? 'أهلاً بيك يا أدمن 👑' : 'أهلاً بيك');
-  }
-
-  function refreshAuthUI() {
-    const admin = isAdmin();
-    $('#accTxt').textContent = me ? (admin ? 'الأدمن' : 'حسابي') : 'تسجيل الدخول';
-    $('#accBtn').classList.toggle('ib--admin', admin);
-    $('#adminBar').hidden = !admin;
-    document.body.classList.toggle('is-admin', admin);
+    toast(t('orderSent'));
   }
 
   /* ============================================================
@@ -449,76 +424,86 @@
     el.className = 'msg' + (text ? ' is-on msg--' + (kind || 'err') : '');
     el.textContent = text || '';
   }
-  function openEdit(on) { $('#editModal').classList.toggle('is-on', on); scrim(on); }
 
   function editView(id) {
     if (!isAdmin()) return;
     const isNew = !id;
+    const src = isNew ? null : byId(id);
     const p = isNew
-      ? { id: 'v' + Date.now().toString(36), cat: CATEGORIES[1].id, name: '', sub: '', desc: '', price: 0, badge: '', img: '' }
-      : Object.assign({}, byId(id));
-    $('#editTitle').textContent = isNew ? 'إضافة منتج' : 'تعديل المنتج';
+      ? { id: 'v' + Date.now().toString(36), cat: CATEGORIES[1].id, name: {ar:'',en:''}, desc: {ar:'',en:''}, price: 0, badge: {ar:'',en:''}, img: '' }
+      : JSON.parse(JSON.stringify(src));
+    const g = (o, k) => (o && typeof o === 'object') ? (o[k] || '') : (k === 'ar' ? (o || '') : '');
+
+    $('#editTitle').textContent = isNew ? t('addTitle') : t('editTitle');
+    $('#editSubText').textContent = t('editSub');
     editMsg('');
     $('#editBody').innerHTML = `
       <div class="row2">
-        <div class="field"><label>اسم المنتج</label><input id="f_name" value="${esc(p.name)}"></div>
-        <div class="field"><label>الاسم بالإنجليزي (اختياري)</label><input id="f_sub" value="${esc(p.sub)}" dir="ltr"></div>
+        <div class="field"><label>${esc(t('fNameAr'))}</label><input id="f_name_ar" dir="rtl" value="${esc(g(p.name,'ar'))}"></div>
+        <div class="field"><label>${esc(t('fNameEn'))}</label><input id="f_name_en" dir="ltr" value="${esc(g(p.name,'en'))}"></div>
       </div>
-      <div class="field"><label>الوصف</label><textarea id="f_desc">${esc(p.desc)}</textarea></div>
       <div class="row2">
-        <div class="field"><label>السعر (${esc(BRAND.currency)})</label><input id="f_price" type="number" min="0" step="1" value="${Number(p.price) || 0}"></div>
-        <div class="field"><label>القسم</label><select id="f_cat">
-          ${CATEGORIES.filter(c => c.id !== 'all').map(c => `<option value="${c.id}"${c.id === p.cat ? ' selected' : ''}>${esc(c.label)}</option>`).join('')}
+        <div class="field"><label>${esc(t('fDescAr'))}</label><textarea id="f_desc_ar" dir="rtl">${esc(g(p.desc,'ar'))}</textarea></div>
+        <div class="field"><label>${esc(t('fDescEn'))}</label><textarea id="f_desc_en" dir="ltr">${esc(g(p.desc,'en'))}</textarea></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>${esc(t('fPrice'))} (${esc(cur())})</label><input id="f_price" type="number" min="0" step="1" value="${Number(p.price) || 0}"></div>
+        <div class="field"><label>${esc(t('fCat'))}</label><select id="f_cat">
+          ${CATEGORIES.filter(c => c.id !== 'all').map(c => `<option value="${c.id}"${c.id === p.cat ? ' selected' : ''}>${esc(tx(c.label))}</option>`).join('')}
         </select></div>
       </div>
-      <div class="field"><label>شارة (اختياري)</label><input id="f_badge" value="${esc(p.badge || '')}" placeholder="مثال: الأكثر طلباً"></div>
+      <div class="row2">
+        <div class="field"><label>${esc(t('fBadgeAr'))}</label><input id="f_badge_ar" dir="rtl" value="${esc(g(p.badge,'ar'))}"></div>
+        <div class="field"><label>${esc(t('fBadgeEn'))}</label><input id="f_badge_en" dir="ltr" value="${esc(g(p.badge,'en'))}"></div>
+      </div>
       <div class="field">
-        <label>الصورة</label>
+        <label>${esc(t('fImage'))}</label>
         <input id="f_img" type="file" accept="image/*">
-        <small>${p.img ? 'فيه صورة حالياً — اختَر ملف جديد لو عايز تغيّرها.' : 'اختر صورة مربّعة للنتيجة الأفضل.'}</small>
+        <small>${esc(p.img ? t('fImageHas') : t('fImageNew'))}</small>
       </div>
       <div class="row2">
-        <button class="btn btn--gold" id="f_save">حفظ</button>
-        ${isNew ? '' : '<button class="btn btn--ghost" id="f_del">حذف المنتج</button>'}
+        <button class="btn btn--gold" id="f_save">${esc(t('save'))}</button>
+        ${isNew ? '' : `<button class="btn btn--ghost" id="f_del">${esc(t('del'))}</button>`}
       </div>`;
 
     let newImg = null;
     $('#f_img').onchange = e => {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
-      shrink(file, 560).then(d => { newImg = d; editMsg('الصورة جاهزة — اضغط حفظ.', 'ok'); })
-                       .catch(() => editMsg('مقدرتش أقرأ الصورة دي.'));
+      shrink(file, 560).then(d => { newImg = d; editMsg(t('imgReady'), 'ok'); })
+                       .catch(() => editMsg(t('imgFail')));
     };
 
     $('#f_save').onclick = () => {
-      const name = $('#f_name').value.trim();
+      const nameAr = $('#f_name_ar').value.trim(), nameEn = $('#f_name_en').value.trim();
       const price = Number($('#f_price').value);
-      if (!name) return editMsg('اكتب اسم المنتج.');
-      if (!(price >= 0)) return editMsg('اكتب سعر صحيح.');
+      if (!nameAr && !nameEn) return editMsg(t('errNameReq'));
+      if (!(price >= 0)) return editMsg(t('errPrice'));
       const img = newImg || p.img;
-      if (!img) return editMsg('اختر صورة للمنتج.');
+      if (!img) return editMsg(t('errImg'));
       const rec = {
-        id: p.id, cat: $('#f_cat').value, name, sub: $('#f_sub').value.trim(),
-        desc: $('#f_desc').value.trim(), price, badge: $('#f_badge').value.trim(), img
+        id: p.id, cat: $('#f_cat').value, price, img,
+        name: { ar: nameAr || nameEn, en: nameEn || nameAr },
+        desc: { ar: $('#f_desc_ar').value.trim(), en: $('#f_desc_en').value.trim() },
+        badge: { ar: $('#f_badge_ar').value.trim(), en: $('#f_badge_en').value.trim() }
       };
       const i = PRODUCTS.findIndex(x => x.id === p.id);
       if (i >= 0) PRODUCTS[i] = rec; else PRODUCTS.push(rec);
-      if (!saveProducts()) return editMsg('مساحة المتصفح امتلأت — جرّب صورة أصغر أو احذف منتجات.');
+      if (!saveProducts()) return editMsg(t('errFull'));
       renderGrid(); renderCart(); openEdit(false);
-      toast(isNew ? 'تم إضافة المنتج' : 'تم حفظ التعديلات');
+      toast(isNew ? t('savedNew') : t('savedEdit'));
     };
 
     const del = $('#f_del');
     if (del) del.onclick = () => {
-      if (!confirm('متأكد إنك عايز تحذف «' + p.name + '»؟')) return;
+      if (!confirm(t('confirmDel')(tx(p.name)))) return;
       PRODUCTS = PRODUCTS.filter(x => x.id !== p.id);
       delete cart[p.id];
       saveProducts(); saveCart(); renderGrid(); renderCart(); openEdit(false);
-      toast('تم حذف المنتج');
+      toast(t('deleted'));
     };
   }
 
-  /* تصغير الصورة قبل حفظها حتى لا تمتلئ مساحة المتصفح */
   function shrink(file, size) {
     return new Promise((res, rej) => {
       const fr = new FileReader();
@@ -530,14 +515,57 @@
           const s = Math.min(img.width, img.height);
           const c = document.createElement('canvas');
           c.width = c.height = size;
-          const x = c.getContext('2d');
-          x.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size);
+          c.getContext('2d').drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size);
           res(c.toDataURL('image/jpeg', 0.82));
         };
         img.src = fr.result;
       };
       fr.readAsDataURL(file);
     });
+  }
+
+  /* ============================================================
+     تطبيق اللغة
+     ============================================================ */
+  function applyLang() {
+    const d = document.documentElement;
+    d.setAttribute('lang', lang);
+    d.setAttribute('dir', t('dir'));
+
+    $$('[data-t]').forEach(el => {
+      const v = t(el.dataset.t);
+      if (typeof v !== 'string') return;
+      if (el.hasAttribute('data-html')) el.innerHTML = v; else el.textContent = v;
+    });
+    $$('[data-cat-label]').forEach(a => {
+      const c = CATEGORIES.find(x => x.id === a.dataset.cat);
+      if (c) a.textContent = tx(c.label);
+    });
+
+    $('#langTxt').textContent = t('other');
+    $('#langBtn').setAttribute('aria-label', t('otherLabel'));
+    $('#cartBtn').setAttribute('aria-label', t('cartAria'));
+    $('#cartClose').setAttribute('aria-label', t('close'));
+    $('#burger').setAttribute('aria-label', t('menu'));
+    $('#cart').setAttribute('aria-label', t('cartAria'));
+
+    [['#ctaWaBtn', 'ctaWa'], ['#askWaBtn', 'askWa'], ['#waLink', 'askWa']].forEach(([sel, key]) => {
+      const el = $(sel);
+      if (!el) return;
+      el.href = wa(t(key)); el.target = '_blank'; el.rel = 'noopener';
+    });
+
+    refreshAuthUI();
+    renderTabs(); renderGrid(); renderPerks(); renderCart();
+    if ($('#authModal').classList.contains('is-on')) authView();
+    if ($('#orderModal').classList.contains('is-on')) orderView();
+    reveal();
+  }
+
+  function toggleLang() {
+    lang = lang === 'ar' ? 'en' : 'ar';
+    try { localStorage.setItem(LKEY, lang); } catch (e) {}
+    applyLang();
   }
 
   /* ============================================================
@@ -584,13 +612,11 @@
     $('#heroLogo').innerHTML = LOGO;
     $('#year').textContent = new Date().getFullYear();
     $('#waShow').textContent = BRAND.whatsappShow;
-    $('#waLink').href = wa('السلام عليكم، عايز أستفسر عن منتجات V.I.P SILVER.');
-    $('#waLink').target = '_blank'; $('#waLink').rel = 'noopener';
 
-    $$('[data-wa]').forEach(el => { el.href = wa(el.dataset.wa); el.target = '_blank'; el.rel = 'noopener'; });
+    applyLang();
+    wireNav();
 
-    refreshAuthUI();
-    renderTabs(); renderGrid('all'); renderPerks(); renderCart(); wireNav(); reveal();
+    $('#langBtn').addEventListener('click', toggleLang);
 
     $('#tabs').addEventListener('click', e => {
       const b = e.target.closest('.tab');
@@ -628,9 +654,9 @@
     $('#editClose').addEventListener('click', () => openEdit(false));
     $('#addProduct').addEventListener('click', () => { editView(null); openEdit(true); });
     $('#resetProducts').addEventListener('click', () => {
-      if (!confirm('هيرجع كل المنتجات لحالتها الأصلية ويلغي تعديلاتك. تمام؟')) return;
+      if (!confirm(t('confirmReset'))) return;
       PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-      store.del(PKEY); renderGrid(); renderCart(); toast('رجعت القائمة الأصلية');
+      store.del(PKEY); renderGrid(); renderCart(); toast(t('resetDone'));
     });
 
     $('#scrim').addEventListener('click', () => { openCart(false); openAuth(false); openEdit(false); openOrder(false); });

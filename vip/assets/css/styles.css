@@ -291,8 +291,7 @@ html[dir="rtl"] .cart{--slide:100%}
   border-radius:var(--r);color:var(--silver);font-size:.92rem;transition:border-color .2s;
 }
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);outline:none}
-.field input[type="tel"],.field .otp{direction:ltr;text-align:start;letter-spacing:.08em}
-.field .otp{font-size:1.5rem;text-align:center;letter-spacing:.6em;font-weight:600}
+.field input[type="tel"]{direction:ltr;text-align:start;letter-spacing:.08em}
 .field textarea{min-height:76px;resize:vertical}
 .field small{display:block;font-size:.74rem;color:var(--silver-2);margin-top:6px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -303,12 +302,6 @@ html[dir="rtl"] .cart{--slide:100%}
 .msg--err{background:rgba(224,87,107,.12);border:1px solid rgba(224,87,107,.4);color:#f2a3ae}
 .msg--ok{background:rgba(62,194,122,.1);border:1px solid rgba(62,194,122,.36);color:#8fdcae}
 .msg--note{background:rgba(207,168,78,.09);border:1px solid var(--line-2);color:var(--gold-soft)}
-
-.demo-otp{
-  margin-top:14px;padding:13px 15px;border:1px dashed var(--line-2);border-radius:var(--r);
-  background:rgba(207,168,78,.06);font-size:.82rem;color:var(--gold-soft);text-align:center;
-}
-.demo-otp b{font-size:1.5rem;letter-spacing:.5em;display:block;margin-top:6px;direction:ltr}
 
 .link-btn{color:var(--gold);font-size:.83rem;text-decoration:underline;text-underline-offset:3px}
 .modal__foot{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);text-align:center;font-size:.83rem;color:var(--silver-2)}
@@ -334,3 +327,10 @@ html[dir="rtl"] .cart{--slide:100%}
   .card__edit{opacity:1}
   .card__add{opacity:1}
 }
+
+/* ---------------------------- مفتاح اللغة والوضع الإنجليزي ---------------------------- */
+html[lang="en"] h1,html[lang="en"] h2,html[lang="en"] .card__name,
+html[lang="en"] .perk h3,html[lang="en"] .modal h3{font-family:'Cinzel',Georgia,serif;letter-spacing:.01em}
+html[lang="en"] body{font-weight:400}
+html[lang="en"] .card__sub{font-family:var(--body);text-transform:none;letter-spacing:.06em}
+html[lang="en"] .cart{--slide:-100%}
