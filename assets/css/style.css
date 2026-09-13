@@ -98,8 +98,8 @@ h1,h2,h3,h4{font-family:var(--ff-d);font-weight:700;line-height:1.35;margin:0;le
   box-shadow:0 8px 20px -10px rgba(149,116,47,.9);flex-shrink:0;
 }
 .logo .txt{display:block;line-height:1}
-.logo .txt b{font-family:var(--ff-d);font-size:1.45rem;line-height:1.55;display:block;margin-bottom:-2px}
-.logo .txt span{display:block;font-size:.64rem;letter-spacing:.2em;color:var(--muted);font-weight:700;margin-top:1px}
+.logo .txt b{font-family:var(--ff-d);font-size:1.4rem;line-height:2;display:block}
+.logo .txt span{display:block;font-size:.64rem;letter-spacing:.2em;color:var(--muted);font-weight:700;margin-top:-1px}
 .nav{display:flex;align-items:center;gap:4px;margin-inline-start:auto}
 .nav a{
   padding:9px 15px;border-radius:100px;font-size:.93rem;font-weight:500;color:var(--ink-2);
