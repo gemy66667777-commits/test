@@ -64,21 +64,21 @@ window.GENSITA_SEED = {
 
   /* المعرض — الاسم والسعر تحت كل صورة */
   items: [
-    { id:"g01", slug:"rokn-el-bloom",       name:"ركن البلوم",        cat:"كوش وأقواس",   price:0, featured:true,  desc:"قوس زهر أبيض وسعف ذهبي مع نيون We Found Love" },
-    { id:"g02", slug:"qos-el-ghoroub",      name:"قوس الغروب",        cat:"كوش وأقواس",   price:0, featured:true,  desc:"تدرّج برتقالي وموڤ على قوس بلينث وردي" },
-    { id:"g03", slug:"qos-el-roman",        name:"قوس الرمان",        cat:"كوش وأقواس",   price:0, featured:false, desc:"ورد أحمر وأنتوريوم على خلفية بيضا ودرابيه غامق" },
-    { id:"g04", slug:"beit-el-foll",        name:"بيت الفل",          cat:"كوش وأقواس",   price:0, featured:false, desc:"كنبة بيضا وستارة شيفون وعمودين ورد" },
-    { id:"g05", slug:"tawaam-el-aqwas",     name:"توأم الأقواس",      cat:"كوش وأقواس",   price:0, featured:true,  desc:"قوسين مضلّعين بالحروف وإضاءة برتقالي دافي" },
-    { id:"g06", slug:"qos-el-horouf",       name:"قوس الحروف",        cat:"حفلات خارجية", price:0, featured:false, desc:"قوس أبيض بحروف العروسين دهبي في الجنينة" },
-    { id:"g07", slug:"genenet-el-farah",    name:"جنينة الفرح",       cat:"حفلات خارجية", price:0, featured:true,  desc:"حفل خارجي بكراسي بيضا وستائر ولمبات معلّقة" },
-    { id:"g08", slug:"kan-dayman-enta",     name:"كان دايمًا انت",    cat:"نيون وإضاءة",  price:0, featured:true,  desc:"خلفية قماش متضفّرة وزهر أبيض ونيون It Was Always You" },
-    { id:"g09", slug:"le2ena-el-hob",       name:"لقينا الحب",        cat:"نيون وإضاءة",  price:0, featured:false, desc:"قوس زهر وكراسي ذهبي وستارة فيري لايت" },
-    { id:"g10", slug:"besm-khaleq-el-hob",  name:"بسم خالق الحب",     cat:"كتب كتاب",     price:0, featured:true,  desc:"نيون عربي وخلفية رمادي متضفّرة وبنش ذهبي" },
-    { id:"g11", slug:"shama-w-foll",        name:"شمع وفل",           cat:"كتب كتاب",     price:0, featured:false, desc:"قوس زهر وشمعدانات فضي وكراسي ذهبي" },
-    { id:"g12", slug:"maa-baad",            name:"مع بعض",            cat:"خطوبة",        price:0, featured:false, desc:"قوس زهر أبيض وستارة إضاءة على أرضية رخام" },
-    { id:"g13", slug:"debla-w-ward",        name:"دبلة وورد",         cat:"خطوبة",        price:0, featured:false, desc:"ورق شجر ذهبي وزهر أبيض وستارة فيري لايت" },
-    { id:"g14", slug:"just-engaged",        name:"جست إنجيجد",        cat:"خطوبة",        price:0, featured:false, desc:"قوس زهر ونيون Just Engaged وبالونات" },
-    { id:"g15", slug:"el-rokn-el-zaytouni", name:"الركن الزيتوني",    cat:"خطوبة",        price:0, featured:false, desc:"ستائر زيتوني وزهر أبيض وڤازات ذهبي" }
+    { id:"g01", slug:"rokn-el-bloom",       name:"كوشة ورد أبيض وسعف ذهبي",        cat:"كوش وأقواس",   price:0, featured:true,  desc:"نيون We Found Love وكراسي بيضا وستارة إضاءة" },
+    { id:"g02", slug:"qos-el-ghoroub",      name:"قوس ورد برتقالي وموڤ",        cat:"كوش وأقواس",   price:0, featured:true,  desc:"تدرّج برتقالي وأحمر وموڤ على قوس بلينث وردي" },
+    { id:"g03", slug:"qos-el-roman",        name:"كوشة ورد أحمر وأنتوريوم",        cat:"كوش وأقواس",   price:0, featured:false, desc:"خلفية بيضا ودرابيه غامق وبلينث أبيض — تجهيز خارجي" },
+    { id:"g04", slug:"beit-el-foll",        name:"كوشة كنبة بيضا وستارة شيفون",          cat:"كوش وأقواس",   price:0, featured:false, desc:"عمودين ورد أبيض على الجانبين — تجهيز في البيت" },
+    { id:"g05", slug:"tawaam-el-aqwas",     name:"قوسين أبيض بحروف العروسين",      cat:"كوش وأقواس",   price:0, featured:true,  desc:"إضاءة أرضية برتقالي وورد أبيض وأخضر" },
+    { id:"g06", slug:"qos-el-horouf",       name:"قوس أبيض بورد بينك وأبيض",        cat:"حفلات خارجية", price:0, featured:false, desc:"حروف العروسين دهبي — تجهيز في الجنينة" },
+    { id:"g07", slug:"genenet-el-farah",    name:"حفل جاردن بكراسي بيضا",       cat:"حفلات خارجية", price:0, featured:true,  desc:"كوشة أقواس بيضا ونيون Better Together ولمبات معلّقة" },
+    { id:"g08", slug:"kan-dayman-enta",     name:"كوشة خلفية بني وورد أبيض",    cat:"نيون وإضاءة",  price:0, featured:true,  desc:"نيون It Was Always You وبنش فرو أبيض" },
+    { id:"g09", slug:"le2ena-el-hob",       name:"كوشة ورد أبيض وكراسي ذهبي",        cat:"نيون وإضاءة",  price:0, featured:false, desc:"نيون We Found Love وستارة تول وفيري لايت" },
+    { id:"g10", slug:"besm-khaleq-el-hob",  name:"كوشة نيون عربي وبنش ذهبي",     cat:"كتب كتاب",     price:0, featured:true,  desc:"خلفية رمادي متضفّرة وورد أبيض وشمعدانات" },
+    { id:"g11", slug:"shama-w-foll",        name:"كوشة ورد أبيض وشمعدانات",           cat:"كتب كتاب",     price:0, featured:false, desc:"نيون Better Together وكراسي ذهبي" },
+    { id:"g12", slug:"maa-baad",            name:"كوشة ورد أبيض وستارة إضاءة",            cat:"خطوبة",        price:0, featured:false, desc:"نيون Better Together وكراسي ذهبي على أرضية رخام" },
+    { id:"g13", slug:"debla-w-ward",        name:"كوشة ورد أبيض وورق ذهبي",         cat:"خطوبة",        price:0, featured:false, desc:"لوحة دبلة و Better Together وستارة فيري لايت" },
+    { id:"g14", slug:"just-engaged",        name:"كوشة خطوبة بنيون وبالونات",        cat:"خطوبة",        price:0, featured:false, desc:"قوس ورد أبيض ولبني ونيون Just Engaged" },
+    { id:"g15", slug:"el-rokn-el-zaytouni", name:"كوشة ستائر زيتوني وورد أبيض",    cat:"خطوبة",        price:0, featured:false, desc:"ڤازات ذهبي وكراسي ذهبي ولوحة Better Together" }
   ],
 
   testimonials: [
