@@ -55,7 +55,7 @@ assets/img/             صور المعرض — نسخة كبيرة و -sm لل�
 صورة المعاينة في `assets/img/og-cover.jpg` بمقاس ١٢٠٠×٦٣٠، والميتا تاجز في أول `index.html`.
 
 **مهم:** لينكات `og:image` و `og:url` لازم تبقى **كاملة** (`https://…`) مش مسارات نسبية، وإلا واتساب وفيسبوك بيتجاهلوا الصورة.
-الدومين مكتوب حاليًا `gensita-wedding.vercel.app` كمكان مبدئي — **غيّره بعد الرفع** في أول `index.html` (٦ أسطر) وفي بلوك `application/ld+json` تحتيهم.
+الدومين مضبوط على `gensita-website.vercel.app`. لو اتغيّر لدومين تاني، غيّره في أول `index.html` (٧ أسطر) وفي بلوك `application/ld+json` تحتيهم.
 
 **لو اللينك اتبعت قبل التعديل:** واتساب بيحفظ نتيجة أول قراءة. ابعتيه مرة بعلامة في آخره (`?v=2`)، أو استخدمي [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) واضغطي *Scrape Again*.
 
