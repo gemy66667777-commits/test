@@ -1,4 +1,4 @@
-/* ليالي بارتي — لوحة التحكم */
+/* سمر — لوحة التحكم */
 (function () {
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => [...(r || document).querySelectorAll(s)];
@@ -303,7 +303,7 @@
     const csv = "﻿" + [H.map(q).join(",")].concat(
       S.data.bookings.map((b) => [b.name, b.phone, b.type, b.date, b.place, b.pkg, b.status, b.note, new Date(b.created).toLocaleString("ar-EG")].map(q).join(","))
     ).join("\n");
-    dl(new Blob([csv], { type: "text/csv;charset=utf-8" }), "laialy-bookings.csv");
+    dl(new Blob([csv], { type: "text/csv;charset=utf-8" }), "samar-bookings.csv");
     toast("اتنزل الملف");
   };
 
@@ -334,7 +334,7 @@
     toast("اتحفظت الإعدادات ✦ الموقع اتحدّث");
   });
 
-  $("#expJson").onclick = () => { dl(S.export(), "laialy-backup.json"); toast("اتنزلت النسخة"); };
+  $("#expJson").onclick = () => { dl(S.export(), "samar-backup.json"); toast("اتنزلت النسخة"); };
   $("#impJson").onclick = () => $("#impFile").click();
   $("#impFile").onchange = (e) => {
     const f = e.target.files[0]; if (!f) return;
@@ -349,5 +349,5 @@
 
   /* ---------- تشغيل ---------- */
   function renderAll() { renderHome(); renderItems(); renderPkgs(); renderBooks(); renderSet(); }
-  document.addEventListener("laialy:change", () => { renderHome(); renderItems(); renderPkgs(); renderBooks(); });
+  document.addEventListener("samar:change", () => { renderHome(); renderItems(); renderPkgs(); renderBooks(); });
 })();

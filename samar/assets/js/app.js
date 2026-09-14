@@ -1,4 +1,4 @@
-/* ليالي بارتي — واجهة الموقع */
+/* سمر — واجهة الموقع */
 (function () {
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => [...(r || document).querySelectorAll(s)];
@@ -259,8 +259,8 @@
 
   /* ---------- إقلاع ---------- */
   function render() { paintSettings(); paintServices(); paintAddons(); paintPackages(); paintSays(); paintGallery(); reveal(); }
-  document.addEventListener("laialy:change", render);
-  addEventListener("storage", (e) => { if (e.key === "laialy.v1") location.reload(); });
+  document.addEventListener("samar:change", render);
+  addEventListener("storage", (e) => { if (e.key === "samar.v1") location.reload(); });
   $("#yr").textContent = ar(new Date().getFullYear());
   render();
 })();

@@ -1,6 +1,6 @@
 /* طبقة التخزين المشتركة بين الموقع ولوحة التحكم */
 (function (w) {
-  const KEY = "laialy.v1";
+  const KEY = "samar.v1";
 
   const clone = (o) => JSON.parse(JSON.stringify(o));
 
@@ -19,22 +19,22 @@
   }
 
   let db = read();
-  if (!db) db = write(clone(w.LAIALY_SEED));
+  if (!db) db = write(clone(w.SAMAR_SEED));
 
   /* دمج أي حقول جديدة اتضافت للبيانات الأساسية بعد آخر حفظ */
-  for (const k in w.LAIALY_SEED.settings)
-    if (!(k in db.settings)) db.settings[k] = w.LAIALY_SEED.settings[k];
+  for (const k in w.SAMAR_SEED.settings)
+    if (!(k in db.settings)) db.settings[k] = w.SAMAR_SEED.settings[k];
   for (const k of ["services", "testimonials", "addons", "occasions"])
-    if (!db[k] || !db[k].length) db[k] = clone(w.LAIALY_SEED[k]);
+    if (!db[k] || !db[k].length) db[k] = clone(w.SAMAR_SEED[k]);
   if (!Array.isArray(db.bookings)) db.bookings = [];
 
   const Store = {
     get data() { return db; },
     get s() { return db.settings; },
 
-    save() { write(db); document.dispatchEvent(new CustomEvent("laialy:change")); return db; },
+    save() { write(db); document.dispatchEvent(new CustomEvent("samar:change")); return db; },
 
-    reset() { db = write(clone(w.LAIALY_SEED)); document.dispatchEvent(new CustomEvent("laialy:change")); return db; },
+    reset() { db = write(clone(w.SAMAR_SEED)); document.dispatchEvent(new CustomEvent("samar:change")); return db; },
 
     imageFor(it) {
       if (it.img) return it.img;                       // صورة مرفوعة من لوحة التحكم
@@ -76,7 +76,7 @@
       const d = JSON.parse(json);
       if (!d.settings || !Array.isArray(d.items)) throw new Error("الملف مش متوافق");
       db = write(d);
-      document.dispatchEvent(new CustomEvent("laialy:change"));
+      document.dispatchEvent(new CustomEvent("samar:change"));
     },
 
     /* الجلسة — لوحة التحكم فقط */
@@ -84,11 +84,11 @@
       const u = String(user || "").replace(/\D/g, "");
       const ok = db.settings.adminPhones.some((p) => p.replace(/\D/g, "") === u)
               && String(pass) === String(db.settings.adminPass);
-      if (ok) sessionStorage.setItem("laialy.session", u);
+      if (ok) sessionStorage.setItem("samar.session", u);
       return ok;
     },
-    session() { return sessionStorage.getItem("laialy.session"); },
-    logout() { sessionStorage.removeItem("laialy.session"); }
+    session() { return sessionStorage.getItem("samar.session"); },
+    logout() { sessionStorage.removeItem("samar.session"); }
   };
 
   w.Store = Store;
