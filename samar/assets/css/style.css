@@ -388,3 +388,86 @@ body.menu .scrim{opacity:1;pointer-events:auto}
   html{scroll-behavior:auto}
   .rv{opacity:1;transform:none}
 }
+
+/* ═══════════════════════════════════════════
+   الإضافات — معاينة النيون · المقارنة · الأسئلة
+   ═══════════════════════════════════════════ */
+
+/* وميض نيون خفيف على اسم البراند */
+@keyframes flicker{
+  0%,18%,22%,25%,53%,57%,100%{opacity:1;filter:none}
+  20%,24%,55%{opacity:.72;filter:brightness(.82)}
+}
+.hero-txt .script{animation:flicker 7s infinite ease-in-out}
+
+/* ===== جرّبي جملة النيون ===== */
+.neonlab{padding-block:clamp(50px,7vw,88px)}
+.nl-wrap{display:grid;grid-template-columns:.86fr 1.14fr;gap:clamp(22px,4vw,42px);align-items:start}
+.nl-form{background:var(--paper);border:1px solid var(--line-2);border-radius:var(--r);padding:26px 24px;box-shadow:var(--sh-1)}
+.nl-form h3{font-size:1.15rem;margin-bottom:3px}
+.nl-form>p{font-size:.83rem;color:var(--muted);margin:0 0 18px}
+.nl-lbl{display:block;font-size:.79rem;font-weight:700;margin:16px 0 8px;color:var(--ink-2)}
+.nl-lbl:first-of-type{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{padding:7px 14px;border-radius:100px;border:1px solid var(--line-2);background:var(--cream);
+  font-size:.79rem;color:var(--ink-2);cursor:pointer;transition:.24s;font-family:inherit}
+.chips button:hover{border-color:var(--gold)}
+.chips button.on{background:var(--night);color:var(--gold-l);border-color:var(--night)}
+.nl-form input[type=text]{width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:var(--r-sm);
+  background:var(--cream);font-size:.92rem;transition:.24s}
+.nl-form input[type=text]:focus{outline:none;border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(200,146,53,.15)}
+.swatches{display:flex;gap:9px}
+.swatches button{width:38px;height:38px;border-radius:50%;border:2px solid transparent;cursor:pointer;
+  transition:.24s;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+.swatches button.on{border-color:var(--ink);transform:scale(1.08)}
+.bgs{display:flex;gap:8px}
+.bgs button{flex:1;padding:0;border:2px solid transparent;border-radius:9px;overflow:hidden;cursor:pointer;
+  background:none;transition:.24s;aspect-ratio:1}
+.bgs button img{width:100%;height:100%;object-fit:cover;display:block}
+.bgs button.on{border-color:var(--gold)}
+
+.nl-stage{display:grid;place-items:center;padding:6px}
+.neon-view{width:100%;max-width:560px;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;position:relative;
+  box-shadow:var(--sh-3);background:#1a1410}
+.neon-view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:brightness(.52) saturate(.9) blur(1px);transition:opacity .45s}
+.neon-view::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 46%, rgba(0,0,0,.12), rgba(10,7,4,.55) 78%)}
+.neon-txt{position:absolute;inset:0;z-index:2;display:grid;place-items:center;padding:12% 9%;text-align:center;
+  line-height:1.9;word-break:break-word;transition:color .35s,text-shadow .35s}
+.neon-txt.ar{font-family:"Aref Ruqaa",serif;font-weight:700;font-size:clamp(1.5rem,5.6vw,2.6rem)}
+.neon-txt.en{font-family:"Great Vibes",cursive;font-size:clamp(1.9rem,7vw,3.4rem);line-height:1.5}
+.nl-hint{text-align:center;font-size:.79rem;color:var(--muted);margin-top:12px}
+@media (max-width:880px){ .nl-wrap{grid-template-columns:1fr} }
+
+/* ===== مقارنة العروض ===== */
+.cmp{margin-top:42px;position:relative}
+.cmp h3{text-align:center;font-size:1.25rem;color:#F4EBDD;margin-bottom:5px}
+.cmp>p{text-align:center;font-size:.85rem;color:rgba(244,235,221,.6);margin:0 0 22px}
+.cmp-scroll{overflow-x:auto;border-radius:var(--r-sm);border:1px solid rgba(233,199,126,.2)}
+.cmp table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:520px;background:rgba(255,255,255,.035)}
+.cmp th,.cmp td{padding:13px 14px;text-align:center;border-bottom:1px solid rgba(233,199,126,.14)}
+.cmp th:first-child,.cmp td:first-child{text-align:start;color:rgba(244,235,221,.92);font-weight:400}
+.cmp thead th{background:rgba(233,199,126,.1);color:var(--gold-l);font-weight:700;font-size:.84rem;
+  position:sticky;top:0;backdrop-filter:blur(6px)}
+.cmp tbody tr:last-child td{border-bottom:none}
+.cmp tbody tr:hover{background:rgba(233,199,126,.06)}
+.cmp .yes{color:var(--gold-l)}
+.cmp .no{color:rgba(244,235,221,.22)}
+.cmp .txt{color:rgba(244,235,221,.72);font-size:.79rem}
+.cmp-note{text-align:center;font-size:.78rem;color:rgba(244,235,221,.5);margin-top:12px}
+
+/* ===== الأسئلة الشائعة ===== */
+.faq{padding-block:clamp(48px,7vw,84px)}
+.faq-list{max-width:780px;margin-inline:auto;display:grid;gap:10px}
+.faq-item{background:var(--paper);border:1px solid var(--line-2);border-radius:var(--r-sm);overflow:hidden;
+  transition:border-color .3s,box-shadow .3s}
+.faq-item.open{border-color:var(--line);box-shadow:var(--sh-1)}
+.faq-q{width:100%;display:flex;align-items:center;gap:14px;padding:18px 20px;background:none;border:none;
+  cursor:pointer;text-align:start;font-size:.97rem;font-weight:700;color:var(--ink);font-family:inherit}
+.faq-q .pm{margin-inline-start:auto;width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:var(--cream-2);display:grid;place-items:center;color:var(--gold-d);
+  transition:transform .35s var(--ease),background .3s}
+.faq-item.open .pm{transform:rotate(45deg);background:var(--night);color:var(--gold-l)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .42s var(--ease)}
+.faq-a p{margin:0;padding:0 20px 20px 20px;font-size:.9rem;color:var(--ink-2);line-height:1.95}

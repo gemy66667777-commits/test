@@ -54,10 +54,12 @@
     </a>
     <nav class="nav" id="nav">
       <a href="#services">خدماتنا</a>
+      <a href="#neon">جرّبي النيون</a>
       <a href="#about">عننا</a>
       <a href="#packages">العروض</a>
       <a href="#gallery">المعرض</a>
       <a href="#says">رأي عميلة</a>
+      <a href="#faq">أسئلة</a>
       <a href="#contact">تواصل</a>
       <a href="#book" class="btn sm">احجزي ميعادك</a>
     </nav>
@@ -107,6 +109,45 @@
     </div>
   </section>
 
+
+  <!-- ✦ جرّبي جملة النيون ✦ -->
+  <section class="neonlab" id="neon">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="eyebrow">جرّبيها دلوقتي</p>
+        <h2>شوفي <span class="amber">جملتك</span> على كوشتنا</h2>
+        <p>اختاري جملة أو اكتبي اللي تحبيه، وبدّلي اللون والخلفية — وشوفي الشكل قبل ما تحجزي.</p>
+      </div>
+      <div class="nl-wrap rv">
+        <div class="nl-form">
+          <h3>اختياراتك</h3>
+          <p>كل تغيير بيظهر على الكوشة على طول</p>
+
+          <span class="nl-lbl">جملة جاهزة</span>
+          <div class="chips" id="nlChips"></div>
+
+          <label class="nl-lbl" for="nlText">أو اكتبي جملتك</label>
+          <input type="text" id="nlText" maxlength="34" placeholder="اكتبي بالعربي أو الإنجليزي">
+
+          <span class="nl-lbl">لون النيون</span>
+          <div class="swatches" id="nlColors"></div>
+
+          <span class="nl-lbl">الخلفية</span>
+          <div class="bgs" id="nlBgs"></div>
+
+          <button class="btn" id="nlOrder" style="width:100%;margin-top:20px">اطلبي الجملة دي</button>
+        </div>
+        <div class="nl-stage">
+          <div class="neon-view">
+            <img id="nlImg" src="" alt="خلفية كوشة">
+            <div class="neon-txt ar" id="nlOut">وجعل بينكم مودة ورحمة</div>
+          </div>
+          <p class="nl-hint">الشكل النهائي بيتظبط على مقاس المكان وقت المعاينة</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="about" id="about">
     <div class="wrap">
       <div class="rv">
@@ -138,6 +179,12 @@
         <p>وكل عرض فيه <b>تزيين باب الشقة بالتل والورد هدية</b> 🌹</p>
       </div>
       <div class="pkg-grid" id="pkgGrid"></div>
+      <div class="cmp rv">
+        <h3>مقارنة سريعة بين العروض</h3>
+        <p>عشان تشوفي الفرق بينهم بنظرة واحدة</p>
+        <div class="cmp-scroll"><table id="cmpTable"></table></div>
+        <p class="cmp-note">أي حاجة في أي عرض بتتزوّد أو تتشال حسب المكان والميزانية.</p>
+      </div>
       <div class="addons rv">
         <h3>إضافات تتطلب مع أي عرض</h3>
         <p class="sub">اختاري اللي محتاجاه وهنضيفه على العرض</p>
@@ -165,6 +212,17 @@
         <h2>رأي <span class="amber">عميلة</span></h2>
       </div>
       <div class="says-grid" id="sayGrid"></div>
+    </div>
+  </section>
+
+
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="eyebrow">قبل ما تسألي</p>
+        <h2>أسئلة <span class="amber">بتتسأل كتير</span></h2>
+      </div>
+      <div class="faq-list rv" id="faqList"></div>
     </div>
   </section>
 
@@ -230,7 +288,8 @@
     </div>
     <div><h4>روابط سريعة</h4>
       <ul>
-        <li><a href="#services">خدماتنا</a></li>
+        <li><a href="#services">خدماتنا</a>
+      <a href="#neon">جرّبي النيون</a></li>
         <li><a href="#packages">العروض</a></li>
         <li><a href="#gallery">المعرض</a></li>
         <li><a href="#book">احجزي ميعادك</a></li>

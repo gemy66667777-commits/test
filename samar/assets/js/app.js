@@ -190,6 +190,116 @@
       </article>`).join("");
   }
 
+  /* ---------- جرّبي جملة النيون ---------- */
+  const NEON_COLORS = [
+    { id:"warm", name:"أبيض دافي", css:"#FFF4DC", glow:"255,222,160" },
+    { id:"gold", name:"ذهبي",      css:"#FFE1A0", glow:"255,205,110" },
+    { id:"pink", name:"وردي",      css:"#FFD3E6", glow:"255,140,190" }
+  ];
+  const isArabic = (t) => /[؀-ۿ]/.test(t);
+
+  function neonLab() {
+    const out = $("#nlOut"); if (!out) return;
+    const img = $("#nlImg"), txt = $("#nlText");
+    const phrases = S.data.neonPhrases || [];
+    const bgs = S.data.neonBackdrops || [];
+    let color = NEON_COLORS[0], bg = bgs[0];
+
+    $("#nlChips").innerHTML = phrases.map((p, i) =>
+      `<button type="button" data-p="${esc(p.t)}"${i === 0 ? ' class="on"' : ""}>${esc(p.t)}</button>`).join("");
+    $("#nlColors").innerHTML = NEON_COLORS.map((c, i) =>
+      `<button type="button" title="${esc(c.name)}" aria-label="${esc(c.name)}" data-c="${c.id}"${i === 0 ? ' class="on"' : ""}
+        style="background:${c.css};box-shadow:0 0 12px rgba(${c.glow},.9),inset 0 0 0 2px rgba(255,255,255,.6)"></button>`).join("");
+    $("#nlBgs").innerHTML = bgs.map((b, i) =>
+      `<button type="button" data-b="${esc(b.slug)}" title="${esc(b.name)}"${i === 0 ? ' class="on"' : ""}>
+        <img src="assets/img/${esc(b.slug)}-sm.jpg" alt="${esc(b.name)}" loading="lazy"></button>`).join("");
+
+    function draw() {
+      const t = (txt.value.trim() || $("#nlChips .on")?.dataset.p || phrases[0].t);
+      out.textContent = t;
+      out.className = "neon-txt " + (isArabic(t) ? "ar" : "en");
+      out.style.color = color.css;
+      out.style.textShadow =
+        `0 0 6px rgba(${color.glow},.98), 0 0 18px rgba(${color.glow},.85), ` +
+        `0 0 42px rgba(${color.glow},.6), 0 0 80px rgba(${color.glow},.35)`;
+      if (bg) img.src = "assets/img/" + bg.slug + ".jpg";
+    }
+
+    $$("#nlChips button").forEach((b) => b.addEventListener("click", () => {
+      $$("#nlChips button").forEach((x) => x.classList.toggle("on", x === b));
+      txt.value = ""; draw();
+    }));
+    txt.addEventListener("input", () => {
+      if (txt.value.trim()) $$("#nlChips button").forEach((x) => x.classList.remove("on"));
+      draw();
+    });
+    $$("#nlColors button").forEach((b) => b.addEventListener("click", () => {
+      $$("#nlColors button").forEach((x) => x.classList.toggle("on", x === b));
+      color = NEON_COLORS.find((c) => c.id === b.dataset.c); draw();
+    }));
+    $$("#nlBgs button").forEach((b) => b.addEventListener("click", () => {
+      $$("#nlBgs button").forEach((x) => x.classList.toggle("on", x === b));
+      bg = bgs.find((x) => x.slug === b.dataset.b); draw();
+    }));
+
+    $("#nlOrder").addEventListener("click", () => {
+      $("#bNote").value = `عايزة كلمة نيون: «${out.textContent}» — اللون ${color.name}`;
+      $("#book").scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => $("#bName").focus({ preventScroll: true }), 600);
+    });
+    draw();
+  }
+
+  /* ---------- مقارنة العروض ---------- */
+  function paintCompare() {
+    const tb = $("#cmpTable"); if (!tb) return;
+    const pk = S.data.packages || [], rows = S.data.compare || [];
+    const box = tb.closest(".cmp");
+    /* الجدول مكتوب لعدد عروض معيّن — لو الأدمن غيّر العدد نخفيه بدل ما نعرض حاجة غلط */
+    if (!rows.length || !pk.length || rows.some((r) => r.v.length !== pk.length)) {
+      if (box) box.style.display = "none";
+      return;
+    }
+    if (box) box.style.display = "";
+
+    const cell = (v) =>
+      v === true  ? `<td class="yes">${ICON.check}</td>` :
+      v === false ? `<td class="no">—</td>` :
+                    `<td class="txt">${esc(v)}</td>`;
+
+    tb.innerHTML =
+      `<thead><tr><th>البند</th>${pk.map((p) => `<th>${esc(p.name)}</th>`).join("")}</tr></thead>` +
+      `<tbody>${rows.map((r) =>
+        `<tr><td>${esc(r.label)}</td>${r.v.map(cell).join("")}</tr>`).join("")}</tbody>`;
+  }
+
+  /* ---------- الأسئلة الشائعة ---------- */
+  function paintFaq() {
+    const box = $("#faqList"); if (!box) return;
+    box.innerHTML = (S.data.faq || []).map((f, i) => `
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="fa${i}">
+          <span>${esc(f.q)}</span>
+          <span class="pm">${sv('<path d="M12 5v14M5 12h14"/>')}</span>
+        </button>
+        <div class="faq-a" id="fa${i}"><p>${esc(f.a)}</p></div>
+      </div>`).join("");
+
+    $$(".faq-q", box).forEach((btn) => btn.addEventListener("click", () => {
+      const item = btn.parentElement, panel = item.querySelector(".faq-a");
+      const open = item.classList.toggle("open");
+      btn.setAttribute("aria-expanded", String(open));
+      panel.style.maxHeight = open ? panel.scrollHeight + "px" : "0";
+      /* نقفل الباقي */
+      $$(".faq-item", box).forEach((o) => {
+        if (o === item) return;
+        o.classList.remove("open");
+        o.querySelector(".faq-q").setAttribute("aria-expanded", "false");
+        o.querySelector(".faq-a").style.maxHeight = "0";
+      });
+    }));
+  }
+
   /* ---------- الحجز ---------- */
   $("#bookForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -258,9 +368,10 @@
   }
 
   /* ---------- إقلاع ---------- */
-  function render() { paintSettings(); paintServices(); paintAddons(); paintPackages(); paintSays(); paintGallery(); reveal(); }
+  function render() { paintSettings(); paintServices(); paintAddons(); paintPackages(); paintCompare(); paintFaq(); paintSays(); paintGallery(); reveal(); }
   document.addEventListener("samar:change", render);
   addEventListener("storage", (e) => { if (e.key === "samar.v1") location.reload(); });
+  neonLab();
   $("#yr").textContent = ar(new Date().getFullYear());
   render();
 })();
