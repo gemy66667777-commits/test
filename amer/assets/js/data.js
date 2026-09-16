@@ -46,7 +46,7 @@ window.AMER_SEED = {
     { id:"chopper",name:"كبة لحوم ومفرمة خضروات رفال",          img:"assets/img/p-chopper.jpg",dept:"home", price:1870, note:"وعاء شفاف وسكاكين استانلس", src:"سعر الملصق" },
     { id:"fridge", name:"ثلاجة نوفروست زجاج أسود باب علوي",     img:"assets/img/p-fridge.jpg", dept:"home", price:34000, note:"موجودة في المعرض — اسأل عن المقاسات المتاحة" },
     { id:"table",  name:"سفرة خشب بستة كراسي",                  img:"assets/img/p-table.jpg",  dept:"furn", price:28000, note:"ترابيزة خشب وكراسي بظهر منجّد" },
-    { id:"spice",  name:"طقم توابل ١٢ برطمان على قاعدة خشب",    img:"assets/img/p-spice.jpg",  dept:"home", price:440, note:"برطمانات زجاج بغطا أسود" },
+    { id:"spice",  name:"طقم توابل ١٢ برطمان على قاعدة خشب",    img:"assets/img/p-spice.jpg",  dept:"home", price:220, note:"برطمانات زجاج بغطا أسود" },
     { id:"pleo",   name:"طبق تقديم برسمة نمر",                  img:"assets/img/p-plate-leopard.jpg", dept:"home", price:55, note:"طبق دائري لامع" },
     { id:"pwood",  name:"طبق تقديم بيضاوي خشب",                 img:"assets/img/p-plate-wood.jpg",    dept:"home", price:65, note:"طبق بيضاوي بلون الخشب" },
     { id:"tlab",   name:"ترمس لابوبو بشاشة حرارة",              img:"assets/img/p-thermos-labubu.jpg",dept:"home", price:380, note:"غطا بشاشة بتوريك حرارة المياه" },
@@ -59,7 +59,7 @@ window.AMER_SEED = {
     { id:"o-bride",   name:"عرض العروسة", sub:"جهاز المطبخ الكامل في مرة واحدة",
       items:["mixer","oven","blender","iron"], price:12900, tag:"أوفر عرض" },
     { id:"o-serve",   name:"عرض التقديم", sub:"طقم توابل وأطباق ومج",
-      items:["spice","pleo","pwood","mug"], price:690, tag:"" },
+      items:["spice","pleo","pwood","mug"], price:480, tag:"" },
     { id:"o-dining",  name:"عرض السفرة", sub:"سفرة ٦ كراسي وطقم التوابل معاها",
       items:["table","spice"], price:27900, tag:"" }
   ],

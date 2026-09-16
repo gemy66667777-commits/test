@@ -113,7 +113,7 @@
           return '<img src="' + esc(p.img) + '" alt="' + esc(p.name) + '">'; }).join("") + "</div>" +
         "<ul>" + its.map(function (p) { return "<li>" + esc(p.name) + "</li>"; }).join("") + "</ul>" +
         '<div class="prc">' +
-        (was > 0 ? '<span class="was">' + esc(money(was)) + "</span>" : "") +
+        (was > Number(o.price || 0) ? '<span class="was">' + esc(money(was)) + "</span>" : "") +
         '<span class="now">' + eg(o.price) + ' <small>' + esc(db.settings.currency) + "</small></span>" +
         (save > 0 ? '<span class="save">توفير ' + esc(money(save)) + "</span>" : "") + "</div>" +
         '<button class="btn btn-a" type="button" style="width:100%">اطلب العرض على واتساب</button></article>';
