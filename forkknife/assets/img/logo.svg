@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="شوكة وسكينة">
+  <rect width="120" height="120" rx="26" fill="#9E1B22"/>
+  <path d="M84 30a30 30 0 1 0 8 20" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+  <path d="M52 34v20a6 6 0 0 0 12 0V34" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M58 54v34" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M80 34c6 4 8 12 5 20l-5 6v28" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
