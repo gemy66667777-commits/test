@@ -64,11 +64,11 @@ assets/img/             صور المنتجات والمعرض + اللوجو + 
 
 `assets/img/og-cover.jpg` مقاس 1200×630، ومربوطة في `<head>` عن طريق `og:image`.
 
-**مهم:** الروابط في `index.html` مكتوبة بدومين `https://amer-amira.vercel.app`.
+**مهم:** الروابط في `index.html` مكتوبة بدومين `https://ameramira.vercel.app`.
 لو رفعت الموقع على دومين تاني، غيّره في كل أماكنه عشان الثامبنيل يظهر:
 
 ```bash
-sed -i 's|amer-amira.vercel.app|الدومين-بتاعك.com|g' index.html
+sed -i 's|ameramira.vercel.app|الدومين-بتاعك.com|g' index.html
 ```
 
 ## التخزين
