@@ -20,7 +20,7 @@ python3 -m http.server 8000
 تظهر صح على فيسبوك وواتساب:
 
 ```bash
-sed -i 's|abo3omar-store.vercel.app|الدومين-بتاعك.vercel.app|g' index.html
+sed -i 's|abo3omar.vercel.app|الدومين-بتاعك.vercel.app|g' index.html
 ```
 
 وبعدين افتح فيسبوك ديبَجر (developers.facebook.com/tools/debug) وحط اللينك
