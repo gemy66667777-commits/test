@@ -61,11 +61,11 @@ assets/img/             صور الأعمال + اللوجو + صورة المش
 
 `assets/img/og-cover.jpg` مقاس 1200×630، ومربوطة في `<head>` عن طريق `og:image`.
 
-**مهم:** الروابط في `index.html` مكتوبة بدومين `https://vista-event.vercel.app`.
+**مهم:** الروابط في `index.html` مكتوبة بدومين `https://vista-events-gamma.vercel.app`.
 لو رفعت الموقع على دومين تاني، غيّره في كل أماكنه عشان الثامبنيل يظهر:
 
 ```bash
-sed -i 's|vista-event.vercel.app|الدومين-بتاعك.com|g' index.html
+sed -i 's|vista-events-gamma.vercel.app|الدومين-بتاعك.com|g' index.html
 ```
 
 ## التخزين
