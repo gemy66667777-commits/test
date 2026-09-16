@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="حدائق الزهور">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="rgba(255,255,255,.14)"/><stop offset="1" stop-color="rgba(255,255,255,.06)"/></linearGradient></defs>
+  <rect width="120" height="120" rx="26" fill="url(#g)"/>
+  <rect x="9" y="9" width="102" height="102" rx="21" fill="none" stroke="#D9B978" stroke-opacity=".5" stroke-width="1.2"/>
+  <g fill="none" stroke="#F0E0BC" stroke-width="2.6" stroke-linecap="round">
+    <path d="M60 86V54"/>
+    <path d="M60 54c0-9 7-16 16-16 0 9-7 16-16 16z"/>
+    <path d="M60 54c0-9-7-16-16-16 0 9 7 16 16 16z"/>
+    <path d="M60 68c0-8 6-14 14-14 0 8-6 14-14 14z"/>
+    <path d="M60 68c0-8-6-14-14-14 0 8 6 14 14 14z"/>
+  </g>
+  <circle cx="60" cy="38" r="5" fill="#F0E0BC"/>
+  <path d="M46 92h28" stroke="#D9B978" stroke-width="2.4" stroke-linecap="round"/>
+</svg>
