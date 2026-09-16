@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="ابو عمر">
+  <rect width="120" height="120" rx="30" fill="rgba(255,255,255,.10)" stroke="rgba(240,223,168,.45)" stroke-width="2"/>
+  <text x="60" y="72" font-family="Georgia,'Times New Roman',serif" font-size="30" font-weight="bold"
+        fill="#F7EFD4" text-anchor="middle" letter-spacing="1">AO</text>
+  <text x="60" y="92" font-family="Georgia,serif" font-size="11" fill="#E6CE85" text-anchor="middle" letter-spacing="2">STORE</text>
+</svg>
