@@ -6,7 +6,7 @@ window.SADANI_SEED = {
     tagline: "للمفروشات",
     slogan: "احنا على قد ايدك",
     intro: "فوط وملايات وبطاطين ودفايات ولحف وكوفرتات وبرانس — أجود الخامات بأسعار الجملة. وبنجهّز جهاز العروسة كامل من مكان واحد.",
-    domain: "https://alsadani-mall.vercel.app",
+    domain: "https://alsadani-mafroshat.vercel.app",
 
     phone:  "01097730579",
     whats:  "201015908083",

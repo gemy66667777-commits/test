@@ -20,7 +20,7 @@ python3 -m http.server 8000
 تظهر صح على فيسبوك وواتساب:
 
 ```bash
-sed -i 's|alsadani-mall.vercel.app|الدومين-بتاعك.vercel.app|g' index.html
+sed -i 's|alsadani-mafroshat.vercel.app|الدومين-بتاعك.vercel.app|g' index.html
 ```
 
 ## الملفات
