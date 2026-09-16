@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة تحكم فيستا إيفينت</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#20211A">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+<section class="gate" id="gate">
+  <div class="gate-box">
+    <img class="mark" src="assets/img/logo.png" alt="فيستا إيفينت">
+    <h1>لوحة تحكم <span id="gBrand">فيستا إيفينت</span></h1>
+    <p class="hint">ادخل برقم البراند وكلمة السر</p>
+    <div class="err" id="gErr"></div>
+    <form id="gForm">
+      <div class="field">
+        <label for="gUser">رقم الإدارة</label>
+        <input id="gUser" inputmode="tel" dir="ltr" placeholder="01500095042" autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="gPass">كلمة السر</label>
+        <input id="gPass" type="password" placeholder="••••••" autocomplete="current-password">
+      </div>
+      <button class="btn" style="width:100%">دخول</button>
+    </form>
+    <a class="back" href="index.html">← رجوع للموقع</a>
+  </div>
+</section>
+
+<div class="app" id="app">
+  <aside class="side" id="side">
+    <div class="brand">
+      <img class="mark" src="assets/img/logo.png" alt="">
+      <span><b id="sBrand">فيستا إيفينت</b><small>لوحة التحكم</small></span>
+    </div>
+    <nav>
+      <button class="tab on" data-tab="home"><span data-icon="grid"></span> نظرة عامة</button>
+      <button class="tab" data-tab="items"><span data-icon="image"></span> المعرض <span class="b" id="nItems">0</span></button>
+      <button class="tab" data-tab="pkgs"><span data-icon="box"></span> الكوش <span class="b" id="nPkgs">0</span></button>
+      <button class="tab" data-tab="svcs"><span data-icon="star"></span> الخدمات <span class="b" id="nSvcs">0</span></button>
+      <button class="tab" data-tab="books"><span data-icon="cal"></span> الحجوزات <span class="b" id="nBooks">0</span></button>
+      <button class="tab" data-tab="set"><span data-icon="gear"></span> الإعدادات</button>
+    </nav>
+    <div class="foot">
+      <a href="index.html" target="_blank">↗ فتح الموقع</a>
+      <button id="logout">← تسجيل الخروج</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <section class="panel on" id="p-home">
+      <div class="top">
+        <button class="mob" aria-label="القائمة">☰</button>
+        <div><h2>أهلاً بيك ✦</h2><p id="whoami"></p></div>
+        <a class="btn sp" href="index.html" target="_blank">معاينة الموقع</a>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div class="two">
+        <div class="card pad">
+          <h3>آخر الحجوزات</h3>
+          <div class="tbl-wrap" id="lastBooks"></div>
+        </div>
+        <div class="card pad">
+          <h3>الطلبات حسب نوع المناسبة</h3>
+          <div class="chart" id="chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="p-items">
+      <div class="top">
+        <button class="mob">☰</button>
+        <div><h2>المعرض</h2><p>الصور ووصفها، والتصنيف اللي «صمّم كوشتك» بيشتغل بيه</p></div>
+        <button class="btn sp" id="addItem">+ إضافة صورة</button>
+      </div>
+      <div class="mgrid" id="mgrid"></div>
+    </section>
+
+    <section class="panel" id="p-pkgs">
+      <div class="top">
+        <button class="mob">☰</button>
+        <div><h2>الكوش</h2><p>الكوش المعروضة ومكوّناتها</p></div>
+        <button class="btn sp" id="addPkg">+ إضافة كوشة</button>
+      </div>
+      <div class="mgrid" id="pgrid"></div>
+    </section>
+
+    <section class="panel" id="p-svcs">
+      <div class="top">
+        <button class="mob">☰</button>
+        <div><h2>الخدمات</h2><p>اللي بيظهر في قسم «بنعمل إيه»</p></div>
+        <button class="btn sp" id="addSvc">+ إضافة خدمة</button>
+      </div>
+      <div class="mgrid" id="sgrid"></div>
+    </section>
+
+    <section class="panel" id="p-books">
+      <div class="top">
+        <button class="mob">☰</button>
+        <div><h2>الحجوزات</h2><p>كل طلب جاي من الموقع</p></div>
+        <div class="sp" style="display:flex;gap:8px;flex-wrap:wrap">
+          <select id="fStatus" style="padding:10px 14px;border:1px solid var(--line-2);border-radius:100px;background:#fff;font-size:.87rem">
+            <option value="">كل الحالات</option><option>جديد</option><option>مؤكد</option><option>تم</option><option>ملغي</option>
+          </select>
+          <button class="btn ghost" id="expCsv">تصدير CSV</button>
+        </div>
+      </div>
+      <div class="card"><div class="tbl-wrap" id="bookTbl"></div></div>
+    </section>
+
+    <section class="panel" id="p-set">
+      <div class="top">
+        <button class="mob">☰</button>
+        <div><h2>الإعدادات</h2><p>بيانات البراند اللي بتظهر في كل مكان بالموقع</p></div>
+      </div>
+      <form id="setForm">
+        <div class="card pad" style="margin-bottom:16px">
+          <h3 style="margin-bottom:16px">بيانات البراند</h3>
+          <div class="grid2">
+            <div class="field"><label>الاسم بالعربي</label><input name="brandAr"></div>
+            <div class="field"><label>الاسم اللاتيني</label><input name="brand" dir="ltr"></div>
+          </div>
+          <div class="field"><label>الجملة التعريفية</label><textarea name="intro" style="min-height:70px"></textarea></div>
+          <div class="grid2">
+            <div class="field"><label>بنشتغل فين</label><input name="area"></div>
+            <div class="field"><label>مواعيد الرد</label><input name="hours"></div>
+          </div>
+        </div>
+
+        <div class="card pad" style="margin-bottom:16px">
+          <h3 style="margin-bottom:16px">التواصل</h3>
+          <div class="grid2">
+            <div class="field"><label>رقم التليفون</label><input name="phone" dir="ltr" inputmode="tel"></div>
+            <div class="field"><label>رقم الواتساب بكود الدولة</label><input name="whats" dir="ltr" inputmode="tel"><div class="hint">مثال: 201500095042</div></div>
+          </div>
+        </div>
+
+        <div class="card pad" style="margin-bottom:16px">
+          <h3 style="margin-bottom:16px">الأسعار</h3>
+          <label class="sw" style="margin-bottom:14px">
+            <input type="checkbox" name="showPrices">
+            <span><b>إظهار الأسعار في الموقع</b><small>لو قفلتها — كل الأسعار هتتبدل بالجملة اللي تحت</small></span>
+          </label>
+          <div class="grid2">
+            <div class="field"><label>الجملة البديلة للسعر</label><input name="priceNote"></div>
+            <div class="field"><label>العملة</label><input name="currency"></div>
+          </div>
+          <div class="field"><label>الملاحظة اللي تحت الأسعار</label><input name="priceHint"></div>
+        </div>
+
+        <div class="card pad" style="margin-bottom:16px">
+          <h3 style="margin-bottom:16px">الدخول للوحة</h3>
+          <div class="field"><label>كلمة سر جديدة</label><input name="adminPass" type="text" dir="ltr">
+            <div class="hint">الدخول برقم التليفون اللي فوق</div></div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" type="submit">حفظ التعديلات</button>
+          <button class="btn ghost" type="button" id="expJson">تصدير نسخة احتياطية</button>
+          <button class="btn ghost" type="button" id="impJson">استيراد نسخة</button>
+          <button class="btn danger" type="button" id="resetAll">استرجاع الوضع الأصلي</button>
+        </div>
+        <input type="file" id="impFile" accept="application/json" hidden>
+      </form>
+    </section>
+
+  </main>
+</div>
+
+<div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>
