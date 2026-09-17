@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مولّد دراسة الجدوى</title>
+<meta name="theme-color" content="#0E3A34">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230E3A34'/><path d='M16 44V30M26 44V20M36 44V34M46 44V24' stroke='%23D8B45A' stroke-width='5' stroke-linecap='round'/></svg>">
+<style>
+:root{
+  --ink:#16211F; --muted:#667875; --line:#DCE6E4; --line2:#C3D3D0;
+  --brand:#0E3A34; --brand2:#165249; --gold:#B8912F; --bg:#F4F8F7; --card:#fff;
+  --ok:#1C8A5A; --bad:#C2453F; --warn:#C98A1B;
+  --f:system-ui,'Segoe UI',Tahoma,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.75}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+table{border-collapse:collapse;width:100%}
+.num{font-variant-numeric:tabular-nums}
+
+.bar{background:var(--brand);color:#fff;padding:14px 22px;display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:20;flex-wrap:wrap}
+.bar b{font-size:1.02rem}
+.bar small{color:rgba(255,255,255,.6);font-size:.78rem;display:block}
+.bar .sp{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 17px;border-radius:10px;background:var(--gold);
+  color:#2A2008;font-size:.86rem;font-weight:700;transition:.16s}
+.btn:hover{filter:brightness(1.07)}
+.btn.o{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}
+.btn.o:hover{background:rgba(255,255,255,.1)}
+.btn.sm{padding:5px 11px;font-size:.78rem;border-radius:8px}
+
+.wrap{max-width:1240px;margin-inline:auto;padding:20px;display:grid;grid-template-columns:420px 1fr;gap:20px;align-items:start}
+.editor{position:sticky;top:76px;max-height:calc(100dvh - 96px);overflow-y:auto;min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.card h3{font-size:.98rem;color:var(--brand);margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:.79rem;margin:0 0 14px}
+.f{margin-bottom:11px;display:flex;flex-direction:column}
+.f label{font-size:.79rem;color:var(--muted);font-weight:600;margin-bottom:4px}
+.f input,.f select,.f textarea{padding:9px 12px;border:1px solid var(--line2);border-radius:9px;font-size:.88rem;background:#fff;width:100%;min-width:0}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid rgba(14,58,52,.3);border-color:var(--brand)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g2>*,.g3>*,.hd3>*{min-width:0}
+.card{min-width:0}
+.g3{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:7px;align-items:end;margin-bottom:7px}
+.g3 input{padding:8px 10px;border:1px solid var(--line2);border-radius:8px;font-size:.84rem;width:100%}
+.g3 .x{width:32px;height:34px;border-radius:8px;background:#FBEAE9;color:var(--bad);display:grid;place-items:center}
+.hd3{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:7px;font-size:.72rem;color:var(--muted);font-weight:700;margin-bottom:5px}
+.hint{font-size:.74rem;color:var(--muted);margin-top:3px}
+
+/* ===== الدراسة ===== */
+.doc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:38px 42px;min-width:0;overflow-wrap:anywhere}
+.doc-hd{text-align:center;border-bottom:3px double var(--brand);padding-bottom:20px;margin-bottom:26px}
+.doc-hd .kick{color:var(--gold);font-size:.8rem;letter-spacing:.24em;font-weight:700}
+.doc-hd h1{font-size:1.75rem;color:var(--brand);margin:8px 0 6px}
+.doc-hd p{color:var(--muted);font-size:.87rem;margin:0}
+.doc h2{font-size:1.1rem;color:var(--brand);margin:28px 0 10px;padding-bottom:7px;border-bottom:2px solid var(--line)}
+.doc h2:first-of-type{margin-top:0}
+.doc p{font-size:.92rem;margin:0 0 10px}
+.doc table{margin-bottom:0;font-size:.87rem}
+.tw{overflow-x:auto;max-width:100%;margin-bottom:8px;-webkit-overflow-scrolling:touch}
+.doc th,.doc td{padding:8px 10px;border:1px solid var(--line);text-align:right}
+.doc th{background:#EEF4F3;color:var(--brand);font-weight:700;font-size:.82rem}
+.doc tfoot td,.doc .tot td{background:#F6FAF9;font-weight:700}
+.doc td.n{text-align:left;font-variant-numeric:tabular-nums;direction:ltr}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin:14px 0 6px}
+.kpi{border:1px solid var(--line);border-radius:11px;padding:13px 15px;background:#FAFCFC}
+.kpi small{display:block;color:var(--muted);font-size:.76rem;margin-bottom:3px}
+.kpi b{font-size:1.2rem;color:var(--brand);font-variant-numeric:tabular-nums}
+.kpi.ok b{color:var(--ok)} .kpi.bad b{color:var(--bad)} .kpi.warn b{color:var(--warn)}
+.verdict{border-radius:11px;padding:15px 18px;margin:16px 0;font-size:.92rem;border:1px solid}
+.v-ok{background:#EAF6F0;border-color:#BCE0CD;color:#14603F}
+.v-bad{background:#FBEDEC;border-color:#EFCBC9;color:#8E2F2B}
+.note{background:#FCF6E8;border:1px solid #EADFC0;border-radius:10px;padding:13px 16px;font-size:.84rem;color:#6E5A22;margin-top:22px}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+
+@media (max-width:520px){
+  .g2{grid-template-columns:1fr;gap:0}
+  .g3,.hd3{grid-template-columns:1fr 66px 78px 32px}
+  .doc{padding:18px 14px}
+  .bar{padding:12px 14px}
+}
+@media (max-width:1050px){
+  .wrap{grid-template-columns:1fr}
+  .editor{position:static;max-height:none}
+  .doc{padding:22px 18px}
+  .doc table{min-width:520px}
+}
+@media print{
+  @page{size:A4;margin:16mm 14mm}
+  body{background:#fff;font-size:12pt}
+  .bar,.editor{display:none!important}
+  .wrap{display:block;max-width:none;padding:0}
+  .doc{border:0;border-radius:0;padding:0}
+  .doc h2{page-break-after:avoid} table,.kpi,.verdict{page-break-inside:avoid}
+  .tw{overflow:visible} .doc table{min-width:0}
+  .kpis{grid-template-columns:repeat(3,1fr)} .doc-hd{padding-bottom:14px;margin-bottom:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div><b>مولّد دراسة الجدوى</b><small>املا الأرقام والدراسة بتتكتب لوحدها</small></div>
+  <div class="sp">
+    <button class="btn o" id="reset">مشروع جديد</button>
+    <button class="btn o" id="save">حفظ</button>
+    <button class="btn" id="print">طباعة PDF</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="editor">
+
+    <div class="card">
+      <h3>بيانات المشروع</h3>
+      <p class="sub">اللي هيظهر في ترويسة الدراسة</p>
+      <div class="f"><label>اسم المشروع</label><input id="pName"></div>
+      <div class="g2">
+        <div class="f"><label>صاحب المشروع</label><input id="pOwner"></div>
+        <div class="f"><label>الموقع</label><input id="pLoc"></div>
+      </div>
+      <div class="f"><label>النشاط</label><input id="pAct"></div>
+      <div class="f"><label>العملة</label><select id="pCur">
+        <option>جنيه</option><option>ريال</option><option>درهم</option><option>دينار</option>
+      </select></div>
+      <div class="g2">
+        <div class="f"><label>سنوات الدراسة</label><input id="pYears" type="number" min="3" max="10" value="5"></div>
+        <div class="f"><label>معدّل الخصم %</label><input id="pDisc" type="number" min="0" value="20">
+          <div class="hint">سعر الفايدة أو العائد البديل</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>التكاليف الاستثمارية</h3>
+      <p class="sub">الأصول الثابتة — تتدفع مرة واحدة في البداية</p>
+      <div class="hd3"><span>البند</span><span>الكمية</span><span>سعر الوحدة</span><span></span></div>
+      <div id="capRows"></div>
+      <button class="btn sm" id="addCap">+ بند</button>
+      <div class="f" style="margin-top:12px"><label>عمر الأصول بالسنين (للإهلاك)</label>
+        <input id="pLife" type="number" min="1" value="10"></div>
+    </div>
+
+    <div class="card">
+      <h3>الإيرادات المتوقعة</h3>
+      <p class="sub">الكمية الشهرية في الطاقة الكاملة</p>
+      <div class="hd3"><span>المنتج / الخدمة</span><span>كمية شهرية</span><span>سعر الوحدة</span><span></span></div>
+      <div id="revRows"></div>
+      <button class="btn sm" id="addRev">+ بند</button>
+      <div class="g2" style="margin-top:12px">
+        <div class="f"><label>نسبة التشغيل أول سنة %</label><input id="pUtil" type="number" min="1" max="100" value="70"></div>
+        <div class="f"><label>نمو سنوي %</label><input id="pGrow" type="number" min="0" value="10"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>التكاليف التشغيلية الشهرية</h3>
+      <p class="sub">علّم «متغيّرة» على اللي بتزيد مع الإنتاج (خامات، عمولات)</p>
+      <div class="hd3"><span>البند</span><span>شهري</span><span>متغيّرة؟</span><span></span></div>
+      <div id="opRows"></div>
+      <button class="btn sm" id="addOp">+ بند</button>
+    </div>
+
+    <div class="card">
+      <h3>التمويل</h3>
+      <p class="sub">سيبه صفر لو المشروع تمويل ذاتي</p>
+      <div class="g2">
+        <div class="f"><label>قيمة القرض</label><input id="lAmt" type="number" min="0" value="0"></div>
+        <div class="f"><label>فايدة سنوية %</label><input id="lRate" type="number" min="0" value="15"></div>
+      </div>
+      <div class="f"><label>مدة السداد بالسنين</label><input id="lYears" type="number" min="1" value="5"></div>
+    </div>
+
+  </div>
+
+  <div class="doc" id="doc"></div>
+</div>
+
+<script>
+(function(){
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const KEY="jadwa.v1";
+const n0=n=>Math.round(Number(n)||0).toLocaleString("en-US");
+const n1=n=>(Math.round((Number(n)||0)*10)/10).toLocaleString("en-US",{minimumFractionDigits:1,maximumFractionDigits:1});
+
+const DEF={
+  name:"مشروع كافيه", owner:"", loc:"", act:"تقديم مشروبات ومأكولات خفيفة",
+  cur:"جنيه", years:5, disc:20, life:10, util:70, grow:10,
+  cap:[["تجهيز وديكور المكان",1,180000],["ماكينة إسبريسو وملحقاتها",1,140000],
+       ["ثلاجات وفريزر",2,25000],["أثاث وكراسي وترابيزات",1,90000],
+       ["شاشات وصوتيات",1,25000],["تأمين ومقدم إيجار",1,60000]],
+  rev:[["مشروبات ساخنة",2200,55],["مشروبات باردة",1600,70],["مأكولات خفيفة",900,75]],
+  op:[["إيجار",35000,0],["رواتب",60000,0],["خامات ومستلزمات",90000,1],
+      ["كهربا ومياه وغاز",12000,1],["إنترنت ونظافة وصيانة",6000,0],["تسويق",8000,0]],
+  lAmt:0, lRate:15, lYears:5
+};
+let D;
+
+/* ---------- تحميل ---------- */
+function load(){ try{D=JSON.parse(localStorage.getItem(KEY))||null}catch(e){D=null}
+  if(!D) D=JSON.parse(JSON.stringify(DEF)); }
+function persist(){ try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){} }
+load();
+
+/* ---------- صفوف ---------- */
+function rows(host,arr,cols,onChange){
+  $(host).innerHTML=arr.map((r,i)=>`<div class="g3" data-i="${i}">
+    <input data-c="0" value="${esc(r[0])}" placeholder="${cols[0]}">
+    <input data-c="1" type="number" min="0" value="${r[1]}">
+    ${cols[2]==="chk"
+      ? `<label style="display:flex;align-items:center;justify-content:center;height:34px">
+           <input data-c="2" type="checkbox" ${r[2]?"checked":""} style="width:18px;height:18px"></label>`
+      : `<input data-c="2" type="number" min="0" value="${r[2]}">`}
+    <button class="x" data-x="${i}">✕</button></div>`).join("");
+  $$(host+" input").forEach(inp=>{
+    inp.oninput=inp.onchange=()=>{
+      const i=+inp.closest(".g3").dataset.i, c=+inp.dataset.c;
+      arr[i][c]= inp.type==="checkbox" ? (inp.checked?1:0)
+               : inp.type==="number" ? (Number(inp.value)||0) : inp.value;
+      onChange();
+    };
+  });
+  $$(host+" [data-x]").forEach(b=>b.onclick=()=>{ arr.splice(+b.dataset.x,1); onChange(); paintRows(); });
+}
+function paintRows(){
+  rows("#capRows",D.cap,["البند","",""],calc);
+  rows("#revRows",D.rev,["المنتج","",""],calc);
+  rows("#opRows",D.op,["البند","","chk"],calc);
+}
+const FIELDS=[["pName","name","s"],["pOwner","owner","s"],["pLoc","loc","s"],["pAct","act","s"],["pCur","cur","s"],
+  ["pYears","years","n"],["pDisc","disc","n"],["pLife","life","n"],["pUtil","util","n"],
+  ["pGrow","grow","n"],["lAmt","lAmt","n"],["lRate","lRate","n"],["lYears","lYears","n"]];
+function paintFields(){ FIELDS.forEach(([id,k])=>{ if($("#"+id)) $("#"+id).value=D[k] }) }
+FIELDS.forEach(([id,k,t])=>{ const el=$("#"+id); if(!el)return;
+  el.oninput=()=>{ D[k]= t==="n" ? (Number(el.value)||0) : el.value; calc() } });
+$("#addCap").onclick=()=>{D.cap.push(["",1,0]);paintRows();calc()};
+$("#addRev").onclick=()=>{D.rev.push(["",0,0]);paintRows();calc()};
+$("#addOp").onclick=()=>{D.op.push(["",0,0]);paintRows();calc()};
+$("#save").onclick=()=>{persist();alert("اتحفظ على الجهاز ده")};
+$("#print").onclick=()=>window.print();
+$("#reset").onclick=()=>{ if(!confirm("هتبدأ مشروع جديد وتمسح اللي مكتوب؟"))return;
+  D=JSON.parse(JSON.stringify(DEF)); D.cap=[["",1,0]]; D.rev=[["",0,0]]; D.op=[["",0,0]];
+  D.name="";D.act=""; paintFields();paintRows();calc(); };
+
+/* ---------- الحسابات ---------- */
+function irr(cf){ let lo=-0.9,hi=10;
+  const npv=r=>cf.reduce((a,c,i)=>a+c/Math.pow(1+r,i),0);
+  if(npv(lo)*npv(hi)>0) return null;
+  for(let i=0;i<200;i++){const m=(lo+hi)/2; if(npv(m)>0){lo=m}else{hi=m}}
+  return (lo+hi)/2;
+}
+function model(){
+  const Y=Math.max(3,Math.min(10,D.years|0||5));
+  const capex=D.cap.reduce((a,r)=>a+(r[1]||0)*(r[2]||0),0);
+  const opMonth=D.op.reduce((a,r)=>a+(r[1]||0),0);
+  const varMonth=D.op.filter(r=>r[2]).reduce((a,r)=>a+(r[1]||0),0);
+  const fixMonth=opMonth-varMonth;
+  const working=opMonth*3;                       /* رأس مال عامل ٣ شهور */
+  const invest=capex+working;
+  const revMonthFull=D.rev.reduce((a,r)=>a+(r[1]||0)*(r[2]||0),0);
+  const deprec=capex/Math.max(1,D.life||10);
+  const loan=D.lAmt||0, lr=(D.lRate||0)/100, ly=Math.max(1,D.lYears||1);
+  const yr=[];
+  for(let i=0;i<Y;i++){
+    const util=Math.min(100,(D.util||70)*Math.pow(1+(D.grow||0)/100,i))/100;
+    const rev=revMonthFull*12*util;
+    const varC=varMonth*12*util;                 /* المتغيّرة بتتحرك مع التشغيل */
+    const fixC=fixMonth*12;
+    const ebitda=rev-varC-fixC;
+    const interest = i<ly ? loan*lr*(1-i/ly) : 0;
+    const principal= i<ly ? loan/ly : 0;
+    const profit=ebitda-deprec-interest;
+    yr.push({i:i+1,util:util*100,rev,varC,fixC,ebitda,deprec,interest,principal,profit,
+      cash:profit+deprec-principal});
+  }
+  const avgCash=yr.reduce((a,y)=>a+y.cash,0)/Y;
+  /* الأساس اللي بنقيس عليه = فلوس صاحب المشروع نفسه (الاستثمار ناقص القرض) */
+  const own=Math.max(0,invest-Math.min(loan,invest));
+  const base=own>0?own:invest;
+  let cum=0, payback=null;
+  for(let i=0;i<Y;i++){ const prev=cum; cum+=yr[i].cash;
+    if(payback===null&&cum>=base&&yr[i].cash>0){ payback=i+(base-prev)/yr[i].cash } }
+  const cf=[-base].concat(yr.map(y=>y.cash));
+  const r=(D.disc||20)/100;
+  const npv=cf.reduce((a,c,i)=>a+c/Math.pow(1+r,i),0);
+  const rate=irr(cf);
+  const y1=yr[0];
+  const cm = y1.rev>0 ? (y1.rev-y1.varC)/y1.rev : 0;   /* هامش المساهمة */
+  const bep = cm>0 ? (y1.fixC+y1.deprec)/cm : 0;
+  const roi = base>0 ? (avgCash/base)*100 : 0;
+  return {Y,capex,working,invest,own,base,opMonth,varMonth,fixMonth,revMonthFull,deprec,
+    yr,avgCash,payback,npv,rate,bep,cm,roi,loan,lr,ly};
+}
+
+/* ---------- الدراسة ---------- */
+function calc(){
+  const m=model(), D2=D, today=new Date().toLocaleDateString("ar-EG",{day:"numeric",month:"long",year:"numeric"});
+  const th=a=>`<tr>${a.map(x=>`<th>${x}</th>`).join("")}</tr>`;
+  const tr=(a,cls="")=>`<tr class="${cls}">${a.map((x,i)=>i?`<td class="n">${x}</td>`:`<td>${x}</td>`).join("")}</tr>`;
+  const good = m.npv>0 && m.payback!==null && m.payback<=m.Y;
+  const C=esc(D2.cur||"جنيه");
+
+  $("#doc").innerHTML=`
+  <div class="doc-hd">
+    <div class="kick">دراسة جدوى اقتصادية</div>
+    <h1>${esc(D2.name||"اسم المشروع")}</h1>
+    <p>${[D2.act,D2.loc].filter(Boolean).map(esc).join(" · ")}${D2.owner?" · مقدَّمة من "+esc(D2.owner):""}</p>
+    <p style="margin-top:4px">${today}</p>
+  </div>
+
+  <h2>١. ملخص تنفيذي</h2>
+  <p>مشروع <strong>${esc(D2.name||"—")}</strong>${D2.act?" في نشاط "+esc(D2.act):""}${D2.loc?" بموقع "+esc(D2.loc):""}،
+  بإجمالي استثمار مطلوب <strong>${n0(m.invest)} ${C}</strong> يشمل
+  ${n0(m.capex)} ${C} أصول ثابتة و${n0(m.working)} ${C} رأس مال عامل يغطي تشغيل ثلاثة أشهر.</p>
+  ${m.loan?`<p>يُموَّل المشروع بقرض قيمته <strong>${n0(m.loan)} ${C}</strong> بفائدة ${n1(m.lr*100)}%
+  سنويًا تُسدَّد على ${n0(m.ly)} سنوات، ومساهمة ذاتية <strong>${n0(m.own)} ${C}</strong>.
+  ومؤشرات الجدوى أدناه محسوبة على المساهمة الذاتية.</p>`:""}
+  <p>الدراسة مبنية على ${m.Y} سنوات تشغيلية، بنسبة تشغيل تبدأ من ${n0(D2.util)}%
+  ومعدل نمو سنوي ${n0(D2.grow)}%، وبمعدل خصم ${n0(D2.disc)}%.</p>
+  <div class="kpis">
+    <div class="kpi"><small>إجمالي الاستثمار</small><b>${n0(m.invest)}</b></div>
+    ${m.loan?`<div class="kpi"><small>مساهمة ذاتية</small><b>${n0(m.own)}</b></div>`:""}
+    <div class="kpi ok"><small>متوسط التدفق السنوي</small><b>${n0(m.avgCash)}</b></div>
+    <div class="kpi ${m.payback&&m.payback<=m.Y?"ok":"bad"}"><small>فترة الاسترداد</small>
+      <b>${m.payback?n1(m.payback)+" سنة":"لا تسترد"}</b></div>
+    <div class="kpi ${m.npv>0?"ok":"bad"}"><small>صافي القيمة الحالية</small><b>${n0(m.npv)}</b></div>
+    <div class="kpi ${m.rate&&m.rate*100>D2.disc?"ok":"warn"}"><small>معدل العائد الداخلي</small>
+      <b>${m.rate?n1(m.rate*100)+"%":"—"}</b></div>
+    <div class="kpi"><small>العائد على ${m.loan?"المساهمة الذاتية":"الاستثمار"}</small><b>${n1(m.roi)}%</b></div>
+  </div>
+  <div class="verdict ${good?"v-ok":"v-bad"}">
+    ${good ? `<strong>الرأي:</strong> المشروع مجدٍ اقتصاديًا وفق الافتراضات الواردة —
+      صافي القيمة الحالية موجب (${n0(m.npv)} ${C})، وتُسترد الاستثمارات خلال
+      ${n1(m.payback)} سنة${m.rate?`، ومعدل العائد الداخلي ${n1(m.rate*100)}% يفوق معدل الخصم ${n0(D2.disc)}%`:""}.`
+      : `<strong>الرأي:</strong> الأرقام الحالية لا تدعم الجدوى —
+      ${m.npv<=0?`صافي القيمة الحالية سالب (${n0(m.npv)} ${C})`:"الاستثمار لا يُسترد خلال مدة الدراسة"}.
+      يلزم مراجعة الأسعار أو التكاليف أو نسبة التشغيل المفترضة.`}
+  </div>
+
+  <h2>٢. التكاليف الاستثمارية</h2>
+  <div class="tw"><table><thead>${th(["البند","الكمية","سعر الوحدة","الإجمالي"])}</thead><tbody>
+    ${D2.cap.filter(r=>r[0]||r[2]).map(r=>tr([esc(r[0]||"—"),n0(r[1]),n0(r[2]),n0((r[1]||0)*(r[2]||0))])).join("")}
+    ${tr(["إجمالي الأصول الثابتة","","",n0(m.capex)],"tot")}
+    ${tr(["رأس المال العامل (٣ أشهر تشغيل)","","",n0(m.working)],"tot")}
+    ${tr(["إجمالي الاستثمار المطلوب","","",n0(m.invest)],"tot")}
+    ${m.loan?tr(["يُموَّل منه بقرض","","",n0(Math.min(m.loan,m.invest))]):""}
+    ${m.loan?tr(["مساهمة ذاتية","","",n0(m.own)],"tot"):""}
+  </tbody></table></div>
+
+  <h2>٣. الإيرادات المتوقعة</h2>
+  <p>بالطاقة الكاملة قبل تطبيق نسبة التشغيل:</p>
+  <div class="tw"><table><thead>${th(["البند","كمية شهرية","سعر الوحدة","إيراد شهري","إيراد سنوي"])}</thead><tbody>
+    ${D2.rev.filter(r=>r[0]||r[2]).map(r=>{const mo=(r[1]||0)*(r[2]||0);
+      return tr([esc(r[0]||"—"),n0(r[1]),n0(r[2]),n0(mo),n0(mo*12)])}).join("")}
+    ${tr(["الإجمالي","","",n0(m.revMonthFull),n0(m.revMonthFull*12)],"tot")}
+  </tbody></table></div>
+
+  <h2>٤. التكاليف التشغيلية</h2>
+  <div class="tw"><table><thead>${th(["البند","شهري","سنوي","النوع"])}</thead><tbody>
+    ${D2.op.filter(r=>r[0]||r[1]).map(r=>tr([esc(r[0]||"—"),n0(r[1]),n0((r[1]||0)*12),
+      r[2]?"متغيّرة":"ثابتة"])).join("")}
+    ${tr(["الإجمالي",n0(m.opMonth),n0(m.opMonth*12),""],"tot")}
+  </tbody></table></div>
+  <p>التكاليف الثابتة ${n0(m.fixMonth*12)} ${C} سنويًا، والمتغيّرة ${n0(m.varMonth*12)} ${C}
+  بالطاقة الكاملة. الإهلاك السنوي ${n0(m.deprec)} ${C} على ${n0(D2.life)} سنوات.</p>
+
+  <h2>٥. قائمة الدخل التقديرية</h2>
+  <div class="tw"><table><thead>${th(["السنة","نسبة التشغيل","الإيرادات","تكاليف متغيّرة","تكاليف ثابتة","الإهلاك",
+    ...(m.loan?["الفوائد"]:[]),"صافي الربح"])}</thead><tbody>
+    ${m.yr.map(y=>tr([`السنة ${y.i}`,n0(y.util)+"%",n0(y.rev),n0(y.varC),n0(y.fixC),n0(y.deprec),
+      ...(m.loan?[n0(y.interest)]:[]),n0(y.profit)])).join("")}
+  </tbody></table></div>
+
+  <h2>٦. التدفقات النقدية</h2>
+  <div class="tw"><table><thead>${th(["السنة","صافي الربح","+ الإهلاك",...(m.loan?["− أقساط القرض"]:[]),
+    "التدفق النقدي","التدفق التراكمي"])}</thead><tbody>
+    ${(()=>{let c=-m.base; return tr([m.loan?"التأسيس (مساهمة ذاتية)":"التأسيس","","",...(m.loan?[""]:[]),n0(-m.base),n0(c)])
+      + m.yr.map(y=>{c+=y.cash; return tr([`السنة ${y.i}`,n0(y.profit),n0(y.deprec),
+        ...(m.loan?[n0(y.principal)]:[]),n0(y.cash),n0(c)])}).join("")})()}
+  </tbody></table></div>
+
+  <h2>٧. نقطة التعادل</h2>
+  <p>هامش المساهمة ${n1(m.cm*100)}% من الإيراد. ونقطة التعادل السنوية
+  <strong>${n0(m.bep)} ${C}</strong> — أي ما يعادل <strong>${n0(m.bep/12)} ${C} شهريًا</strong>،
+  وهو الحد الذي لا يحقق المشروع عنده ربحًا ولا خسارة.</p>
+  <p>إيراد السنة الأولى المتوقع ${n0(m.yr[0].rev)} ${C}، أي
+  ${m.bep>0?n1(m.yr[0].rev/m.bep*100):"—"}% من نقطة التعادل.</p>
+
+  <h2>٨. الافتراضات والمخاطر</h2>
+  <p>تقوم الدراسة على الافتراضات الآتية: نسبة تشغيل ${n0(D2.util)}% في السنة الأولى ترتفع
+  بمعدل ${n0(D2.grow)}% سنويًا، وثبات الأسعار وهيكل التكاليف بالقيم الواردة،
+  ورأس مال عامل يغطي ثلاثة أشهر، وإهلاك على ${n0(D2.life)} سنوات.</p>
+  <p>وأبرز المخاطر: انخفاض نسبة التشغيل عن المتوقع، وارتفاع أسعار الخامات والطاقة،
+  ودخول منافسين جدد، وتقلب أسعار الصرف بما يؤثر على تكلفة المعدات المستوردة.</p>
+
+  <div class="note"><strong>تنبيه:</strong> هذه الدراسة مبنية بالكامل على البيانات والأرقام
+  المقدَّمة من صاحب المشروع. وهي أداة تخطيط ولا تُعد ضمانًا لتحقق النتائج،
+  ويلزم التحقق من الأسعار والتكاليف من مصادرها قبل اتخاذ قرار الاستثمار.</div>
+
+  <div class="sign"><div>مُعِدّ الدراسة: ____________________</div>
+    <div>التوقيع والتاريخ: ${today}</div></div>`;
+  persist();
+}
+
+paintFields(); paintRows(); calc();
+})();
+</script>
+</body>
+</html>
