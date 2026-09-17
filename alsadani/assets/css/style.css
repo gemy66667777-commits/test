@@ -341,6 +341,12 @@ footer a:hover{color:var(--gold-2)}
   .of{padding:20px}
   .gal{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
   .wa-fab{width:50px;height:50px;inset-block-end:14px;inset-inline-start:14px}
+  /* زرار الواتساب كان قاعد فوق لينك لوحة التحكم — نبعّد الفوتر ونخلي اللينك زرار واضح */
+  footer{padding-block-end:96px}
+  .fbot{flex-direction:column;align-items:center;gap:12px;text-align:center}
+  .fbot a{display:inline-block;padding:9px 20px;border:1px solid rgba(255,255,255,.24);
+    border-radius:99px;background:rgba(255,255,255,.05)}
+  .fbot a:active{background:rgba(255,255,255,.12)}
   .toast{inset-inline:14px;inset-block-end:74px;text-align:center}
   .lb button{width:38px;height:38px}
 }
