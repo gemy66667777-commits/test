@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>نظام متابعة الطلبة</title>
+<title>نظام متابعة الطلبة — نسخة تجربة</title>
 <meta name="theme-color" content="#123A6B">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23123A6B'/><path d='M14 26 32 17l18 9-18 9z' fill='%23E8B23A'/><path d='M22 31v9c0 3 4.5 5 10 5s10-2 10-5v-9' fill='none' stroke='%23E8B23A' stroke-width='3'/></svg>">
 <style>
@@ -146,10 +146,10 @@ td small{color:var(--muted);font-size:.76rem;direction:ltr;display:block}
       <svg width="34" height="34" viewBox="0 0 64 64"><path d="M14 26 32 17l18 9-18 9z" fill="#E8B23A"/><path d="M22 31v9c0 3 4.5 5 10 5s10-2 10-5v-9" fill="none" stroke="#E8B23A" stroke-width="3"/></svg>
     </div>
     <h1 id="gTitle">نظام متابعة الطلبة</h1>
-    <p>ادخل كلمة السر عشان تفتح النظام</p>
+    <p>نسخة تجربة · كلمة السر <b style="color:var(--navy)">1234</b></p>
     <div class="gerr" id="gErr"></div>
     <form id="gForm">
-      <div class="field"><input id="gPass" type="password" placeholder="كلمة السر" autocomplete="current-password"></div>
+      <div class="field"><input id="gPass" type="password" placeholder="كلمة السر" value="1234" autocomplete="current-password"></div>
       <button class="btn" style="width:100%">دخول</button>
     </form>
   </div>
@@ -251,6 +251,7 @@ td small{color:var(--muted);font-size:.76rem;direction:ltr;display:block}
       </div>
       <div class="card pad" style="max-width:620px">
         <h3 style="margin-bottom:6px">النسخ الاحتياطية</h3>
+        <p style="background:#FCF1DF;border:1px solid #F0DCB4;border-radius:10px;padding:10px 13px;font-size:.84rem;color:#7A5A1E;margin:0 0 12px">دي نسخة تجربة وبياناتها وهمية. النسخة بتاعتك بتبدأ فاضية وبتدخل بياناتك انت.</p>
         <p style="color:var(--muted);font-size:.85rem;margin:0 0 14px">
           البيانات محفوظة على الجهاز ده بس. اعمل نسخة احتياطية كل فترة، ولو غيّرت الجهاز استوردها.</p>
         <div class="row" style="margin:0">
@@ -280,7 +281,62 @@ const todayISO=()=>new Date().toLocaleDateString("sv-SE");
 const curMonth=()=>todayISO().slice(0,7);
 
 /* ---------- البيانات ---------- */
-const SEED={settings:{name:"سنتر النجاح",phone:"01000000000",pass:"1234"},students:[],groups:[],att:{},pays:[]};
+const DEMO_GROUPS=[
+  {id:"g1",name:"رياضيات ٣ث",subject:"رياضيات",teacher:"أ. محمود عبد الله",days:["6","2"],time:"٤ العصر",fee:400},
+  {id:"g2",name:"فيزياء ٣ث",subject:"فيزياء",teacher:"أ. هاني رزق",days:["0","3"],time:"٦ مساءً",fee:350},
+  {id:"g3",name:"كيمياء ٣ث",subject:"كيمياء",teacher:"أ. سماح فؤاد",days:["1","4"],time:"٤ العصر",fee:350},
+  {id:"g4",name:"إنجليزي ٢ث",subject:"إنجليزي",teacher:"أ. ريهام سعيد",days:["6","1","3"],time:"٢ الظهر",fee:300},
+  {id:"g5",name:"عربي ٣ع",subject:"لغة عربية",teacher:"أ. مصطفى جاد",days:["5","0"],time:"١١ صباحًا",fee:250}
+];
+const DEMO_NAMES=[
+  ["أحمد سيد محمود","g1","تالتة ثانوي"],["منة الله خالد","g1","تالتة ثانوي"],
+  ["يوسف علي حسن","g1","تالتة ثانوي"],["سلمى إبراهيم","g1","تالتة ثانوي"],
+  ["كريم مصطفى","g1","تالتة ثانوي"],["نورهان عادل","g2","تالتة ثانوي"],
+  ["محمد جمال","g2","تالتة ثانوي"],["حبيبة شريف","g2","تالتة ثانوي"],
+  ["زياد طارق","g2","تالتة ثانوي"],["ملك أشرف","g3","تالتة ثانوي"],
+  ["عمر حسام","g3","تالتة ثانوي"],["رنا وائل","g3","تالتة ثانوي"],
+  ["مازن عصام","g3","تالتة ثانوي"],["فاطمة رمضان","g4","تانية ثانوي"],
+  ["عبد الرحمن ماهر","g4","تانية ثانوي"],["جنى هشام","g4","تانية ثانوي"],
+  ["أدهم صلاح","g4","تانية ثانوي"],["ندى أيمن","g4","تانية ثانوي"],
+  ["مروان فتحي","g5","تالتة إعدادي"],["لجين محمد","g5","تالتة إعدادي"],
+  ["طه عماد","g5","تالتة إعدادي"],["أسماء ياسر","g5","تالتة إعدادي"]
+];
+function buildDemo(){
+  const iso=d=>d.toLocaleDateString("sv-SE");
+  const now=new Date(), month=iso(now).slice(0,7);
+  const students=DEMO_NAMES.map((n,i)=>({
+    id:"s"+(i+1), name:n[0], group:n[1], grade:n[2],
+    phone:"010"+String(10000000+i*1234567%89999999).slice(0,8),
+    parent:"011"+String(20000000+i*7654321%79999999).slice(0,8)
+  }));
+  /* حضور آخر ١٤ يوم — معظمهم حاضر وفيه غياب وتأخير */
+  const att={};
+  for(let back=14;back>=0;back--){
+    const d=new Date(now); d.setDate(d.getDate()-back);
+    const day=String(d.getDay()), date=iso(d);
+    const todays=DEMO_GROUPS.filter(g=>g.days.includes(day));
+    todays.forEach((g,ti)=>{
+      if(back===0 && ti>0) return;            /* النهاردة: أول مجموعة بس، والباقي يجرّبه بنفسه */
+      const gi=DEMO_GROUPS.indexOf(g);
+      const rec={};
+      students.filter(s=>s.group===g.id).forEach((s,si)=>{
+        const r=(back*7+si*3+gi*5)%10;
+        rec[s.id]= r===0 ? "غايب" : r===1 ? "متأخر" : "حاضر";
+      });
+      att[g.id+"|"+date]=rec;
+    });
+  }
+  /* دفعات الشهر الحالي — فيه دافع كامل وجزئي ولسه */
+  const pays=[], fee=id=>(DEMO_GROUPS.find(g=>g.id===id)||{}).fee||0;
+  students.forEach((s,i)=>{
+    const f=fee(s.group), r=i%10;
+    if(r<6){ pays.push({id:"p"+i+"a",student:s.id,month:month,amount:f,note:"كاش",at:now.toISOString()}); }
+    else if(r<8){ pays.push({id:"p"+i+"b",student:s.id,month:month,amount:Math.round(f/2),note:"دفعة أولى",at:now.toISOString()}); }
+  });
+  return {settings:{name:"سنتر التفوق",phone:"01012345678",pass:"1234"},
+    students:students, groups:DEMO_GROUPS, att:att, pays:pays};
+}
+const SEED=buildDemo();
 let db;
 function load(){ try{db=JSON.parse(localStorage.getItem(KEY))||null}catch(e){db=null}
   if(!db) db=JSON.parse(JSON.stringify(SEED));
