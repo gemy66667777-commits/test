@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>نظام متابعة الطلبة</title>
+<meta name="theme-color" content="#123A6B">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23123A6B'/><path d='M14 26 32 17l18 9-18 9z' fill='%23E8B23A'/><path d='M22 31v9c0 3 4.5 5 10 5s10-2 10-5v-9' fill='none' stroke='%23E8B23A' stroke-width='3'/></svg>">
+<style>
+:root{
+  --navy:#123A6B; --navy-2:#1B4E8A; --navy-3:#0C2747;
+  --gold:#E8B23A; --gold-2:#F5D089;
+  --ink:#16202C; --muted:#6B7A8C; --line:#DFE6EE; --line-2:#C8D4E0;
+  --bg:#F5F8FB; --card:#fff;
+  --ok:#1E9E5A; --warn:#D98A1B; --bad:#C94A47; --wa:#25D366;
+  --r:14px; --sh:0 2px 10px rgba(18,58,107,.07); --sh2:0 12px 34px rgba(18,58,107,.16);
+  --f:system-ui,'Segoe UI',Tahoma,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.7;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+h1,h2,h3,h4{margin:0;line-height:1.35}
+table{border-collapse:collapse;width:100%}
+.num{font-variant-numeric:tabular-nums}
+
+/* ===== شاشة الدخول ===== */
+.gate{min-height:100dvh;display:grid;place-items:center;padding:22px;
+  background:radial-gradient(800px 420px at 80% 5%,rgba(232,178,58,.22),transparent 60%),var(--navy-3)}
+.gbox{background:#fff;border-radius:20px;padding:34px 30px;width:min(390px,100%);box-shadow:var(--sh2);text-align:center}
+.gbox .mark{width:62px;height:62px;border-radius:17px;background:var(--navy);display:grid;place-items:center;margin:0 auto 16px}
+.gbox h1{font-size:1.25rem;color:var(--navy);margin-bottom:5px}
+.gbox p{color:var(--muted);font-size:.87rem;margin:0 0 20px}
+.gerr{display:none;background:#FCEDEC;color:var(--bad);border:1px solid #F3C9C7;border-radius:10px;padding:9px;font-size:.85rem;margin-bottom:14px}
+.gerr.on{display:block}
+
+/* ===== التخطيط ===== */
+.app{display:none;min-height:100dvh;grid-template-columns:232px 1fr}
+.app.on{display:grid}
+.side{background:var(--navy-3);color:#fff;padding:18px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100dvh}
+.brand{display:flex;align-items:center;gap:11px;padding:6px 8px 16px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:10px}
+.brand .mark{width:38px;height:38px;border-radius:11px;background:var(--navy-2);display:grid;place-items:center;flex:0 0 auto}
+.brand b{display:block;font-size:.95rem}
+.brand small{color:rgba(255,255,255,.55);font-size:.72rem}
+.tab{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:11px;color:rgba(255,255,255,.78);font-size:.9rem;font-weight:600;width:100%;text-align:right;transition:.15s}
+.tab:hover{background:rgba(255,255,255,.07);color:#fff}
+.tab.on{background:var(--navy-2);color:#fff}
+.tab .b{margin-inline-start:auto;background:rgba(255,255,255,.14);border-radius:99px;padding:1px 8px;font-size:.72rem}
+.side .foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+.side .foot button{color:rgba(255,255,255,.6);font-size:.83rem;padding:7px 8px;width:100%;text-align:right;border-radius:9px}
+.side .foot button:hover{background:rgba(255,255,255,.07);color:#fff}
+.main{padding:22px 26px 60px;min-width:0}
+.panel{display:none}
+.panel.on{display:block}
+.top{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.top h2{font-size:1.4rem;color:var(--navy)}
+.top p{margin:2px 0 0;color:var(--muted);font-size:.87rem}
+.top .sp{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap}
+.mob{display:none;width:40px;height:40px;border-radius:11px;background:#fff;border:1px solid var(--line-2);color:var(--navy);font-size:1.1rem}
+
+/* ===== عناصر ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 17px;border-radius:11px;
+  background:var(--navy);color:#fff;font-size:.87rem;font-weight:700;transition:.16s;white-space:nowrap}
+.btn:hover{background:var(--navy-2)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line-2)}
+.btn.ghost:hover{border-color:var(--navy);background:#fff}
+.btn.wa{background:var(--wa)}
+.btn.wa:hover{background:#1fbb59}
+.btn.danger{background:#fff;color:var(--bad);border:1px solid #EFC9C8}
+.btn.sm{padding:6px 12px;font-size:.8rem;border-radius:9px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.pad{padding:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh)}
+.kpi small{display:block;color:var(--muted);font-size:.8rem;margin-bottom:4px}
+.kpi b{font-size:1.5rem;color:var(--navy);display:block;line-height:1.2}
+.kpi.bad b{color:var(--bad)} .kpi.ok b{color:var(--ok)} .kpi.warn b{color:var(--warn)}
+.field{margin-bottom:13px;display:flex;flex-direction:column}
+.field label{font-size:.82rem;color:var(--muted);font-weight:600;margin-bottom:5px}
+.field input,.field select,.field textarea{padding:10px 13px;border:1px solid var(--line-2);border-radius:10px;background:#fff;font-size:.9rem}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid rgba(18,58,107,.35);border-color:var(--navy)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hint{font-size:.76rem;color:var(--muted);margin-top:4px}
+.search{position:relative;flex:1;min-width:190px}
+.search input{width:100%;padding:10px 14px;border:1px solid var(--line-2);border-radius:99px;font-size:.88rem}
+.tbl-wrap{overflow-x:auto}
+th,td{padding:11px 12px;text-align:right;font-size:.87rem;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:#F0F5FA;color:var(--muted);font-weight:700;font-size:.79rem;position:sticky;top:0}
+tbody tr:hover{background:#F7FAFD}
+td .nm{display:block;font-weight:700}
+td small{color:var(--muted);font-size:.76rem;direction:ltr;display:block}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.75rem;font-weight:700}
+.p-ok{background:#E4F5EC;color:var(--ok)} .p-bad{background:#FBEAE9;color:var(--bad)}
+.p-warn{background:#FCF1DF;color:var(--warn)} .p-mut{background:#EEF2F7;color:var(--muted)}
+.ib{width:32px;height:32px;border-radius:9px;display:inline-grid;place-items:center;color:var(--navy);background:#F0F5FA}
+.ib:hover{background:#E2ECF6}
+.ib.del{color:var(--bad);background:#FBEAE9}
+.blank{text-align:center;padding:44px 18px;color:var(--muted);font-size:.9rem}
+.blank b{display:block;color:var(--navy);font-size:1rem;margin-bottom:5px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+
+/* الحضور */
+.att{display:grid;gap:8px}
+.att-row{display:flex;align-items:center;gap:11px;padding:11px 14px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.att-row .nm{flex:1;min-width:0;font-weight:700;font-size:.9rem}
+.seg{display:flex;border:1px solid var(--line-2);border-radius:10px;overflow:hidden;flex:0 0 auto}
+.seg button{padding:7px 14px;font-size:.8rem;font-weight:700;color:var(--muted);background:#fff}
+.seg button.on[data-s="حاضر"]{background:var(--ok);color:#fff}
+.seg button.on[data-s="غايب"]{background:var(--bad);color:#fff}
+.seg button.on[data-s="متأخر"]{background:var(--warn);color:#fff}
+
+/* مودال */
+.modal{position:fixed;inset:0;background:rgba(12,39,71,.55);display:none;place-items:center;padding:18px;z-index:80;overflow-y:auto}
+.modal.on{display:grid}
+.mbox{background:#fff;border-radius:18px;padding:24px;width:min(560px,100%);box-shadow:var(--sh2);max-height:92vh;overflow-y:auto}
+.mbox h3{font-size:1.1rem;color:var(--navy);margin-bottom:4px}
+.mbox .sub{color:var(--muted);font-size:.84rem;margin:0 0 16px}
+.macts{display:flex;gap:9px;justify-content:flex-start;margin-top:18px;flex-wrap:wrap}
+.toast{position:fixed;inset-block-end:22px;inset-inline-start:22px;background:var(--navy-3);color:#fff;padding:12px 20px;
+  border-radius:12px;font-size:.87rem;font-weight:700;box-shadow:var(--sh2);opacity:0;transform:translateY(10px);
+  pointer-events:none;transition:.25s;z-index:90}
+.toast.on{opacity:1;transform:translateY(0)}
+
+@media (max-width:900px){
+  .app.on{grid-template-columns:1fr}
+  .side{position:fixed;inset-block:0;inset-inline-end:0;width:250px;transform:translateX(100%);transition:.28s;z-index:70}
+  body.nav .side{transform:translateX(0)}
+  body.nav::after{content:"";position:fixed;inset:0;background:rgba(12,39,71,.5);z-index:60}
+  .mob{display:grid}
+  .main{padding:16px 14px 70px}
+  .g2{grid-template-columns:1fr}
+  th,td{padding:9px 8px;font-size:.82rem}
+}
+@media print{
+  .side,.top .sp,.mob,.row,.btn{display:none!important}
+  .app.on{grid-template-columns:1fr}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<section class="gate" id="gate">
+  <div class="gbox">
+    <div class="mark">
+      <svg width="34" height="34" viewBox="0 0 64 64"><path d="M14 26 32 17l18 9-18 9z" fill="#E8B23A"/><path d="M22 31v9c0 3 4.5 5 10 5s10-2 10-5v-9" fill="none" stroke="#E8B23A" stroke-width="3"/></svg>
+    </div>
+    <h1 id="gTitle">نظام متابعة الطلبة</h1>
+    <p>ادخل كلمة السر عشان تفتح النظام</p>
+    <div class="gerr" id="gErr"></div>
+    <form id="gForm">
+      <div class="field"><input id="gPass" type="password" placeholder="كلمة السر" autocomplete="current-password"></div>
+      <button class="btn" style="width:100%">دخول</button>
+    </form>
+  </div>
+</section>
+
+<div class="app" id="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="mark"><svg width="22" height="22" viewBox="0 0 64 64"><path d="M14 26 32 17l18 9-18 9z" fill="#E8B23A"/><path d="M22 31v9c0 3 4.5 5 10 5s10-2 10-5v-9" fill="none" stroke="#E8B23A" stroke-width="3"/></svg></div>
+      <span><b id="sName">السنتر</b><small>متابعة الطلبة</small></span>
+    </div>
+    <button class="tab on" data-tab="home">لوحة اليوم</button>
+    <button class="tab" data-tab="att">تسجيل الحضور</button>
+    <button class="tab" data-tab="pay">الدفعات <span class="b" id="nDue">0</span></button>
+    <button class="tab" data-tab="std">الطلبة <span class="b" id="nStd">0</span></button>
+    <button class="tab" data-tab="grp">المجموعات <span class="b" id="nGrp">0</span></button>
+    <button class="tab" data-tab="set">الإعدادات</button>
+    <div class="foot"><button id="logout">تسجيل الخروج</button></div>
+  </aside>
+
+  <main class="main">
+
+    <!-- لوحة اليوم -->
+    <section class="panel on" id="p-home">
+      <div class="top"><button class="mob">☰</button>
+        <div><h2>لوحة اليوم</h2><p id="todayLine"></p></div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div class="card pad" style="margin-bottom:16px">
+        <h3 style="margin-bottom:12px">مجموعات النهاردة</h3>
+        <div id="todayGroups"></div>
+      </div>
+      <div class="card pad">
+        <h3 style="margin-bottom:4px">عليهم متأخرات</h3>
+        <p style="color:var(--muted);font-size:.84rem;margin:0 0 12px">الطلبة اللي لسه مدفعوش شهر <span id="curMonth"></span></p>
+        <div class="tbl-wrap" id="dueTbl"></div>
+      </div>
+    </section>
+
+    <!-- الحضور -->
+    <section class="panel" id="p-att">
+      <div class="top"><button class="mob">☰</button>
+        <div><h2>تسجيل الحضور</h2><p>اختار المجموعة والتاريخ وسجّل بضغطة</p></div>
+      </div>
+      <div class="row">
+        <select id="attGrp" style="padding:10px 13px;border:1px solid var(--line-2);border-radius:10px;min-width:190px"></select>
+        <input id="attDate" type="date" style="padding:10px 13px;border:1px solid var(--line-2);border-radius:10px">
+        <button class="btn ghost sm" id="allPresent">تعليم الكل حاضر</button>
+        <button class="btn wa sm" id="notifyAbsent">تنبيه أولياء أمور الغايبين</button>
+      </div>
+      <div class="att" id="attList"></div>
+    </section>
+
+    <!-- الدفعات -->
+    <section class="panel" id="p-pay">
+      <div class="top"><button class="mob">☰</button>
+        <div><h2>الدفعات</h2><p>مين دفع ومين عليه فلوس</p></div>
+        <div class="sp">
+          <input id="payMonth" type="month" style="padding:9px 13px;border:1px solid var(--line-2);border-radius:10px">
+          <button class="btn" id="addPay">+ تسجيل دفعة</button>
+        </div>
+      </div>
+      <div class="kpis" id="payKpis"></div>
+      <div class="card"><div class="tbl-wrap" id="payTbl"></div></div>
+    </section>
+
+    <!-- الطلبة -->
+    <section class="panel" id="p-std">
+      <div class="top"><button class="mob">☰</button>
+        <div><h2>الطلبة</h2><p>بيانات الطلبة وأولياء الأمور</p></div>
+        <div class="sp"><button class="btn" id="addStd">+ إضافة طالب</button></div>
+      </div>
+      <div class="row"><div class="search"><input id="qStd" type="search" placeholder="دوّر بالاسم أو رقم الموبايل"></div></div>
+      <div class="card"><div class="tbl-wrap" id="stdTbl"></div></div>
+    </section>
+
+    <!-- المجموعات -->
+    <section class="panel" id="p-grp">
+      <div class="top"><button class="mob">☰</button>
+        <div><h2>المجموعات</h2><p>المادة والمدرّس والمواعيد والاشتراك</p></div>
+        <div class="sp"><button class="btn" id="addGrp">+ إضافة مجموعة</button></div>
+      </div>
+      <div class="card"><div class="tbl-wrap" id="grpTbl"></div></div>
+    </section>
+
+    <!-- الإعدادات -->
+    <section class="panel" id="p-set">
+      <div class="top"><button class="mob">☰</button>
+        <div><h2>الإعدادات</h2><p>بيانات السنتر والنسخ الاحتياطية</p></div>
+      </div>
+      <div class="card pad" style="margin-bottom:16px;max-width:620px">
+        <h3 style="margin-bottom:14px">بيانات السنتر</h3>
+        <div class="g2">
+          <div class="field"><label>اسم السنتر</label><input id="setName"></div>
+          <div class="field"><label>رقم السنتر</label><input id="setPhone" dir="ltr" inputmode="tel"></div>
+        </div>
+        <div class="field"><label>كلمة السر</label><input id="setPass" dir="ltr"></div>
+        <button class="btn" id="saveSet">حفظ</button>
+      </div>
+      <div class="card pad" style="max-width:620px">
+        <h3 style="margin-bottom:6px">النسخ الاحتياطية</h3>
+        <p style="color:var(--muted);font-size:.85rem;margin:0 0 14px">
+          البيانات محفوظة على الجهاز ده بس. اعمل نسخة احتياطية كل فترة، ولو غيّرت الجهاز استوردها.</p>
+        <div class="row" style="margin:0">
+          <button class="btn ghost" id="expJson">تصدير نسخة احتياطية</button>
+          <button class="btn ghost" id="impJson">استيراد نسخة</button>
+          <button class="btn ghost" id="expCsv">تصدير الطلبة CSV</button>
+          <button class="btn danger" id="wipe">مسح كل البيانات</button>
+        </div>
+        <input type="file" id="impFile" accept="application/json" hidden>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const KEY="senter.v1", SK="senter.auth";
+const ar=n=>Number(n||0).toLocaleString("ar-EG");
+const DAYS=["الأحد","الاتنين","التلات","الأربع","الخميس","الجمعة","السبت"];
+const todayISO=()=>new Date().toLocaleDateString("sv-SE");
+const curMonth=()=>todayISO().slice(0,7);
+
+/* ---------- البيانات ---------- */
+const SEED={settings:{name:"سنتر النجاح",phone:"01000000000",pass:"1234"},students:[],groups:[],att:{},pays:[]};
+let db;
+function load(){ try{db=JSON.parse(localStorage.getItem(KEY))||null}catch(e){db=null}
+  if(!db) db=JSON.parse(JSON.stringify(SEED));
+  db.settings=Object.assign({},SEED.settings,db.settings||{});
+  ["students","groups","pays"].forEach(k=>{ if(!Array.isArray(db[k])) db[k]=[] });
+  if(!db.att||typeof db.att!=="object") db.att={};
+}
+function save(){ try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){toast("مساحة التخزين اتملت")} }
+load();
+
+let tT; function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");
+  clearTimeout(tT);tT=setTimeout(()=>t.classList.remove("on"),2200)}
+const modal=$("#modal"),mbox=$("#mbox");
+function openM(h){mbox.innerHTML=h;modal.classList.add("on");document.body.style.overflow="hidden"}
+function closeM(){modal.classList.remove("on");document.body.style.overflow=""}
+modal.onclick=e=>{if(e.target===modal)closeM()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeM()});
+
+const grp=id=>db.groups.find(g=>g.id===id);
+const std=id=>db.students.find(s=>s.id===id);
+const digits=s=>String(s||"").replace(/\D/g,"");
+function wa(phone,txt){const p=digits(phone);const n=p.startsWith("0")?"2"+p:p;
+  return "https://wa.me/"+n+"?text="+encodeURIComponent(txt)}
+const attKey=(gid,date)=>gid+"|"+date;
+function paidFor(sid,month){return db.pays.filter(p=>p.student===sid&&p.month===month)
+  .reduce((a,p)=>a+(Number(p.amount)||0),0)}
+function feeFor(sid){const s=std(sid);const g=s&&grp(s.group);return g?Number(g.fee)||0:0}
+
+/* ---------- الدخول ---------- */
+$("#gTitle").textContent=db.settings.name;
+$("#gForm").onsubmit=e=>{e.preventDefault();
+  if($("#gPass").value===db.settings.pass){try{sessionStorage.setItem(SK,"1")}catch(e2){}enter()}
+  else{$("#gErr").textContent="كلمة السر غلط";$("#gErr").classList.add("on");$("#gPass").value=""}};
+function enter(){$("#gate").style.display="none";$("#app").classList.add("on");renderAll()}
+$("#logout").onclick=()=>{try{sessionStorage.removeItem(SK)}catch(e){}location.reload()};
+try{if(sessionStorage.getItem(SK))enter()}catch(e){}
+
+$$(".tab").forEach(t=>t.onclick=()=>{
+  $$(".tab").forEach(x=>x.classList.toggle("on",x===t));
+  $$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+t.dataset.tab));
+  document.body.classList.remove("nav");scrollTo({top:0});
+});
+$$(".mob").forEach(b=>b.onclick=()=>document.body.classList.toggle("nav"));
+document.addEventListener("click",e=>{ if(document.body.classList.contains("nav")
+  && !e.target.closest(".side") && !e.target.closest(".mob")) document.body.classList.remove("nav") });
+
+/* ---------- لوحة اليوم ---------- */
+function renderHome(){
+  const t=todayISO(), d=new Date().getDay(), m=curMonth();
+  $("#todayLine").textContent=DAYS[d]+" "+new Date().toLocaleDateString("ar-EG",{day:"numeric",month:"long",year:"numeric"});
+  $("#curMonth").textContent=m;
+  const todays=db.groups.filter(g=>(g.days||[]).includes(String(d)));
+  let present=0,absent=0;
+  todays.forEach(g=>{const a=db.att[attKey(g.id,t)]||{};
+    Object.values(a).forEach(v=>{if(v==="حاضر"||v==="متأخر")present++;else if(v==="غايب")absent++})});
+  let due=0,dueN=0;
+  db.students.forEach(s=>{const f=feeFor(s.id); if(!f)return;
+    const rem=f-paidFor(s.id,m); if(rem>0){due+=rem;dueN++}});
+  const collected=db.pays.filter(p=>p.month===m).reduce((a,p)=>a+(Number(p.amount)||0),0);
+  const kpi=(c,l,v)=>`<div class="kpi ${c}"><small>${l}</small><b class="num">${v}</b></div>`;
+  $("#kpis").innerHTML=kpi("","إجمالي الطلبة",ar(db.students.length))
+    +kpi("ok","حضور النهاردة",ar(present))
+    +kpi("warn","غياب النهاردة",ar(absent))
+    +kpi("bad","متأخرات ("+ar(dueN)+" طالب)",ar(due)+" ج");
+  $("#nDue").textContent=ar(dueN); $("#nStd").textContent=ar(db.students.length);
+  $("#nGrp").textContent=ar(db.groups.length);
+
+  $("#todayGroups").innerHTML=todays.length?todays.map(g=>{
+    const n=db.students.filter(s=>s.group===g.id).length;
+    const done=Object.keys(db.att[attKey(g.id,t)]||{}).length;
+    return `<div class="att-row"><span class="nm">${esc(g.name)} <small style="display:inline;color:var(--muted)">${esc(g.time||"")}</small></span>
+      <span class="pill ${done?"p-ok":"p-mut"}">${done?"اتسجّل "+ar(done)+"/"+ar(n):"لسه"}</span>
+      <button class="btn sm" data-go="${esc(g.id)}">سجّل الحضور</button></div>`}).join("")
+    : `<div class="blank"><b>مفيش مجموعات النهاردة</b>حدّد أيام كل مجموعة من تبويب المجموعات.</div>`;
+  $$("#todayGroups [data-go]").forEach(b=>b.onclick=()=>{
+    $$(".tab").forEach(x=>x.classList.toggle("on",x.dataset.tab==="att"));
+    $$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-att"));
+    $("#attGrp").value=b.dataset.go; $("#attDate").value=t; renderAtt(); scrollTo({top:0});
+  });
+
+  const rows=db.students.map(s=>({s,rem:feeFor(s.id)-paidFor(s.id,m)})).filter(x=>x.rem>0)
+    .sort((a,b)=>b.rem-a.rem);
+  $("#dueTbl").innerHTML=rows.length?`<table><thead><tr><th>الطالب</th><th>المجموعة</th><th>المتبقي</th><th></th></tr></thead><tbody>`
+    +rows.map(({s,rem})=>`<tr>
+      <td><span class="nm">${esc(s.name)}</span><small>${esc(s.parent||s.phone||"")}</small></td>
+      <td>${esc((grp(s.group)||{}).name||"—")}</td>
+      <td class="num" style="color:var(--bad);font-weight:700">${ar(rem)} ج</td>
+      <td><a class="btn wa sm" target="_blank" rel="noopener" href="${wa(s.parent||s.phone,
+        "السلام عليكم، معاك "+db.settings.name+".\nبنذكّر حضرتك بمتأخرات الطالب "+s.name+" لشهر "+m+" وقدرها "+rem+" جنيه.\nشكرًا لحضرتك.")}">تذكير</a></td>
+    </tr>`).join("")+"</tbody></table>"
+    : `<div class="blank"><b>مفيش متأخرات</b>كل الطلبة دافعين الشهر ده.</div>`;
+}
+
+/* ---------- الحضور ---------- */
+function fillGrpSelect(){
+  $("#attGrp").innerHTML=db.groups.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("")
+    ||`<option value="">مفيش مجموعات</option>`;
+}
+function renderAtt(){
+  const gid=$("#attGrp").value, date=$("#attDate").value||todayISO();
+  const list=db.students.filter(s=>s.group===gid);
+  const rec=db.att[attKey(gid,date)]||{};
+  if(!gid||!list.length){$("#attList").innerHTML=`<div class="blank"><b>مفيش طلبة في المجموعة دي</b>ضيف طلبة وحدّد مجموعتهم.</div>`;return}
+  $("#attList").innerHTML=list.map(s=>`<div class="att-row" data-s="${esc(s.id)}">
+    <span class="nm">${esc(s.name)}</span>
+    <span class="seg">${["حاضر","متأخر","غايب"].map(v=>
+      `<button data-s="${v}" class="${rec[s.id]===v?"on":""}">${v}</button>`).join("")}</span>
+  </div>`).join("");
+  $$("#attList .att-row").forEach(r=>{
+    const sid=r.dataset.s;
+    $$(".seg button",r).forEach(b=>b.onclick=()=>{
+      const k=attKey(gid,date); db.att[k]=db.att[k]||{};
+      if(db.att[k][sid]===b.dataset.s) delete db.att[k][sid]; else db.att[k][sid]=b.dataset.s;
+      save(); renderAtt(); renderHome();
+    });
+  });
+}
+$("#attGrp").onchange=renderAtt; $("#attDate").onchange=renderAtt;
+$("#allPresent").onclick=()=>{
+  const gid=$("#attGrp").value,date=$("#attDate").value||todayISO(),k=attKey(gid,date);
+  db.att[k]=db.att[k]||{};
+  db.students.filter(s=>s.group===gid).forEach(s=>{if(!db.att[k][s.id])db.att[k][s.id]="حاضر"});
+  save();renderAtt();renderHome();toast("اتسجّلوا حاضرين");
+};
+$("#notifyAbsent").onclick=()=>{
+  const gid=$("#attGrp").value,date=$("#attDate").value||todayISO(),rec=db.att[attKey(gid,date)]||{};
+  const ab=db.students.filter(s=>s.group===gid&&rec[s.id]==="غايب");
+  if(!ab.length){toast("مفيش غايبين");return}
+  openM(`<h3>تنبيه أولياء الأمور</h3><p class="sub">${ar(ab.length)} طالب غايب. اضغط على كل واحد عشان تبعت.</p>
+    ${ab.map(s=>`<div class="att-row" style="margin-bottom:8px"><span class="nm">${esc(s.name)}</span>
+      <a class="btn wa sm" target="_blank" rel="noopener" href="${wa(s.parent||s.phone,
+      "السلام عليكم، معاك "+db.settings.name+".\nالطالب "+s.name+" كان غايب عن حصة "+((grp(gid)||{}).name||"")+" يوم "+date+".")}">ابعت</a></div>`).join("")}
+    <div class="macts"><button class="btn ghost" onclick="this.closest('.modal').classList.remove('on');document.body.style.overflow=''">تمام</button></div>`);
+};
+
+/* ---------- الدفعات ---------- */
+function renderPay(){
+  const m=$("#payMonth").value||curMonth();
+  const rows=db.students.map(s=>{const fee=feeFor(s.id),paid=paidFor(s.id,m);
+    return {s,fee,paid,rem:fee-paid}});
+  const total=rows.reduce((a,r)=>a+r.fee,0), got=rows.reduce((a,r)=>a+r.paid,0);
+  const kpi=(c,l,v)=>`<div class="kpi ${c}"><small>${l}</small><b class="num">${v}</b></div>`;
+  $("#payKpis").innerHTML=kpi("","المتوقع للشهر",ar(total)+" ج")
+    +kpi("ok","المحصّل",ar(got)+" ج")+kpi("bad","المتبقي",ar(Math.max(0,total-got))+" ج");
+  $("#payTbl").innerHTML=rows.length?`<table><thead><tr>
+    <th>الطالب</th><th>المجموعة</th><th>الاشتراك</th><th>دفع</th><th>المتبقي</th><th>الحالة</th><th></th>
+    </tr></thead><tbody>`+rows.map(({s,fee,paid,rem})=>`<tr>
+      <td><span class="nm">${esc(s.name)}</span><small>${esc(s.parent||s.phone||"")}</small></td>
+      <td>${esc((grp(s.group)||{}).name||"—")}</td>
+      <td class="num">${ar(fee)}</td><td class="num">${ar(paid)}</td>
+      <td class="num" style="color:${rem>0?"var(--bad)":"var(--ok)"};font-weight:700">${ar(Math.max(0,rem))}</td>
+      <td>${rem<=0?'<span class="pill p-ok">مدفوع</span>':paid>0?'<span class="pill p-warn">جزئي</span>':'<span class="pill p-bad">لسه</span>'}</td>
+      <td><button class="btn sm ghost" data-pay="${esc(s.id)}">تسجيل</button></td>
+    </tr>`).join("")+"</tbody></table>"
+    :`<div class="blank"><b>مفيش طلبة</b>ضيف الطلبة الأول.</div>`;
+  $$("#payTbl [data-pay]").forEach(b=>b.onclick=()=>payForm(b.dataset.pay,m));
+}
+$("#payMonth").onchange=renderPay;
+$("#addPay").onclick=()=>payForm(null,$("#payMonth").value||curMonth());
+function payForm(sid,month){
+  if(!db.students.length){toast("ضيف طلبة الأول");return}
+  const s=sid?std(sid):null, rem=sid?Math.max(0,feeFor(sid)-paidFor(sid,month)):0;
+  openM(`<h3>تسجيل دفعة</h3><p class="sub">${s?esc(s.name)+" — المتبقي "+ar(rem)+" جنيه":"اختار الطالب والمبلغ"}</p>
+    <div class="field"><label>الطالب</label><select id="pS">${db.students.map(x=>
+      `<option value="${esc(x.id)}" ${sid===x.id?"selected":""}>${esc(x.name)}</option>`).join("")}</select></div>
+    <div class="g2">
+      <div class="field"><label>الشهر</label><input id="pM" type="month" value="${esc(month)}"></div>
+      <div class="field"><label>المبلغ</label><input id="pA" type="number" min="0" value="${rem||""}"></div>
+    </div>
+    <div class="field"><label>ملاحظة</label><input id="pN" placeholder="كاش، فودافون كاش، دفعة أولى…"></div>
+    <div class="macts"><button class="btn" id="pOk">حفظ</button>
+      <button class="btn ghost" id="pC">إلغاء</button></div>`);
+  $("#pC").onclick=closeM;
+  $("#pOk").onclick=()=>{
+    const amt=Number($("#pA").value)||0; if(!amt){$("#pA").focus();return}
+    db.pays.push({id:"p"+Date.now(),student:$("#pS").value,month:$("#pM").value,
+      amount:amt,note:$("#pN").value.trim(),at:new Date().toISOString()});
+    save();closeM();renderAll();toast("الدفعة اتسجّلت");
+  };
+}
+
+/* ---------- الطلبة ---------- */
+let qs="";
+$("#qStd").oninput=e=>{qs=e.target.value.trim();renderStd()};
+function renderStd(){
+  const list=db.students.filter(s=>!qs||(s.name+" "+(s.phone||"")+" "+(s.parent||"")).includes(qs));
+  $("#stdTbl").innerHTML=list.length?`<table><thead><tr>
+    <th>الاسم</th><th>الصف</th><th>المجموعة</th><th>موبايل ولي الأمر</th><th></th></tr></thead><tbody>`
+    +list.map(s=>`<tr>
+      <td><span class="nm">${esc(s.name)}</span><small>${esc(s.phone||"")}</small></td>
+      <td>${esc(s.grade||"—")}</td><td>${esc((grp(s.group)||{}).name||"—")}</td>
+      <td dir="ltr" style="text-align:right">${esc(s.parent||"—")}</td>
+      <td style="display:flex;gap:6px">
+        ${s.parent||s.phone?`<a class="ib" target="_blank" rel="noopener" title="واتساب"
+          href="${wa(s.parent||s.phone,"السلام عليكم، معاك "+db.settings.name+".")}">✆</a>`:""}
+        <button class="ib" data-ed="${esc(s.id)}" title="تعديل">✎</button>
+        <button class="ib del" data-del="${esc(s.id)}" title="حذف">✕</button></td>
+    </tr>`).join("")+"</tbody></table>"
+    :`<div class="blank"><b>${qs?"مفيش نتيجة":"مفيش طلبة"}</b>${qs?"جرّب اسم تاني.":"ابدأ بإضافة أول طالب."}</div>`;
+  $$("#stdTbl [data-ed]").forEach(b=>b.onclick=()=>stdForm(b.dataset.ed));
+  $$("#stdTbl [data-del]").forEach(b=>b.onclick=()=>{
+    const s=std(b.dataset.del); if(!confirm("تحذف "+s.name+"؟"))return;
+    db.students=db.students.filter(x=>x.id!==s.id);
+    db.pays=db.pays.filter(p=>p.student!==s.id);
+    Object.values(db.att).forEach(a=>delete a[s.id]);
+    save();renderAll();toast("اتحذف");
+  });
+}
+$("#addStd").onclick=()=>stdForm(null);
+function stdForm(id){
+  const s=id?std(id):{id:"s"+Date.now(),name:"",phone:"",parent:"",grade:"",group:(db.groups[0]||{}).id||""};
+  openM(`<h3>${id?"تعديل طالب":"طالب جديد"}</h3><p class="sub">رقم ولي الأمر مهم عشان التنبيهات</p>
+    <div class="field"><label>اسم الطالب</label><input id="fN" value="${esc(s.name)}"></div>
+    <div class="g2">
+      <div class="field"><label>موبايل الطالب</label><input id="fP" dir="ltr" inputmode="tel" value="${esc(s.phone||"")}"></div>
+      <div class="field"><label>موبايل ولي الأمر</label><input id="fR" dir="ltr" inputmode="tel" value="${esc(s.parent||"")}"></div>
+    </div>
+    <div class="g2">
+      <div class="field"><label>الصف</label><input id="fG" value="${esc(s.grade||"")}" placeholder="تالتة ثانوي"></div>
+      <div class="field"><label>المجموعة</label><select id="fGr"><option value="">بدون</option>${
+        db.groups.map(g=>`<option value="${esc(g.id)}" ${s.group===g.id?"selected":""}>${esc(g.name)}</option>`).join("")}</select></div>
+    </div>
+    <div class="macts"><button class="btn" id="fOk">حفظ</button><button class="btn ghost" id="fC">إلغاء</button></div>`);
+  $("#fC").onclick=closeM;
+  $("#fOk").onclick=()=>{
+    const n=$("#fN").value.trim(); if(!n){$("#fN").focus();return}
+    const rec={id:s.id,name:n,phone:$("#fP").value.trim(),parent:$("#fR").value.trim(),
+      grade:$("#fG").value.trim(),group:$("#fGr").value};
+    const i=db.students.findIndex(x=>x.id===s.id);
+    if(i<0)db.students.push(rec);else db.students[i]=rec;
+    save();closeM();renderAll();toast("اتحفظ");
+  };
+}
+
+/* ---------- المجموعات ---------- */
+function renderGrp(){
+  $("#grpTbl").innerHTML=db.groups.length?`<table><thead><tr>
+    <th>المجموعة</th><th>المدرّس</th><th>الأيام</th><th>الميعاد</th><th>الاشتراك</th><th>عدد</th><th></th>
+    </tr></thead><tbody>`+db.groups.map(g=>`<tr>
+      <td><span class="nm">${esc(g.name)}</span><small style="direction:rtl">${esc(g.subject||"")}</small></td>
+      <td>${esc(g.teacher||"—")}</td>
+      <td>${(g.days||[]).map(d=>DAYS[d]).join("، ")||"—"}</td>
+      <td>${esc(g.time||"—")}</td><td class="num">${ar(g.fee||0)} ج</td>
+      <td class="num">${ar(db.students.filter(s=>s.group===g.id).length)}</td>
+      <td style="display:flex;gap:6px">
+        <button class="ib" data-ed="${esc(g.id)}">✎</button>
+        <button class="ib del" data-del="${esc(g.id)}">✕</button></td>
+    </tr>`).join("")+"</tbody></table>"
+    :`<div class="blank"><b>مفيش مجموعات</b>ابدأ بإضافة أول مجموعة عشان تقدر تسجّل حضور.</div>`;
+  $$("#grpTbl [data-ed]").forEach(b=>b.onclick=()=>grpForm(b.dataset.ed));
+  $$("#grpTbl [data-del]").forEach(b=>b.onclick=()=>{
+    const g=grp(b.dataset.del);
+    const n=db.students.filter(s=>s.group===g.id).length;
+    if(n){alert("مينفعش تحذف «"+g.name+"» وفيها "+n+" طالب. انقلهم مجموعة تانية الأول.");return}
+    if(!confirm("تحذف مجموعة "+g.name+"؟"))return;
+    db.groups=db.groups.filter(x=>x.id!==g.id);save();renderAll();toast("اتحذفت");
+  });
+}
+$("#addGrp").onclick=()=>grpForm(null);
+function grpForm(id){
+  const g=id?grp(id):{id:"g"+Date.now(),name:"",subject:"",teacher:"",days:[],time:"",fee:0};
+  openM(`<h3>${id?"تعديل مجموعة":"مجموعة جديدة"}</h3><p class="sub">الأيام بتحدد المجموعة تظهر في لوحة أنهي يوم</p>
+    <div class="g2">
+      <div class="field"><label>اسم المجموعة</label><input id="gN" value="${esc(g.name)}" placeholder="رياضة ٣ث — سبت وتلات"></div>
+      <div class="field"><label>المادة</label><input id="gS" value="${esc(g.subject||"")}"></div>
+    </div>
+    <div class="g2">
+      <div class="field"><label>المدرّس</label><input id="gT" value="${esc(g.teacher||"")}"></div>
+      <div class="field"><label>الميعاد</label><input id="gM" value="${esc(g.time||"")}" placeholder="٤ العصر"></div>
+    </div>
+    <div class="field"><label>الأيام</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${DAYS.map((d,i)=>
+        `<label style="display:flex;align-items:center;gap:5px;padding:7px 11px;border:1px solid var(--line-2);border-radius:9px;cursor:pointer;font-size:.84rem">
+          <input type="checkbox" class="gd" value="${i}" ${(g.days||[]).includes(String(i))||(g.days||[]).includes(i)?"checked":""}>${d}</label>`).join("")}</div></div>
+    <div class="field"><label>الاشتراك الشهري</label><input id="gF" type="number" min="0" value="${Number(g.fee)||0}">
+      <div class="hint">ده اللي بيتحسب عليه المتأخرات</div></div>
+    <div class="macts"><button class="btn" id="gOk">حفظ</button><button class="btn ghost" id="gC">إلغاء</button></div>`);
+  $("#gC").onclick=closeM;
+  $("#gOk").onclick=()=>{
+    const n=$("#gN").value.trim(); if(!n){$("#gN").focus();return}
+    const rec={id:g.id,name:n,subject:$("#gS").value.trim(),teacher:$("#gT").value.trim(),
+      time:$("#gM").value.trim(),fee:Number($("#gF").value)||0,
+      days:$$(".gd").filter(c=>c.checked).map(c=>c.value)};
+    const i=db.groups.findIndex(x=>x.id===g.id);
+    if(i<0)db.groups.push(rec);else db.groups[i]=rec;
+    save();closeM();renderAll();toast("اتحفظت");
+  };
+}
+
+/* ---------- الإعدادات ---------- */
+function renderSet(){ $("#setName").value=db.settings.name; $("#setPhone").value=db.settings.phone;
+  $("#setPass").value=db.settings.pass; $("#sName").textContent=db.settings.name }
+$("#saveSet").onclick=()=>{
+  db.settings.name=$("#setName").value.trim()||"السنتر";
+  db.settings.phone=$("#setPhone").value.trim();
+  db.settings.pass=$("#setPass").value.trim()||"1234";
+  save();renderSet();toast("اتحفظ");
+};
+function dl(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}
+$("#expJson").onclick=()=>dl(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),
+  "نسخة-احتياطية-"+todayISO()+".json");
+$("#impJson").onclick=()=>$("#impFile").click();
+$("#impFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||typeof o!=="object")throw 0;
+    db=o;load();save();renderAll();renderSet();toast("النسخة اترجّعت")}catch(x){toast("الملف مش مظبوط")}};
+  r.readAsText(f);e.target.value=""};
+$("#expCsv").onclick=()=>{
+  const m=curMonth();
+  const rows=[["الاسم","الصف","المجموعة","موبايل الطالب","موبايل ولي الأمر","الاشتراك","دفع","المتبقي"]]
+    .concat(db.students.map(s=>{const fee=feeFor(s.id),paid=paidFor(s.id,m);
+      return [s.name,s.grade||"",(grp(s.group)||{}).name||"",s.phone||"",s.parent||"",fee,paid,Math.max(0,fee-paid)]}));
+  dl(new Blob(["﻿"+rows.map(r=>r.map(c=>'"'+String(c==null?"":c).replace(/"/g,'""')+'"').join(",")).join("\r\n")],
+    {type:"text/csv;charset=utf-8"}),"الطلبة-"+m+".csv");
+};
+$("#wipe").onclick=()=>{ if(!confirm("هتمسح كل البيانات نهائي. متأكد؟"))return;
+  if(!confirm("تأكيد أخير — مفيش رجوع بعد كده."))return;
+  localStorage.removeItem(KEY);load();save();renderAll();renderSet();toast("اتمسح كله") };
+
+/* ---------- تشغيل ---------- */
+function renderAll(){ fillGrpSelect();
+  if(!$("#attDate").value)$("#attDate").value=todayISO();
+  if(!$("#payMonth").value)$("#payMonth").value=curMonth();
+  renderHome();renderAtt();renderPay();renderStd();renderGrp();renderSet(); }
+})();
+</script>
+</body>
+</html>
