@@ -108,6 +108,10 @@ td small{color:var(--muted);font-size:.76rem;direction:ltr;display:block}
 .seg button.on[data-s="حاضر"]{background:var(--ok);color:#fff}
 .seg button.on[data-s="غايب"]{background:var(--bad);color:#fff}
 .seg button.on[data-s="متأخر"]{background:var(--warn);color:#fff}
+.paybtn{flex:0 0 auto;padding:7px 13px;border-radius:10px;border:1px solid var(--line-2);
+  background:#fff;color:var(--muted);font-size:.79rem;font-weight:700;white-space:nowrap}
+.paybtn:hover{border-color:var(--ok);color:var(--ok)}
+.paybtn.on{background:var(--ok);border-color:var(--ok);color:#fff}
 
 /* مودال */
 .modal{position:fixed;inset:0;background:rgba(12,39,71,.55);display:none;place-items:center;padding:18px;z-index:80;overflow-y:auto}
@@ -163,7 +167,7 @@ td small{color:var(--muted);font-size:.76rem;direction:ltr;display:block}
     </div>
     <button class="tab on" data-tab="home">لوحة اليوم</button>
     <button class="tab" data-tab="att">تسجيل الحضور</button>
-    <button class="tab" data-tab="pay">الدفعات <span class="b" id="nDue">0</span></button>
+    <button class="tab" data-tab="pay">الحسابات <span class="b" id="nDue">0</span></button>
     <button class="tab" data-tab="std">الطلبة <span class="b" id="nStd">0</span></button>
     <button class="tab" data-tab="grp">المجموعات <span class="b" id="nGrp">0</span></button>
     <button class="tab" data-tab="set">الإعدادات</button>
@@ -184,7 +188,7 @@ td small{color:var(--muted);font-size:.76rem;direction:ltr;display:block}
       </div>
       <div class="card pad">
         <h3 style="margin-bottom:4px">عليهم متأخرات</h3>
-        <p style="color:var(--muted);font-size:.84rem;margin:0 0 12px">الطلبة اللي لسه مدفعوش شهر <span id="curMonth"></span></p>
+        <p style="color:var(--muted);font-size:.84rem;margin:0 0 12px">حسب الحصص اللي حضروها في شهر <span id="curMonth"></span></p>
         <div class="tbl-wrap" id="dueTbl"></div>
       </div>
     </section>
@@ -206,7 +210,7 @@ td small{color:var(--muted);font-size:.76rem;direction:ltr;display:block}
     <!-- الدفعات -->
     <section class="panel" id="p-pay">
       <div class="top"><button class="mob">☰</button>
-        <div><h2>الدفعات</h2><p>مين دفع ومين عليه فلوس</p></div>
+        <div><h2>الحسابات</h2><p>المستحق على كل طالب حسب حصصه ومين عليه فلوس</p></div>
         <div class="sp">
           <input id="payMonth" type="month" style="padding:9px 13px;border:1px solid var(--line-2);border-radius:10px">
           <button class="btn" id="addPay">+ تسجيل دفعة</button>
@@ -307,7 +311,19 @@ function wa(phone,txt){const p=digits(phone);const n=p.startsWith("0")?"2"+p:p;
 const attKey=(gid,date)=>gid+"|"+date;
 function paidFor(sid,month){return db.pays.filter(p=>p.student===sid&&p.month===month)
   .reduce((a,p)=>a+(Number(p.amount)||0),0)}
+/* سعر الحصة الواحدة */
 function feeFor(sid){const s=std(sid);const g=s&&grp(s.group);return g?Number(g.fee)||0:0}
+/* عدد الحصص اللي حضرها الطالب في الشهر */
+function sessionsIn(sid,month){const s=std(sid);if(!s)return 0;let n=0;
+  Object.keys(db.att).forEach(k=>{
+    if(k.indexOf(s.group+"|")!==0)return;
+    if(k.split("|")[1].slice(0,7)!==month)return;
+    const v=db.att[k][sid]; if(v==="حاضر"||v==="متأخر")n++;});
+  return n}
+/* المستحق = حصص حضرها × سعر الحصة */
+function dueFor(sid,month){return sessionsIn(sid,month)*feeFor(sid)}
+/* هل حصة معيّنة اتدفعت؟ */
+function sessionPaid(sid,key){return db.pays.some(p=>p.student===sid&&p.session===key)}
 
 /* ---------- الدخول ---------- */
 $("#gTitle").textContent=db.settings.name;
@@ -337,13 +353,15 @@ function renderHome(){
   todays.forEach(g=>{const a=db.att[attKey(g.id,t)]||{};
     Object.values(a).forEach(v=>{if(v==="حاضر"||v==="متأخر")present++;else if(v==="غايب")absent++})});
   let due=0,dueN=0;
-  db.students.forEach(s=>{const f=feeFor(s.id); if(!f)return;
-    const rem=f-paidFor(s.id,m); if(rem>0){due+=rem;dueN++}});
-  const collected=db.pays.filter(p=>p.month===m).reduce((a,p)=>a+(Number(p.amount)||0),0);
+  db.students.forEach(s=>{const rem=dueFor(s.id,m)-paidFor(s.id,m);
+    if(rem>0){due+=rem;dueN++}});
+  const todayCash=db.pays.filter(p=>(p.at||"").slice(0,10)===t)
+    .reduce((a,p)=>a+(Number(p.amount)||0),0);
   const kpi=(c,l,v)=>`<div class="kpi ${c}"><small>${l}</small><b class="num">${v}</b></div>`;
   $("#kpis").innerHTML=kpi("","إجمالي الطلبة",ar(db.students.length))
     +kpi("ok","حضور النهاردة",ar(present))
     +kpi("warn","غياب النهاردة",ar(absent))
+    +kpi("ok","تحصيل النهاردة",ar(todayCash)+" ج")
     +kpi("bad","متأخرات ("+ar(dueN)+" طالب)",ar(due)+" ج");
   $("#nDue").textContent=ar(dueN); $("#nStd").textContent=ar(db.students.length);
   $("#nGrp").textContent=ar(db.groups.length);
@@ -361,15 +379,16 @@ function renderHome(){
     $("#attGrp").value=b.dataset.go; $("#attDate").value=t; renderAtt(); scrollTo({top:0});
   });
 
-  const rows=db.students.map(s=>({s,rem:feeFor(s.id)-paidFor(s.id,m)})).filter(x=>x.rem>0)
-    .sort((a,b)=>b.rem-a.rem);
-  $("#dueTbl").innerHTML=rows.length?`<table><thead><tr><th>الطالب</th><th>المجموعة</th><th>المتبقي</th><th></th></tr></thead><tbody>`
-    +rows.map(({s,rem})=>`<tr>
+  const rows=db.students.map(s=>({s,rem:dueFor(s.id,m)-paidFor(s.id,m),n:sessionsIn(s.id,m)}))
+    .filter(x=>x.rem>0).sort((a,b)=>b.rem-a.rem);
+  $("#dueTbl").innerHTML=rows.length?`<table><thead><tr><th>الطالب</th><th>المجموعة</th><th>حصص</th><th>المتبقي</th><th></th></tr></thead><tbody>`
+    +rows.map(({s,rem,n})=>`<tr>
       <td><span class="nm">${esc(s.name)}</span><small>${esc(s.parent||s.phone||"")}</small></td>
       <td>${esc((grp(s.group)||{}).name||"—")}</td>
+      <td class="num">${ar(n)}</td>
       <td class="num" style="color:var(--bad);font-weight:700">${ar(rem)} ج</td>
       <td><a class="btn wa sm" target="_blank" rel="noopener" href="${wa(s.parent||s.phone,
-        "السلام عليكم، معاك "+db.settings.name+".\nبنذكّر حضرتك بمتأخرات الطالب "+s.name+" لشهر "+m+" وقدرها "+rem+" جنيه.\nشكرًا لحضرتك.")}">تذكير</a></td>
+        "السلام عليكم، معاك "+db.settings.name+".\nالطالب "+s.name+" حضر "+n+" حصة الشهر ده، والمتبقي عليه "+rem+" جنيه.\nشكرًا لحضرتك.")}">تذكير</a></td>
     </tr>`).join("")+"</tbody></table>"
     : `<div class="blank"><b>مفيش متأخرات</b>كل الطلبة دافعين الشهر ده.</div>`;
 }
@@ -389,18 +408,31 @@ function renderAtt(){
   const list=db.students.filter(s=>s.group===gid);
   const rec=db.att[attKey(gid,date)]||{};
   if(!gid||!list.length){$("#attList").innerHTML=`<div class="blank"><b>مفيش طلبة في المجموعة دي</b>ضيف طلبة وحدّد مجموعتهم.</div>`;return}
-  $("#attList").innerHTML=list.map(s=>`<div class="att-row" data-s="${esc(s.id)}">
+  const key=attKey(gid,date), fee=Number((grp(gid)||{}).fee)||0;
+  $("#attList").innerHTML=list.map(s=>{
+    const here=rec[s.id]&&rec[s.id]!=="غايب", paid=sessionPaid(s.id,key);
+    return `<div class="att-row" data-s="${esc(s.id)}">
     <span class="nm">${esc(s.name)}</span>
     <span class="seg">${["حاضر","متأخر","غايب"].map(v=>
       `<button data-s="${v}" class="${rec[s.id]===v?"on":""}">${v}</button>`).join("")}</span>
-  </div>`).join("");
+    ${here?`<button class="paybtn ${paid?"on":""}" data-p="${esc(s.id)}">${
+      paid?"مدفوع ✓":"دفع "+ar(fee)+" ج"}</button>`:""}
+  </div>`}).join("");
   $$("#attList .att-row").forEach(r=>{
     const sid=r.dataset.s;
     $$(".seg button",r).forEach(b=>b.onclick=()=>{
       const k=attKey(gid,date); db.att[k]=db.att[k]||{};
       if(db.att[k][sid]===b.dataset.s) delete db.att[k][sid]; else db.att[k][sid]=b.dataset.s;
-      save(); renderAtt(); renderHome();
+      if(db.att[k][sid]==="غايب"||!db.att[k][sid]) db.pays=db.pays.filter(p=>!(p.student===sid&&p.session===k));
+      save(); renderAtt(); renderPay(); renderHome();
     });
+    const pb=$(".paybtn",r);
+    if(pb) pb.onclick=()=>{
+      if(sessionPaid(sid,key)) db.pays=db.pays.filter(p=>!(p.student===sid&&p.session===key));
+      else db.pays.push({id:"p"+Date.now()+sid,student:sid,month:date.slice(0,7),
+        amount:fee,session:key,note:"حصة "+date,at:new Date().toISOString()});
+      save(); renderAtt(); renderPay(); renderHome();
+    };
   });
 }
 $("#attGrp").onchange=renderAtt; $("#attDate").onchange=renderAtt;
@@ -424,20 +456,21 @@ $("#notifyAbsent").onclick=()=>{
 /* ---------- الدفعات ---------- */
 function renderPay(){
   const m=$("#payMonth").value||curMonth();
-  const rows=db.students.map(s=>{const fee=feeFor(s.id),paid=paidFor(s.id,m);
-    return {s,fee,paid,rem:fee-paid}});
-  const total=rows.reduce((a,r)=>a+r.fee,0), got=rows.reduce((a,r)=>a+r.paid,0);
+  const rows=db.students.map(s=>{const fee=feeFor(s.id),n=sessionsIn(s.id,m),
+    due=n*fee,paid=paidFor(s.id,m); return {s,fee,n,due,paid,rem:due-paid}});
+  const total=rows.reduce((a,r)=>a+r.due,0), got=rows.reduce((a,r)=>a+r.paid,0);
   const kpi=(c,l,v)=>`<div class="kpi ${c}"><small>${l}</small><b class="num">${v}</b></div>`;
-  $("#payKpis").innerHTML=kpi("","المتوقع للشهر",ar(total)+" ج")
+  $("#payKpis").innerHTML=kpi("","مستحق الشهر",ar(total)+" ج")
     +kpi("ok","المحصّل",ar(got)+" ج")+kpi("bad","المتبقي",ar(Math.max(0,total-got))+" ج");
   $("#payTbl").innerHTML=rows.length?`<table><thead><tr>
-    <th>الطالب</th><th>المجموعة</th><th>الاشتراك</th><th>دفع</th><th>المتبقي</th><th>الحالة</th><th></th>
-    </tr></thead><tbody>`+rows.map(({s,fee,paid,rem})=>`<tr>
+    <th>الطالب</th><th>المجموعة</th><th>حصص</th><th>سعر الحصة</th><th>مستحق</th><th>دفع</th><th>المتبقي</th><th>الحالة</th><th></th>
+    </tr></thead><tbody>`+rows.map(({s,fee,n,due,paid,rem})=>`<tr>
       <td><span class="nm">${esc(s.name)}</span><small>${esc(s.parent||s.phone||"")}</small></td>
       <td>${esc((grp(s.group)||{}).name||"—")}</td>
-      <td class="num">${ar(fee)}</td><td class="num">${ar(paid)}</td>
+      <td class="num">${ar(n)}</td>
+      <td class="num">${ar(fee)}</td><td class="num">${ar(due)}</td><td class="num">${ar(paid)}</td>
       <td class="num" style="color:${rem>0?"var(--bad)":"var(--ok)"};font-weight:700">${ar(Math.max(0,rem))}</td>
-      <td>${rem<=0?'<span class="pill p-ok">مدفوع</span>':paid>0?'<span class="pill p-warn">جزئي</span>':'<span class="pill p-bad">لسه</span>'}</td>
+      <td>${due<=0?'<span class="pill p-mut">لسه محضرش</span>':rem<=0?'<span class="pill p-ok">مسدّد</span>':paid>0?'<span class="pill p-warn">جزئي</span>':'<span class="pill p-bad">عليه</span>'}</td>
       <td><button class="btn sm ghost" data-pay="${esc(s.id)}">تسجيل</button></td>
     </tr>`).join("")+"</tbody></table>"
     :`<div class="blank"><b>مفيش طلبة</b>ضيف الطلبة الأول.</div>`;
@@ -447,15 +480,15 @@ $("#payMonth").onchange=renderPay;
 $("#addPay").onclick=()=>payForm(null,$("#payMonth").value||curMonth());
 function payForm(sid,month){
   if(!db.students.length){toast("ضيف طلبة الأول");return}
-  const s=sid?std(sid):null, rem=sid?Math.max(0,feeFor(sid)-paidFor(sid,month)):0;
-  openM(`<h3>تسجيل دفعة</h3><p class="sub">${s?esc(s.name)+" — المتبقي "+ar(rem)+" جنيه":"اختار الطالب والمبلغ"}</p>
+  const s=sid?std(sid):null, rem=sid?Math.max(0,dueFor(sid,month)-paidFor(sid,month)):0;
+  openM(`<h3>تسجيل دفعة</h3><p class="sub">${s?esc(s.name)+" — حضر "+ar(sessionsIn(sid,month))+" حصة والمتبقي عليه "+ar(rem)+" جنيه":"اختار الطالب والمبلغ"}</p>
     <div class="field"><label>الطالب</label><select id="pS">${db.students.map(x=>
       `<option value="${esc(x.id)}" ${sid===x.id?"selected":""}>${esc(x.name)}</option>`).join("")}</select></div>
     <div class="g2">
       <div class="field"><label>الشهر</label><input id="pM" type="month" value="${esc(month)}"></div>
       <div class="field"><label>المبلغ</label><input id="pA" type="number" min="0" value="${rem||""}"></div>
     </div>
-    <div class="field"><label>ملاحظة</label><input id="pN" placeholder="كاش، فودافون كاش، دفعة أولى…"></div>
+    <div class="field"><label>ملاحظة</label><input id="pN" placeholder="كاش، فودافون كاش، دفعة مقدمة…"></div>
     <div class="macts"><button class="btn" id="pOk">حفظ</button>
       <button class="btn ghost" id="pC">إلغاء</button></div>`);
   $("#pC").onclick=closeM;
@@ -523,7 +556,7 @@ function stdForm(id){
 /* ---------- المجموعات ---------- */
 function renderGrp(){
   $("#grpTbl").innerHTML=db.groups.length?`<table><thead><tr>
-    <th>المجموعة</th><th>المدرّس</th><th>الأيام</th><th>الميعاد</th><th>الاشتراك</th><th>عدد</th><th></th>
+    <th>المجموعة</th><th>المدرّس</th><th>الأيام</th><th>الميعاد</th><th>سعر الحصة</th><th>عدد</th><th></th>
     </tr></thead><tbody>`+db.groups.map(g=>`<tr>
       <td><span class="nm">${esc(g.name)}</span><small style="direction:rtl">${esc(g.subject||"")}</small></td>
       <td>${esc(g.teacher||"—")}</td>
@@ -560,8 +593,8 @@ function grpForm(id){
       <div style="display:flex;gap:6px;flex-wrap:wrap">${DAYS.map((d,i)=>
         `<label style="display:flex;align-items:center;gap:5px;padding:7px 11px;border:1px solid var(--line-2);border-radius:9px;cursor:pointer;font-size:.84rem">
           <input type="checkbox" class="gd" value="${i}" ${(g.days||[]).includes(String(i))||(g.days||[]).includes(i)?"checked":""}>${d}</label>`).join("")}</div></div>
-    <div class="field"><label>الاشتراك الشهري</label><input id="gF" type="number" min="0" value="${Number(g.fee)||0}">
-      <div class="hint">ده اللي بيتحسب عليه المتأخرات</div></div>
+    <div class="field"><label>سعر الحصة</label><input id="gF" type="number" min="0" value="${Number(g.fee)||0}">
+      <div class="hint">المستحق على الطالب = عدد الحصص اللي حضرها × السعر ده</div></div>
     <div class="macts"><button class="btn" id="gOk">حفظ</button><button class="btn ghost" id="gC">إلغاء</button></div>`);
   $("#gC").onclick=closeM;
   $("#gOk").onclick=()=>{
@@ -595,9 +628,9 @@ $("#impFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new Fi
   r.readAsText(f);e.target.value=""};
 $("#expCsv").onclick=()=>{
   const m=curMonth();
-  const rows=[["الاسم","الصف","المجموعة","موبايل الطالب","موبايل ولي الأمر","الاشتراك","دفع","المتبقي"]]
-    .concat(db.students.map(s=>{const fee=feeFor(s.id),paid=paidFor(s.id,m);
-      return [s.name,s.grade||"",(grp(s.group)||{}).name||"",s.phone||"",s.parent||"",fee,paid,Math.max(0,fee-paid)]}));
+  const rows=[["الاسم","الصف","المجموعة","موبايل الطالب","موبايل ولي الأمر","حصص الشهر","سعر الحصة","مستحق","دفع","المتبقي"]]
+    .concat(db.students.map(s=>{const fee=feeFor(s.id),n=sessionsIn(s.id,m),due=n*fee,paid=paidFor(s.id,m);
+      return [s.name,s.grade||"",(grp(s.group)||{}).name||"",s.phone||"",s.parent||"",n,fee,due,paid,Math.max(0,due-paid)]}));
   dl(new Blob(["﻿"+rows.map(r=>r.map(c=>'"'+String(c==null?"":c).replace(/"/g,'""')+'"').join(",")).join("\r\n")],
     {type:"text/csv;charset=utf-8"}),"الطلبة-"+m+".csv");
 };
