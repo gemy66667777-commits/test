@@ -10,7 +10,7 @@
 | `abo3omar/` | أبو عمر للأجهزة المنزلية | أجهزة منزلية — القاهرة | abo3omar.vercel.app |
 | `forkknife/` | شوكة وسكينة | أدوات منزلية — دكرنس | forkknife.vercel.app |
 | `hadaeq/` | حدائق الزهور للعطور | عطور نيش — الدمام 🇸🇦 | hadaeq-alzohour.vercel.app |
-| `mrmedia/` | Mr.Media | تنظيم مناسبات وكوش أفراح | mrmedia-omega.vercel.app |
+| `mrmedia/` | Mr.Media | تنظيم مناسبات وكوش أفراح | mrmedia-events.vercel.app |
 | `vip/` | V.I.P | إكسسوارات | vip-website-three.vercel.app |
 | `bahia/` | باهية | مكياج — السعودية | — |
 | `shatha-almadina/` | شذا المدينة | — | — |

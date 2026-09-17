@@ -11,11 +11,11 @@ python3 -m http.server 8000
 
 ## الرفع على Vercel
 
-ستاتيك بالكامل — ارفع الفولدر زي ما هو. الدومين مظبوط على `mrmedia-omega.vercel.app`.
+ستاتيك بالكامل — ارفع الفولدر زي ما هو. الدومين مظبوط على `mrmedia-events.vercel.app`.
 لو هيبقى مختلف:
 
 ```bash
-sed -i 's|mrmedia-omega.vercel.app|الدومين-بتاعك.vercel.app|g' index.html
+sed -i 's|mrmedia-events.vercel.app|الدومين-بتاعك.vercel.app|g' index.html
 ```
 
 وبعدين **Scrape Again** في فيسبوك ديبَجر عشان الثامبنيل يتحدّث.
