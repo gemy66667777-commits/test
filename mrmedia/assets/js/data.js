@@ -6,7 +6,7 @@ window.MM_SEED = {
     tagline: "تنظيم مناسبات",
     slogan: "Professional Event Planner",
     intro: "بنجهّز كوش الأفراح والخطوبة وكتب الكتاب — تصميم وتنفيذ كامل بالورد والدراپيه والنيون والإضاءة والصوتيات. اختار التصميم اللي عاجبك وابعتلنا تاريخ مناسبتك.",
-    domain: "https://mrmedia.vercel.app",
+    domain: "https://mrmedia-omega.vercel.app",
 
     phone:  "01099451018",
     whats:  "201099451018",
