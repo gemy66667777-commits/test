@@ -140,8 +140,13 @@ table{border-collapse:collapse;width:100%}
       <div class="hd3"><span>البند</span><span>الكمية</span><span>سعر الوحدة</span><span></span></div>
       <div id="capRows"></div>
       <button class="btn sm" id="addCap">+ بند</button>
-      <div class="f" style="margin-top:12px"><label>عمر الأصول بالسنين (للإهلاك)</label>
-        <input id="pLife" type="number" min="1" value="10"></div>
+      <div class="g2" style="margin-top:12px">
+        <div class="f"><label>عمر الأصول بالسنين (للإهلاك)</label>
+          <input id="pLife" type="number" min="1" value="10"></div>
+        <div class="f"><label>ضريبة على الأرباح %</label>
+          <input id="pTax" type="number" min="0" max="60" value="0">
+          <div class="hint">صفر لو معفى — راجع نسبة بلد المشروع</div></div>
+      </div>
     </div>
 
     <div class="card">
@@ -189,7 +194,7 @@ const n1=n=>(Math.round((Number(n)||0)*10)/10).toLocaleString("en-US",{minimumFr
 
 const DEF={
   name:"مشروع كافيه", owner:"", loc:"", act:"تقديم مشروبات ومأكولات خفيفة",
-  cur:"جنيه", years:5, disc:20, life:10, util:70, grow:10,
+  cur:"جنيه", years:5, disc:20, life:10, util:70, grow:10, tax:0,
   cap:[["تجهيز وديكور المكان",1,180000],["ماكينة إسبريسو وملحقاتها",1,140000],
        ["ثلاجات وفريزر",2,25000],["أثاث وكراسي وترابيزات",1,90000],
        ["شاشات وصوتيات",1,25000],["تأمين ومقدم إيجار",1,60000]],
@@ -232,7 +237,7 @@ function paintRows(){
   rows("#opRows",D.op,["البند","","chk"],calc);
 }
 const FIELDS=[["pName","name","s"],["pOwner","owner","s"],["pLoc","loc","s"],["pAct","act","s"],["pCur","cur","s"],
-  ["pYears","years","n"],["pDisc","disc","n"],["pLife","life","n"],["pUtil","util","n"],
+  ["pYears","years","n"],["pDisc","disc","n"],["pLife","life","n"],["pUtil","util","n"],["pTax","tax","n"],
   ["pGrow","grow","n"],["lAmt","lAmt","n"],["lRate","lRate","n"],["lYears","lYears","n"]];
 function paintFields(){ FIELDS.forEach(([id,k])=>{ if($("#"+id)) $("#"+id).value=D[k] }) }
 FIELDS.forEach(([id,k,t])=>{ const el=$("#"+id); if(!el)return;
@@ -273,8 +278,10 @@ function model(){
     const ebitda=rev-varC-fixC;
     const interest = i<ly ? loan*lr*(1-i/ly) : 0;
     const principal= i<ly ? loan/ly : 0;
-    const profit=ebitda-deprec-interest;
-    yr.push({i:i+1,util:util*100,rev,varC,fixC,ebitda,deprec,interest,principal,profit,
+    const ebt=ebitda-deprec-interest;                /* الربح قبل الضريبة */
+    const tax=Math.max(0,ebt)*(Math.min(60,Math.max(0,D.tax||0))/100);
+    const profit=ebt-tax;
+    yr.push({i:i+1,util:util*100,rev,varC,fixC,ebitda,deprec,interest,principal,ebt,tax,profit,
       cash:profit+deprec-principal});
   }
   const avgCash=yr.reduce((a,y)=>a+y.cash,0)/Y;
@@ -292,8 +299,9 @@ function model(){
   const cm = y1.rev>0 ? (y1.rev-y1.varC)/y1.rev : 0;   /* هامش المساهمة */
   const bep = cm>0 ? (y1.fixC+y1.deprec)/cm : 0;
   const roi = base>0 ? (avgCash/base)*100 : 0;
+  const taxOn=(D.tax||0)>0;
   return {Y,capex,working,invest,own,base,opMonth,varMonth,fixMonth,revMonthFull,deprec,
-    yr,avgCash,payback,npv,rate,bep,cm,roi,loan,lr,ly};
+    yr,avgCash,payback,npv,rate,bep,cm,roi,loan,lr,ly,taxOn,taxRate:D.tax||0};
 }
 
 /* ---------- الدراسة ---------- */
@@ -370,9 +378,9 @@ function calc(){
 
   <h2>٥. قائمة الدخل التقديرية</h2>
   <div class="tw"><table><thead>${th(["السنة","نسبة التشغيل","الإيرادات","تكاليف متغيّرة","تكاليف ثابتة","الإهلاك",
-    ...(m.loan?["الفوائد"]:[]),"صافي الربح"])}</thead><tbody>
+    ...(m.loan?["الفوائد"]:[]),...(m.taxOn?["الربح قبل الضريبة","الضريبة"]:[]),"صافي الربح"])}</thead><tbody>
     ${m.yr.map(y=>tr([`السنة ${y.i}`,n0(y.util)+"%",n0(y.rev),n0(y.varC),n0(y.fixC),n0(y.deprec),
-      ...(m.loan?[n0(y.interest)]:[]),n0(y.profit)])).join("")}
+      ...(m.loan?[n0(y.interest)]:[]),...(m.taxOn?[n0(y.ebt),n0(y.tax)]:[]),n0(y.profit)])).join("")}
   </tbody></table></div>
 
   <h2>٦. التدفقات النقدية</h2>
@@ -391,6 +399,10 @@ function calc(){
   ${m.bep>0?n1(m.yr[0].rev/m.bep*100):"—"}% من نقطة التعادل.</p>
 
   <h2>٨. الافتراضات والمخاطر</h2>
+  ${m.taxOn?`<p>احتُسبت ضريبة على الأرباح بنسبة ${n1(m.taxRate)}% تُطبَّق على الربح قبل الضريبة
+  في سنوات الربح فقط، والتدفقات النقدية أعلاه بعد الضريبة.</p>`
+  :`<p>الأرقام أعلاه <strong>قبل الضريبة</strong>. يلزم تطبيق النسبة السارية في بلد المشروع
+  على الأرباح قبل اتخاذ القرار.</p>`}
   <p>تقوم الدراسة على الافتراضات الآتية: نسبة تشغيل ${n0(D2.util)}% في السنة الأولى ترتفع
   بمعدل ${n0(D2.grow)}% سنويًا، وثبات الأسعار وهيكل التكاليف بالقيم الواردة،
   ورأس مال عامل يغطي ثلاثة أشهر، وإهلاك على ${n0(D2.life)} سنوات.</p>
