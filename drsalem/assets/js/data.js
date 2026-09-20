@@ -4,7 +4,7 @@ window.DS_SEED = {
     drName: "د. محمود سالم",
     drTitle: "استشاري طب وجراحة العيون",
     brandEn: "DR. MAHMOUD SALIM",
-    domain: "https://dr-mahmoud-salem.vercel.app",
+    domain: "https://drsalem.vercel.app",
 
     heroLine1: "عينك",
     heroLine2: "تستاهل أحسن رؤية",

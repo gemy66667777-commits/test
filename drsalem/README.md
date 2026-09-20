@@ -2,7 +2,7 @@
 
 موقع حجوزات كامل ولوحة تحكم. ملفات ثابتة بس — من غير سيرفر ولا قاعدة بيانات.
 
-**الدومين:** https://dr-mahmoud-salem.vercel.app
+**الدومين:** https://drsalem.vercel.app
 
 ---
 
@@ -10,8 +10,8 @@
 
 1. vercel.com → **Add New → Project**
 2. ارفع محتويات الفولدر ده (الملفات في الجذر مباشرة)
-3. اسم المشروع: `dr-mahmoud-salem`
-4. **Settings → Domains** وتأكد إن الدومين `dr-mahmoud-salem.vercel.app`
+3. اسم المشروع: `drsalem`
+4. **Settings → Domains** وتأكد إن الدومين `drsalem.vercel.app`
 
 > بعد الرفع: [فيسبوك ديبَجر](https://developers.facebook.com/tools/debug/) → حط اللينك → **Scrape Again**
 > عشان صورة المشاركة تظهر. ولو بعت اللينك على واتساب قبل كده ومظهرش، ابعته بـ `?v=2`.
@@ -37,7 +37,7 @@ assets/img/             اللوجو والأيقونة وصورة المشار�
 
 ## لوحة التحكم
 
-`dr-mahmoud-salem.vercel.app/admin.html`
+`drsalem.vercel.app/admin.html`
 
 | | |
 |---|---|
