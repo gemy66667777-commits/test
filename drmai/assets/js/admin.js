@@ -118,7 +118,8 @@
       rows.map(function (b) {
         var idx = db.bookings.indexOf(b);
         return "<tr><td>" + esc(b.name) + "</td>" +
-          "<td dir='ltr'><a href='tel:" + esc(b.phone) + "'>" + esc(b.phone) + "</a></td>" +
+          "<td dir='ltr'><a href='tel:" + esc(b.phone) + "'>" + esc(b.phone) + "</a>" +
+            (b.phone2 ? "<br><a href='tel:" + esc(b.phone2) + "'>" + esc(b.phone2) + "</a>" : "") + "</td>" +
           "<td>" + esc(b.clinic || "—") + "</td>" +
           "<td>" + esc(b.reason || "—") + "</td>" +
           "<td>" + esc(b.dateTxt || b.date) + " · " + esc(b.time) + "</td>" +

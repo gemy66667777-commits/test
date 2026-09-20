@@ -215,6 +215,7 @@
   function bookSubmit(e) {
     e.preventDefault();
     var name = $("#bName").value.trim(), phone = $("#bPhone").value.trim();
+    var phone2 = $("#bPhone2").value.trim();
     var reason = $("#bFor").value, note = $("#bNote").value.trim();
     var err = $("#bErr"), ok = $("#bOk");
     ok.classList.remove("on");
@@ -235,7 +236,7 @@
     var theDate = pickedDate, theSlot = pickedSlot, theClinic = b.name;
     var dTxt = dateTxt(theDate);
     MaiStore.patch(function (d2) {
-      d2.bookings.unshift({ id: "bk" + Date.now(), name: name, phone: phone, reason: reason,
+      d2.bookings.unshift({ id: "bk" + Date.now(), name: name, phone: phone, phone2: phone2, reason: reason,
         clinic: theClinic, date: theDate, dateTxt: dTxt, time: theSlot, note: note,
         at: new Date().toISOString(), status: "جديد" });
       if (d2.bookings.length > 300) d2.bookings.length = 300;
@@ -243,7 +244,7 @@
 
     var msg = HI + "\nحابب أحجز ميعاد.\n\n" +
       "• الاسم: " + name + "\n" +
-      "• الموبايل: " + phone + "\n" +
+      "• الموبايل: " + phone + (phone2 ? " — ورقم تاني: " + phone2 : "") + "\n" +
       "• العيادة: " + theClinic + "\n" +
       "• سبب الزيارة: " + reason + "\n" +
       "• اليوم: " + dTxt + "\n" +
@@ -252,7 +253,8 @@
       "\n\nياريت تأكدولي الميعاد ده.";
     window.open(wa(msg), "_blank");
     ok.classList.add("on");
-    $("#bName").value = ""; $("#bPhone").value = ""; $("#bNote").value = ""; $("#bFor").value = "";
+    $("#bName").value = ""; $("#bPhone").value = ""; $("#bPhone2").value = "";
+    $("#bNote").value = ""; $("#bFor").value = "";
     pickedDate = null; pickedSlot = null;
     $$("#dayW .day").forEach(function (x) { x.classList.remove("on"); });
     $$("#slotW .slot").forEach(function (x) { x.classList.remove("on"); });
