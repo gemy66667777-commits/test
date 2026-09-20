@@ -14,6 +14,7 @@
 | `elaj/` | مستشفى علاج | مستشفى — مدينة نصر | elaj-hospital.vercel.app |
 | `drsalem/` | د. محمود سالم | عيادة عيون — الشيخ زايد | drsalem.vercel.app |
 | `drmai/` | د. مي السادات | جراحة عامة ومناظير — زايد والمنيل | drmai.vercel.app |
+| `smilecare/` | Smile Care Center — د. مهند العقباوي | تجميل وزراعة أسنان — الشيخ زايد | smilecare.vercel.app |
 | `vip/` | V.I.P | إكسسوارات | vip-website-three.vercel.app |
 | `bahia/` | باهية | مكياج — السعودية | — |
 | `shatha-almadina/` | شذا المدينة | — | — |

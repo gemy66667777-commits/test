@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة تحكم Smile Care Center</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#151C26">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/admin.css">
+<style>
+  /* ألوان العيادة بدل ألوان القالب الأصلي */
+  :root{
+    --ivory:#FBFAF7; --paper:#fff; --ink:#151C26; --ink-2:#4E5867; --muted:#8A8F99;
+    --gold:#C9A227; --gold-l:#E5C45C; --gold-d:#8A6F12;
+    --night:#1E2836; --night-2:#151C26;
+    --line:rgba(201,162,39,.28); --line-2:#E9E5DA;
+    --ok:#1FB6A2; --bad:#C2352F; --info:#C9A227;
+  }
+  .tbl-wrap table{width:100%;border-collapse:collapse;font-size:.88rem}
+  .tbl-wrap th,.tbl-wrap td{padding:9px 10px;border-bottom:1px solid #EFEBE0;text-align:right;vertical-align:middle}
+  .tbl-wrap th{background:#FBFAF7;color:#151C26;font-weight:700;font-size:.8rem;white-space:nowrap}
+  .tbl-wrap input,.tbl-wrap select,.tbl-wrap textarea{width:100%;min-width:0;padding:7px 9px;border:1px solid #DCD6C6;border-radius:8px;font-size:.85rem;background:#fff}
+  .tbl-wrap textarea{min-height:56px;resize:vertical}
+  .tbl-wrap input[type=checkbox]{width:18px;height:18px}
+  .ib{width:30px;height:30px;border-radius:8px;display:inline-grid;place-items:center;background:#FBF4DF;color:#8A6F12;font-weight:700}
+  .ib.del{background:#FDECEB;color:#C2352F}
+  .tab .b{background:#E5C45C;color:#2A2005}
+  .side .brand b{font-family:var(--ff-d);letter-spacing:0;font-size:1rem}
+  .side .brand small{letter-spacing:.04em}
+  .hint{font-size:.82rem;color:var(--muted)}
+  .warn{background:#FFF7E6;border:1px solid #F0DCA8;color:#7A5A12;border-radius:10px;padding:10px 13px;font-size:.83rem;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<section class="gate" id="gate">
+  <div class="gate-box">
+    <img class="mark" src="assets/img/logo.svg" alt="Smile Care Center" width="56" height="56">
+    <h1>لوحة تحكم <span id="gBrand">العيادة</span></h1>
+    <p class="hint">ادخل برقم العيادة وكلمة السر</p>
+    <div class="err" id="gErr"></div>
+    <form id="gForm">
+      <div class="field"><label for="gUser">رقم العيادة</label>
+        <input id="gUser" inputmode="tel" dir="ltr" placeholder="01152700005" autocomplete="username"></div>
+      <div class="field"><label for="gPass">كلمة السر</label>
+        <input id="gPass" type="password" placeholder="••••••" autocomplete="current-password"></div>
+      <button class="btn" style="width:100%">دخول</button>
+    </form>
+    <a class="back" href="index.html">← رجوع للموقع</a>
+  </div>
+</section>
+
+<div class="app" id="app">
+  <aside class="side" id="side">
+    <div class="brand">
+      <img class="mark" src="assets/img/logo.svg" alt="" width="40" height="40">
+      <span><b id="sBrand">Smile Care Center</b><small>لوحة التحكم</small></span>
+    </div>
+    <nav>
+      <button class="tab on" data-tab="home">نظرة عامة</button>
+      <button class="tab" data-tab="books">الحجوزات <span class="b" id="nBooks">0</span></button>
+      <button class="tab" data-tab="procs">الخدمات والأسعار <span class="b" id="nProcs">0</span></button>
+      <button class="tab" data-tab="pkgs">الباقات <span class="b" id="nPkgs">0</span></button>
+      <button class="tab" data-tab="hours">المواعيد</button>
+      <button class="tab" data-tab="steps">الرحلة والمميزات</button>
+      <button class="tab" data-tab="fear">قسم الخوف</button>
+      <button class="tab" data-tab="revs">آراء المرضى <span class="b" id="nRevs">0</span></button>
+      <button class="tab" data-tab="faq">الأسئلة <span class="b" id="nFaq">0</span></button>
+      <button class="tab" data-tab="set">الإعدادات</button>
+    </nav>
+    <div class="foot">
+      <a href="index.html" target="_blank">↗ فتح الموقع</a>
+      <button id="logout">← تسجيل الخروج</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <button class="btn ghost mob" id="mob">☰</button>
+      <b id="topTitle">نظرة عامة</b>
+      <div class="acts"><button class="btn ghost" id="resetAll">إرجاع البيانات الأصلية</button></div>
+    </div>
+
+    <section class="panel on" id="p-home">
+      <div class="kpis" id="kpis"></div>
+      <div class="card"><h3>أحدث الحجوزات</h3><div class="tbl-wrap" id="homeBooks"></div></div>
+    </section>
+
+    <section class="panel" id="p-books">
+      <div class="card">
+        <h3>الحجوزات اللي جات من الموقع</h3>
+        <p class="hint">الحجوزات بتتسجل هنا لما حد يحجز من الموقع على نفس الجهاز.</p>
+        <div class="tbl-wrap" id="tBooks"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="p-procs">
+      <div class="card"><h3>أقسام الخدمات</h3><div class="tbl-wrap" id="tCats"></div>
+        <button class="btn" id="addCat">+ قسم</button></div>
+      <div class="card"><h3>الخدمات والأسعار</h3>
+        <p class="hint">السعر صفر يعني «بيتحدد بعد الكشف». الأيقونة: tooth · implant · smile · crown · sparkle · fill · clean · ortho · surg · kids · check</p>
+        <div class="tbl-wrap" id="tProcs"></div>
+        <button class="btn" id="addProc">+ خدمة جديدة</button></div>
+    </section>
+
+    <section class="panel" id="p-pkgs">
+      <div class="card"><h3>الباقات</h3>
+        <p class="hint">اختار الخدمات اللي في الباقة، والسعر قبل العرض والتوفير بيتحسبوا لوحدهم.</p>
+        <div id="pkgList"></div>
+        <button class="btn" id="addPkg">+ باقة جديدة</button></div>
+    </section>
+
+    <section class="panel" id="p-hours">
+      <div class="card"><h3>مواعيد الأسبوع</h3>
+        <p class="hint">علّم «إجازة» على اليوم المقفول — بيختفي من قايمة الحجز لوحده.</p>
+        <div class="tbl-wrap" id="tDays"></div></div>
+      <div class="card"><h3>ساعات الحجز</h3><div class="tbl-wrap" id="tSlots"></div>
+        <button class="btn" id="addSlot">+ ساعة</button></div>
+    </section>
+
+    <section class="panel" id="p-fear">
+      <div class="card"><h3>قسم «بتأجّل من سنين؟»</h3>
+        <p class="hint">القسم الداكن الكبير في الموقع.</p>
+        <div id="fearW"></div></div>
+    </section>
+
+    <section class="panel" id="p-steps">
+      <div class="card"><h3>رحلة المريض</h3><div class="tbl-wrap" id="tSteps"></div>
+        <button class="btn" id="addStep">+ خطوة</button></div>
+      <div class="card"><h3>ليه العيادة دي</h3><div class="tbl-wrap" id="tWhy"></div>
+        <button class="btn" id="addWhy">+ ميزة</button></div>
+      <div class="card"><h3>الأرقام</h3><div class="tbl-wrap" id="tStats"></div>
+        <button class="btn" id="addStat">+ رقم</button></div>
+    </section>
+
+    <section class="panel" id="p-revs">
+      <div class="card"><h3>آراء المرضى</h3><div class="tbl-wrap" id="tRevs"></div>
+        <button class="btn" id="addRev">+ رأي جديد</button></div>
+    </section>
+
+    <section class="panel" id="p-faq">
+      <div class="card"><h3>الأسئلة الشائعة</h3><div class="tbl-wrap" id="tFaq"></div>
+        <button class="btn" id="addFaq">+ سؤال جديد</button></div>
+    </section>
+
+    <section class="panel" id="p-set">
+      <div class="card"><h3>بيانات العيادة</h3><div id="setW"></div></div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>
