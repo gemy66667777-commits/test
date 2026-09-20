@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 132" role="img" aria-label="د. محمود سالم — طب وجراحة العيون">
+  <defs>
+    <mask id="irisBite">
+      <rect width="220" height="132" fill="#fff"/>
+      <circle cx="123" cy="52" r="8.5" fill="#000"/>
+    </mask>
+  </defs>
+  <path d="M26 82 L26 66 C52 30 154 26 194 58" fill="none" stroke="#1C7FC0" stroke-width="13"/>
+  <path d="M194 50 L194 66 C168 102 66 106 26 74" fill="none" stroke="#62B84A" stroke-width="13"/>
+  <circle cx="110" cy="66" r="20" fill="#62B84A" mask="url(#irisBite)"/>
+</svg>
