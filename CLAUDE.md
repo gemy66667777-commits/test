@@ -11,10 +11,13 @@
 | `forkknife/` | شوكة وسكينة | أدوات منزلية — دكرنس | forkknife.vercel.app |
 | `hadaeq/` | حدائق الزهور للعطور | عطور نيش — الدمام 🇸🇦 | hadaeq-alzohour.vercel.app |
 | `mrmedia/` | Mr.Media | تنظيم مناسبات وكوش أفراح | mrmedia-events.vercel.app |
+| `elaj/` | مستشفى علاج | مستشفى — مدينة نصر | elaj-hospital.vercel.app |
 | `vip/` | V.I.P | إكسسوارات | vip-website-three.vercel.app |
 | `bahia/` | باهية | مكياج — السعودية | — |
 | `shatha-almadina/` | شذا المدينة | — | — |
 | الروت | الروقي للعطور | عطور — الكويت | — |
+
+**منتجات جاهزة في `products/`:** `senter/` نظام متابعة طلبة السناتر · `jadwa/` مولّد دراسة الجدوى.
 
 ## قواعد ثابتة — متسألش عنها
 

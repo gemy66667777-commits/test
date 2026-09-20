@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مستشفى علاج — طوارئ ٢٤ ساعة · ولادة وحضانات · تحاليل وأشعة · مدينة نصر</title>
+<meta name="description" content="مستشفى علاج في مكرم عبيد بمدينة نصر — استقبال وطوارئ ٢٤ ساعة، وحدة ولادة وحضانات، معامل تحاليل وأشعة، عيادات تخصصية، ومركز معتمد لفحص العمالة الوافدة لدول مجلس التعاون الخليجي.">
+<meta name="theme-color" content="#062B5C">
+<link rel="canonical" href="https://elaj-hospital.vercel.app/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="مستشفى علاج">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:url" content="https://elaj-hospital.vercel.app/">
+<meta property="og:title" content="مستشفى علاج — طوارئ ٢٤ ساعة في مدينة نصر">
+<meta property="og:description" content="طوارئ واستقبال ٢٤ ساعة · ولادة وحضانات · تحاليل وأشعة · عيادات تخصصية · فحص العمالة الوافدة لدول الخليج.">
+<meta property="og:image" content="https://elaj-hospital.vercel.app/assets/img/og-cover.jpg">
+<meta property="og:image:secure_url" content="https://elaj-hospital.vercel.app/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="مستشفى علاج — طوارئ ٢٤ ساعة في مدينة نصر">
+<meta name="twitter:description" content="طوارئ واستقبال ٢٤ ساعة · ولادة وحضانات · تحاليل وأشعة · عيادات تخصصية.">
+<meta name="twitter:image" content="https://elaj-hospital.vercel.app/assets/img/og-cover.jpg">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/favicon.svg">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/noto-sans-arabic-400-arabic.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/changa-700-arabic.woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- ===== أيقونات ===== -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-emg" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></symbol>
+  <symbol id="i-birth" viewBox="0 0 24 24"><path d="M20.8 8.6a5.1 5.1 0 0 0-8.8-3.2A5.1 5.1 0 0 0 3.2 8.6c0 5 8.8 11.4 8.8 11.4s8.8-6.4 8.8-11.4Z"/></symbol>
+  <symbol id="i-nicu" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/><path d="M10 7.5h.01M14 7.5h.01"/></symbol>
+  <symbol id="i-gamca" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="i-lab" viewBox="0 0 24 24"><path d="M9 3v7.2L4.3 18A2 2 0 0 0 6 21h12a2 2 0 0 0 1.7-3L15 10.2V3"/><path d="M8 3h8M7.5 14h9"/></symbol>
+  <symbol id="i-xray" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 7v10M8.5 9.5c2 1.2 5 1.2 7 0M8.5 14.5c2-1.2 5-1.2 7 0"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+  <symbol id="i-tel" viewBox="0 0 24 24"><path d="M6.3 3.5h3l1.6 4-2 1.3a12 12 0 0 0 5.3 5.3l1.3-2 4 1.6v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.3 5.7a2 2 0 0 1 2-2.2Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84a9.7 9.7 0 0 0 1.35 4.94L2 22l5.35-1.4a9.9 9.9 0 0 0 4.69 1.19h.01c5.43 0 9.84-4.4 9.84-9.84C21.89 6.4 17.48 2 12.04 2Zm5.76 14.05c-.24.68-1.42 1.3-1.95 1.34-.5.05-1.13.07-1.83-.11a16.4 16.4 0 0 1-1.65-.62c-2.9-1.25-4.8-4.17-4.95-4.37-.14-.2-1.19-1.58-1.19-3.02 0-1.43.75-2.13 1.02-2.42.27-.3.58-.37.78-.37h.56c.18 0 .42-.07.66.5.24.59.83 2.02.9 2.17.08.14.13.31.03.51-.1.2-.15.32-.29.5l-.44.5c-.14.14-.29.3-.12.59.17.29.74 1.22 1.58 1.98 1.09.97 2 1.27 2.29 1.42.29.14.46.12.63-.7.17-.2.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.14.48.22.55.34.07.12.07.7-.17 1.38Z"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.2 3 7.8 7 9 4-1.2 7-4.8 7-9V6Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 19v-9M3 13h18a0 0 0 0 1 0 0v6M21 19v-4"/><circle cx="7.5" cy="10" r="2"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/></symbol>
+</svg>
+
+<!-- ===== الهيدر ===== -->
+<header id="hdr">
+  <div class="wrap bar">
+    <a href="#top" class="logo">
+      <span class="mk" id="logoMk"></span>
+      <span><b id="brandAr">مستشفى علاج</b><small class="js-tag">علاج بلا حدود</small></span>
+    </a>
+    <nav>
+      <a class="nl" href="#services">الخدمات</a>
+      <a class="nl" href="#clinics">العيادات</a>
+      <a class="nl" href="#packages">العروض</a>
+      <a class="nl" href="#labs">التحاليل</a>
+      <a class="nl" href="#rooms">الغرف</a>
+      <a class="nl" href="#contact">تواصل</a>
+      <a class="btn btn-r" id="hdrCall" href="#"><svg><use href="#i-tel"></use></svg><span>طوارئ</span></a>
+      <button class="burger" id="burger" aria-label="القائمة"><svg><use href="#i-menu"></use></svg></button>
+    </nav>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer">
+  <button class="x" id="dx" aria-label="إغلاق"><svg><use href="#i-x"></use></svg></button>
+  <a href="#services">الخدمات</a>
+  <a href="#clinics">العيادات والحجز</a>
+  <a href="#packages">عروض التشيك أب</a>
+  <a href="#labs">التحاليل والأشعة</a>
+  <a href="#rooms">الغرف والإقامة</a>
+  <a href="#gallery">المعرض</a>
+  <a href="#faq">أسئلة شائعة</a>
+  <a href="#contact">تواصل معانا</a>
+</aside>
+
+<!-- ===== الهيرو ===== -->
+<section class="hero" id="top">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  <span class="grid-bg"></span>
+  <svg class="ecg" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 60h150l14-34 16 68 14-34h120l14-22 14 44 12-22h180l14-34 16 68 14-34h120l14-22 14 44 12-22h180l14-34 16 68 14-34h150"/>
+  </svg>
+  <div class="wrap hero-in">
+    <span class="pill"><span class="dot"></span><span id="liveTxt">الطوارئ مفتوحة دلوقتي</span></span>
+    <h1>رعاية طبية <span class="gr">على مدار ٢٤ ساعة</span><br>في قلب مدينة نصر</h1>
+    <p class="sub" id="hIntro"></p>
+    <div class="cta">
+      <a class="btn btn-r lg" id="ctaCall" href="#"><svg><use href="#i-tel"></use></svg>اتصل بالطوارئ</a>
+      <a class="btn btn-w lg" href="#clinics"><svg><use href="#i-clock"></use></svg>احجز في العيادة</a>
+    </div>
+    <div class="quick" id="quickW"></div>
+  </div>
+  <div class="scroller"><svg><use href="#i-chev"></use></svg>انزل</div>
+</section>
+
+<!-- ===== شريط متحرك ===== -->
+<div class="marq"><div class="tr" id="marqW"></div></div>
+
+<!-- ===== إحصائيات ===== -->
+<section class="sec" style="padding-block:44px">
+  <div class="wrap"><div class="stats rv" id="statsW"></div></div>
+</section>
+
+<!-- ===== الخدمات ===== -->
+<section class="sec alt" id="services">
+  <div class="wrap">
+    <div class="hd rv">
+      <span class="kick">أقسام المستشفى</span>
+      <h2>خدماتنا الطبية</h2>
+      <p>كل اللي محتاجه تحت سقف واحد — من الطوارئ والولادة للتحاليل والأشعة والعيادات التخصصية.</p>
+      <div class="ln"></div>
+    </div>
+    <div class="svcs rv" id="svcW"></div>
+  </div>
+</section>
+
+<!-- ===== ليه احنا ===== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="hd rv"><span class="kick">ليه علاج</span><h2>إيه اللي بيفرّق عندنا</h2><div class="ln"></div></div>
+    <div class="whys rv" id="whyW"></div>
+  </div>
+</section>
+
+<!-- ===== العيادات والحجز ===== -->
+<section class="sec alt" id="clinics">
+  <div class="wrap">
+    <div class="hd rv">
+      <span class="kick">العيادات الخارجية</span>
+      <h2>احجز في العيادة</h2>
+      <p id="clinHours"></p>
+      <div class="ln"></div>
+    </div>
+    <div class="clin-wrap rv">
+      <div>
+        <div class="clins" id="clinW"></div>
+      </div>
+      <form class="book" id="bookForm" novalidate>
+        <h3>بيانات الحجز</h3>
+        <p class="note">املا البيانات وهيوصلنا الحجز على واتساب ونأكده معاك.</p>
+        <div class="fld"><label for="bName">الاسم</label><input id="bName" placeholder="الاسم بالكامل" autocomplete="name"></div>
+        <div class="fld"><label for="bPhone">رقم الموبايل</label><input id="bPhone" type="tel" inputmode="numeric" placeholder="01xxxxxxxxx" autocomplete="tel"></div>
+        <div class="fld"><label for="bClinic">العيادة</label><select id="bClinic"></select></div>
+        <div class="fld"><label for="bDate">تاريخ الحجز</label><input id="bDate" type="date"></div>
+        <div class="fld"><label>الساعة</label><div class="slots" id="slotW"></div></div>
+        <div class="fld"><label for="bNote">ملاحظات (اختياري)</label><textarea id="bNote" placeholder="اكتب شكوتك باختصار أو أي ملاحظة"></textarea></div>
+        <div class="err" id="bErr"></div>
+        <button type="submit" class="btn btn-b lg"><svg><use href="#i-wa"></use></svg>أكّد الحجز على واتساب</button>
+        <div class="okmsg" id="bOk">تمام — اتسجّل الحجز وفتحنا لك واتساب برسالة جاهزة. ابعتها وهنأكدلك.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== الباقات ===== -->
+<section class="sec" id="packages">
+  <div class="wrap">
+    <div class="hd rv">
+      <span class="kick">عروض التشيك أب</span>
+      <h2>باقات فحص بأسعار أقل</h2>
+      <p>باقات جاهزة بتجمع التحاليل اللي بتتطلب مع بعض — بسعر أقل من إنك تعملها واحدة واحدة.</p>
+      <div class="ln"></div>
+    </div>
+    <div class="pkgs rv" id="pkgW"></div>
+  </div>
+</section>
+
+<!-- ===== التحاليل ===== -->
+<section class="sec alt" id="labs">
+  <div class="wrap">
+    <div class="hd rv">
+      <span class="kick">المعامل والأشعة</span>
+      <h2>قائمة التحاليل والأسعار</h2>
+      <p id="priceHint"></p>
+      <div class="ln"></div>
+    </div>
+    <div class="rv">
+      <div class="search">
+        <input id="q" placeholder="دوّر على تحليل أو أشعة…" aria-label="بحث">
+        <svg><use href="#i-search"></use></svg>
+      </div>
+      <div class="tabs" id="tabW"></div>
+      <div class="labs" id="labW"></div>
+      <div class="empty" id="labEmpty" style="display:none">مفيش نتايج للبحث ده — جرّب كلمة تانية أو كلّمنا على واتساب.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== الغرف والولادة ===== -->
+<section class="sec" id="rooms">
+  <div class="wrap">
+    <div class="hd rv">
+      <span class="kick">الإقامة</span>
+      <h2>الغرف وأسعار الإقامة</h2>
+      <p>كل الأسعار شاملة الإقامة والتمريض ووجبات المريض.</p>
+      <div class="ln"></div>
+    </div>
+    <div class="rooms rv" id="roomW"></div>
+
+    <div class="hd rv" style="margin-top:62px">
+      <span class="kick">وحدة الولادة</span>
+      <h2>باقات الولادة والحضانة</h2>
+      <div class="ln"></div>
+    </div>
+    <div class="rooms rv" id="birthW"></div>
+  </div>
+</section>
+
+<!-- ===== المعرض ===== -->
+<section class="sec alt" id="gallery">
+  <div class="wrap">
+    <div class="hd rv"><span class="kick">من جوه المستشفى</span><h2>صور المكان</h2><div class="ln"></div></div>
+    <div class="gal rv" id="galW"></div>
+  </div>
+</section>
+
+<!-- ===== آراء ===== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="hd rv"><span class="kick">آراء المرضى</span><h2>الناس بتقول إيه</h2><div class="ln"></div></div>
+    <div class="revs rv" id="revW"></div>
+  </div>
+</section>
+
+<!-- ===== الأسئلة ===== -->
+<section class="sec alt" id="faq">
+  <div class="wrap">
+    <div class="hd rv"><span class="kick">أسئلة شائعة</span><h2>أسئلة بتتسأل كتير</h2><div class="ln"></div></div>
+    <div class="faqs rv" id="faqW"></div>
+  </div>
+</section>
+
+<!-- ===== التواصل ===== -->
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="hd rv"><span class="kick">تواصل معانا</span><h2>إحنا فين ونرد عليك إزاي</h2><div class="ln"></div></div>
+    <div class="cts rv" id="ctW"></div>
+    <div class="mapbox rv">
+      <div class="inf">
+        <h3>مستشفى علاج</h3>
+        <p id="addrTxt"></p>
+        <div class="hrs" id="hrsW"></div>
+        <a class="btn btn-b" id="mapBtn" href="#" target="_blank" rel="noopener"><svg><use href="#i-pin"></use></svg>افتح على خرائط جوجل</a>
+      </div>
+      <div class="ph"><img src="assets/img/facade.jpg" alt="مبنى مستشفى علاج" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== الفوتر ===== -->
+<footer>
+  <div class="wrap top">
+    <div>
+      <div class="flogo"><span class="mk" id="logoMk2"></span>
+        <span><b id="brandAr2">مستشفى علاج</b><small class="js-tag">علاج بلا حدود</small></span></div>
+      <p id="fIntro"></p>
+    </div>
+    <div>
+      <h4>أقسام</h4>
+      <div class="lst">
+        <a href="#services">الخدمات الطبية</a>
+        <a href="#clinics">العيادات والحجز</a>
+        <a href="#packages">عروض التشيك أب</a>
+        <a href="#labs">التحاليل والأشعة</a>
+        <a href="#rooms">الغرف والإقامة</a>
+      </div>
+    </div>
+    <div>
+      <h4>تواصل</h4>
+      <div class="lst">
+        <a id="fPhone" href="#"></a>
+        <a id="fWa" href="#" target="_blank" rel="noopener">واتساب المستشفى</a>
+        <a id="fMail" href="#"></a>
+        <a id="fMap" href="#" target="_blank" rel="noopener">العنوان على الخريطة</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap fbot">
+    <span>© <span id="yr"></span> مستشفى علاج — كل الحقوق محفوظة</span>
+    <a class="adm" href="admin.html"><svg><use href="#i-lock"></use></svg>دخول لوحة التحكم</a>
+  </div>
+</footer>
+
+<a class="wa-fab" id="waFab" href="#" target="_blank" rel="noopener" aria-label="واتساب"><svg><use href="#i-wa"></use></svg></a>
+<a class="emg-fab" id="emgFab" href="#" aria-label="الطوارئ"><span class="dot"></span>طوارئ ٢٤ ساعة</a>
+
+<div class="lb" id="lb">
+  <button class="x" id="lbX" aria-label="إغلاق"><svg><use href="#i-x"></use></svg></button>
+  <button class="pv" id="lbP" aria-label="السابق"><svg style="transform:scaleX(-1)"><use href="#i-arrow"></use></svg></button>
+  <button class="nx" id="lbN" aria-label="التالي"><svg><use href="#i-arrow"></use></svg></button>
+  <img id="lbI" alt="">
+  <div class="cp" id="lbC"></div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

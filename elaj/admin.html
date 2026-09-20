@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة تحكم مستشفى علاج</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#062B5C">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/admin.css">
+<style>
+  /* ألوان المستشفى بدل ألوان القالب الأصلي */
+  :root{
+    --ivory:#F2F7FD; --paper:#fff; --ink:#10233D; --ink-2:#41597A; --muted:#7389A8;
+    --gold:#0B4DA2; --gold-l:#4AA3F0; --gold-d:#062B5C;
+    --night:#0B4DA2; --night-2:#062B5C;
+    --line:rgba(11,77,162,.24); --line-2:#DCE7F5;
+    --ok:#12B3A3; --bad:#E0272C; --info:#1668D6;
+  }
+  .tbl-wrap table{width:100%;border-collapse:collapse;font-size:.88rem}
+  .tbl-wrap th,.tbl-wrap td{padding:9px 10px;border-bottom:1px solid #E5EDF7;text-align:right;vertical-align:middle}
+  .tbl-wrap th{background:#F2F7FD;color:#062B5C;font-weight:700;font-size:.8rem;white-space:nowrap}
+  .tbl-wrap input,.tbl-wrap select,.tbl-wrap textarea{width:100%;min-width:0;padding:7px 9px;border:1px solid #CBDCEF;border-radius:8px;font-size:.85rem;background:#fff}
+  .tbl-wrap textarea{min-height:54px;resize:vertical}
+  .ib{width:30px;height:30px;border-radius:8px;display:inline-grid;place-items:center;background:#EEF4FC;color:#0B4DA2;font-weight:700}
+  .ib.del{background:#FDECEC;color:#C2352F}
+  .thumb{width:54px;height:40px;object-fit:cover;border-radius:7px;border:1px solid #E5EDF7;background:#F2F7FD}
+  .warn{background:#FFF7E6;border:1px solid #F0DCA8;color:#7A5A12;border-radius:10px;padding:9px 12px;font-size:.82rem;margin-bottom:10px}
+  .pickrow{display:flex;gap:7px;align-items:center;margin-bottom:6px}
+  .pickrow select{flex:1}
+  .pickrow input{width:72px}
+  .picklist{margin-bottom:10px}
+  /* الشارة: رقم أبيض على خلفية فاتحة عشان يبان على الأزرق */
+  .tab .b{background:#4AA3F0;color:#062B5C}
+  .side .brand b{font-family:var(--ff-d);letter-spacing:0;font-size:1rem}
+  .side .brand small{letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<section class="gate" id="gate">
+  <div class="gate-box">
+    <img class="mark" src="assets/img/logo.svg" alt="مستشفى علاج" width="64" height="64">
+    <h1>لوحة تحكم <span id="gBrand">مستشفى علاج</span></h1>
+    <p class="hint">ادخل برقم الإدارة وكلمة السر</p>
+    <div class="err" id="gErr"></div>
+    <form id="gForm">
+      <div class="field"><label for="gUser">رقم الإدارة</label>
+        <input id="gUser" inputmode="tel" dir="ltr" placeholder="01277773703" autocomplete="username"></div>
+      <div class="field"><label for="gPass">كلمة السر</label>
+        <input id="gPass" type="password" placeholder="••••••" autocomplete="current-password"></div>
+      <button class="btn" style="width:100%">دخول</button>
+    </form>
+    <a class="back" href="index.html">← رجوع للموقع</a>
+  </div>
+</section>
+
+<div class="app" id="app">
+  <aside class="side" id="side">
+    <div class="brand">
+      <img class="mark" src="assets/img/logo-light.svg" alt="" width="40" height="40">
+      <span><b id="sBrand">مستشفى علاج</b><small>لوحة التحكم</small></span>
+    </div>
+    <nav>
+      <button class="tab on" data-tab="home">نظرة عامة</button>
+      <button class="tab" data-tab="books">الحجوزات <span class="b" id="nBooks">0</span></button>
+      <button class="tab" data-tab="svcs">الخدمات <span class="b" id="nSvcs">0</span></button>
+      <button class="tab" data-tab="clins">العيادات <span class="b" id="nClins">0</span></button>
+      <button class="tab" data-tab="labs">التحاليل والأشعة <span class="b" id="nLabs">0</span></button>
+      <button class="tab" data-tab="pkgs">الباقات <span class="b" id="nPkgs">0</span></button>
+      <button class="tab" data-tab="rooms">الغرف والولادة <span class="b" id="nRooms">0</span></button>
+      <button class="tab" data-tab="gal">المعرض <span class="b" id="nGal">0</span></button>
+      <button class="tab" data-tab="revs">آراء المرضى <span class="b" id="nRevs">0</span></button>
+      <button class="tab" data-tab="faq">الأسئلة <span class="b" id="nFaq">0</span></button>
+      <button class="tab" data-tab="set">الإعدادات</button>
+    </nav>
+    <div class="foot">
+      <a href="index.html" target="_blank">↗ فتح الموقع</a>
+      <button id="logout">← تسجيل الخروج</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <button class="btn ghost mob" id="mob">☰</button>
+      <b id="topTitle">نظرة عامة</b>
+      <div class="acts"><button class="btn ghost" id="resetAll">إرجاع البيانات الأصلية</button></div>
+    </div>
+
+    <section class="panel on" id="p-home">
+      <div class="kpis" id="kpis"></div>
+      <div class="card"><h3>أحدث الحجوزات</h3><div class="tbl-wrap" id="homeBooks"></div></div>
+    </section>
+
+    <section class="panel" id="p-books">
+      <div class="card">
+        <h3>الحجوزات اللي جات من الموقع</h3>
+        <p class="hint">الحجوزات بتتسجل هنا لما حد يبعت من فورم الموقع على نفس الجهاز.</p>
+        <div class="tbl-wrap" id="tBooks"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="p-svcs">
+      <div class="card"><h3>الخدمات الطبية</h3><div class="tbl-wrap" id="tSvcs"></div>
+        <button class="btn" id="addSvc">+ خدمة جديدة</button></div>
+    </section>
+
+    <section class="panel" id="p-clins">
+      <div class="card"><h3>العيادات</h3><div class="tbl-wrap" id="tClins"></div>
+        <button class="btn" id="addClin">+ عيادة جديدة</button></div>
+    </section>
+
+    <section class="panel" id="p-labs">
+      <div class="card"><h3>أقسام التحاليل</h3><div class="tbl-wrap" id="tCats"></div>
+        <button class="btn" id="addCat">+ قسم جديد</button></div>
+      <div class="card"><h3>التحاليل والأشعة والأسعار</h3><div class="tbl-wrap" id="tLabs"></div>
+        <button class="btn" id="addLab">+ تحليل جديد</button></div>
+    </section>
+
+    <section class="panel" id="p-pkgs">
+      <div class="card"><h3>باقات التشيك أب</h3>
+        <p class="hint">اختار التحاليل اللي في الباقة، والسعر قبل العرض بيتحسب لوحده.</p>
+        <div id="pkgList"></div>
+        <button class="btn" id="addPkg">+ باقة جديدة</button></div>
+    </section>
+
+    <section class="panel" id="p-rooms">
+      <div class="card"><h3>غرف الإقامة</h3><div class="tbl-wrap" id="tRooms"></div>
+        <button class="btn" id="addRoom">+ غرفة جديدة</button></div>
+      <div class="card"><h3>الولادة والحضانة</h3><div class="tbl-wrap" id="tBirths"></div>
+        <button class="btn" id="addBirth">+ بند جديد</button></div>
+    </section>
+
+    <section class="panel" id="p-gal">
+      <div class="card"><h3>معرض الصور</h3><div class="tbl-wrap" id="tGal"></div>
+        <button class="btn" id="addGal">+ صورة جديدة</button></div>
+    </section>
+
+    <section class="panel" id="p-revs">
+      <div class="card"><h3>آراء المرضى</h3><div class="tbl-wrap" id="tRevs"></div>
+        <button class="btn" id="addRev">+ رأي جديد</button></div>
+    </section>
+
+    <section class="panel" id="p-faq">
+      <div class="card"><h3>الأسئلة الشائعة</h3><div class="tbl-wrap" id="tFaq"></div>
+        <button class="btn" id="addFaq">+ سؤال جديد</button></div>
+    </section>
+
+    <section class="panel" id="p-set">
+      <div class="card"><h3>بيانات المستشفى</h3><div id="setW"></div></div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>
