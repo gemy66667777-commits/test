@@ -30,6 +30,14 @@ h2 { border-left-color:#0e7490; }
        padding:1px 7px; background:#f8fafc; }
 .anstab td { font-size:9.6pt; padding:4px 7px; }
 .anstab td.qn { font-weight:700; color:#0e7490; width:5%%; text-align:center; }
+.sol2 { border:1.2px solid #cbd5e1; border-left:4.5px solid #0e7490; border-radius:0 8px 8px 0;
+        background:rgba(255,255,255,.78); padding:5px 11px 6px; margin:7px 0; break-inside:avoid; }
+.sol2 .sn { display:inline-block; background:#0e7490; color:#fff; border-radius:5px; padding:1px 8px;
+        font-weight:700; font-size:9.5pt; margin-right:7px; }
+.sol2 .hd { font-size:9.6pt; color:#475569; }
+.sol2 pre { font-family:"Liberation Mono","DejaVu Sans Mono",monospace; font-size:9.3pt; line-height:1.5;
+        margin:4px 0 0; white-space:pre-wrap; color:#0f172a; }
+.sol2 .fa { color:#15803d; font-weight:700; }
 """ % WM64 + '</style></head><body>')
 
 a('<div class="head head3"><div><h1>Physics Question Bank &mdash; 60 Questions</h1>'
@@ -389,6 +397,157 @@ for i in range(half):
     a('<tr><td class="qn">' + str(l[0]) + '</td><td>' + l[1] + '</td>'
       '<td class="qn">' + str(r[0]) + '</td><td>' + r[1] + '</td></tr>')
 a('</table>')
+
+
+# ============================ STEP-BY-STEP SOLUTIONS ============================
+a('<div class="pb"></div>')
+a('<h2><span class="num">&#9998;</span>Solutions &mdash; step by step</h2>')
+a('<div class="box note">The full working of every question, from the first step to the final answer. '
+  'Use it only after trying the question by yourself.</div>')
+
+
+def sol(n, hd, steps, fa):
+    a('<div class="sol2"><span class="sn">' + str(n) + '</span><span class="hd">' + hd + '</span>'
+      '<pre>' + steps + '\n<span class="fa">Final answer : ' + fa + '</span></pre></div>')
+
+
+a('<h3>Section 1 &mdash; Relative velocity</h3>')
+sol(1, 'same direction', 'v(A rel B) = v(A) &minus; v(B)\n            = 90 &minus; 60 = 30 km/h', 'B) 30 km/h')
+sol(2, 'opposite directions', 'v(A rel B) = v(A) &minus; ( &minus; v(B) ) = v(A) + v(B)\n'
+    '            = 20 + 15 = 35 m/s', 'C) 35 m/s')
+sol(3, 'catching up', 'v(A) = 72 / 3.6 = 20 m/s        v(B) = 54 / 3.6 = 15 m/s\n'
+    '(i)  v(A rel B) = 20 &minus; 15 = 5 m/s\n(ii) t = d / v(rel) = 150 / 5 = 30 s', '(i) 5 m/s   (ii) 30 s')
+sol(4, 'approaching cars', '(i)  v(rel) = 30 + 20 = 50 m/s   (opposite directions)\n'
+    '(ii) t = 500 / 50 = 10 s', '(i) 50 m/s   (ii) 10 s')
+sol(5, 'man inside a train', 'v(man rel ground) = v(man rel train) + v(train)\n'
+    '                  = 1.5 + 20 = 21.5 m/s', 'C) 21.5 m/s')
+sol(6, 'man walking backwards', 'v(man rel ground) = 15 &minus; 2 = 13 m/s', 'B) 13 m/s')
+sol(7, 'equal velocities', 'v(A rel B) = v(A) &minus; v(B) = v &minus; v = 0', 'A) zero')
+sol(8, 'perpendicular velocities', 'v(A rel B) = v(A) &minus; v(B) = 30 (east) + 40 (south)\n'
+    '| v | = &radic;( 30&sup2; + 40&sup2; ) = &radic;2500 = 50 m/s\n'
+    'tan &theta; = 40 / 30 = 1.333   &rarr;   &theta; = 53&deg;', '50 m/s , 53&deg; south of east')
+sol(9, 'boat heading straight across', '(i)   v = &radic;( 4&sup2; + 3&sup2; ) = 5 m/s\n'
+    '(ii)  t = width / v(boat) = 80 / 4 = 20 s      (the current does not affect the time)\n'
+    '(iii) drift = v(river) &times; t = 3 &times; 20 = 60 m', '(i) 5 m/s   (ii) 20 s   (iii) 60 m')
+sol(10, 'landing exactly opposite', '(i)   sin &alpha; = v(river) / v(boat) = 3 / 4 = 0.75  &rarr;  &alpha; = 48.6&deg; upstream\n'
+    '(ii)  v = &radic;( 4&sup2; &minus; 3&sup2; ) = &radic;7 = 2.65 m/s\n'
+    '(iii) t = 80 / 2.65 = 30.2 s', '(i) 48.6&deg;   (ii) 2.65 m/s   (iii) 30.2 s')
+sol(11, 'time of crossing', 't = width / v(boat)   &mdash;  only the component perpendicular to the bank\n'
+    'carries the boat across, so the current changes the drift, not the time.',
+    'B) the width and the velocity of the boat only')
+sol(12, 'rain relative to a man', 'v(rain rel man) = v(rain) &minus; v(man)\n'
+    '| v | = &radic;( 8.66&sup2; + 5&sup2; ) = &radic;100 = 10 m/s\n'
+    'tan &theta; = 5 / 8.66 = 0.577   &rarr;   &theta; = 30&deg; from the vertical', '10 m/s , 30&deg; from the vertical')
+sol(13, 'finding the rain speed', 'tan 45&deg; = v(man) / v(rain)\n1 = 4 / v(rain)   &rarr;   v(rain) = 4 m/s', '4 m/s')
+sol(14, 'perpendicular components', 'v = &radic;( 6&sup2; + 8&sup2; ) = &radic;100 = 10 m/s', 'B) 10 m/s')
+sol(15, 'two velocities at 60&deg;', 'v = &radic;( 5&sup2; + 3&sup2; + 2 &times; 5 &times; 3 &times; cos 60&deg; )\n'
+    '  = &radic;( 25 + 9 + 15 ) = &radic;49 = 7 m/s\n'
+    'tan &alpha; = ( 3 sin 60&deg; ) / ( 5 + 3 cos 60&deg; ) = 2.598 / 6.5 = 0.3997\n'
+    '&alpha; = 21.8&deg;', '7 m/s , 21.8&deg; from the 5 m/s velocity')
+
+a('<h3>Section 2 &mdash; Projection without an angle</h3>')
+sol(16, 'time of fall', 'the vertical motion is a free fall :   h = &frac12; g t&sup2;\n'
+    't = &radic;( 2h / g ) = &radic;( 2 &times; 1.25 / 10 ) = &radic;0.25 = 0.5 s', 'B) 0.5 s')
+sol(17, 'horizontal distance', 'x = v &times; t = 3 &times; 0.5 = 1.5 m    (the horizontal velocity is constant)', 'B) 1.5 m')
+sol(18, 'landing velocity', 'v(y) = g t = 10 &times; 0.5 = 5 m/s        v(x) = 3 m/s\n'
+    'v = &radic;( 3&sup2; + 5&sup2; ) = &radic;34 = 5.83 m/s\n'
+    'tan &theta; = 5 / 3   &rarr;   &theta; = 59&deg;', '5.83 m/s , 59&deg; below the horizontal')
+sol(19, 'dropped and projected', 'both bodies have the same vertical motion :  v(y) = 0 at the start and a = g\n'
+    'the horizontal velocity of X does not change its time of fall.', 'C) both reach the ground at the same instant')
+sol(20, 'stone from a cliff', '(i)   t = &radic;( 2h / g ) = &radic;( 2 &times; 45 / 10 ) = &radic;9 = 3 s\n'
+    '(ii)  R = v t = 20 &times; 3 = 60 m\n'
+    '(iii) v(y) = g t = 30 m/s   &rarr;  v = &radic;( 20&sup2; + 30&sup2; ) = &radic;1300 = 36.06 m/s',
+    '(i) 3 s   (ii) 60 m   (iii) 36.06 m/s')
+sol(21, 'package from a plane', 't = &radic;( 2h / g ) = &radic;( 2 &times; 500 / 10 ) = &radic;100 = 10 s', 'C) 10 s')
+sol(22, 'horizontal distance', 'x = v t = 100 &times; 10 = 1000 m', 'D) 1000 m')
+sol(23, 'as seen by the pilot', 'the package keeps the horizontal velocity of the plane (100 m/s),\n'
+    'so plane and package always have the same horizontal position.',
+    'C) vertically downwards, below the aeroplane')
+sol(24, 'height of the table', 't = x / v = 2 / 5 = 0.4 s\nh = &frac12; g t&sup2; = &frac12; &times; 10 &times; 0.16 = 0.8 m', 'h = 0.8 m')
+sol(25, 'horizontal component', 'no horizontal force acts  &rarr;  a(x) = 0  &rarr;  v(x) is constant', 'C) remains constant')
+sol(26, 'velocity after 1 s', 'v(y) = g t = 10 &times; 1 = 10 m/s        v(x) = 15 m/s\n'
+    'v = &radic;( 15&sup2; + 10&sup2; ) = &radic;325 = 18.03 m/s', '18.03 m/s')
+sol(27, 'height of projection', 'h = &frac12; g t&sup2; = &frac12; &times; 10 &times; 4&sup2; = 80 m', 'C) 80 m')
+sol(28, 'free fall', '(i)  d = &frac12; g t&sup2; = &frac12; &times; 10 &times; 9 = 45 m\n(ii) v = g t = 10 &times; 3 = 30 m/s',
+    '(i) 45 m   (ii) 30 m/s')
+sol(29, 'dropped ball', 't = &radic;( 2h / g ) = &radic;( 2 &times; 20 / 10 ) = 2 s\nv = g t = 10 &times; 2 = 20 m/s', 'B) 2 s and 20 m/s')
+sol(30, 'two horizontal projectiles', '(i)  t = &radic;( 2h / g )  &mdash; depends on the height only  &rarr;  equal times\n'
+    '(ii) R = v t   &rarr;   R&#8321; : R&#8322; = 10 : 20 = 1 : 2', '(i) equal   (ii) 1 : 2')
+
+a('<h3>Section 3 &mdash; Projection at an angle</h3>')
+sol(31, 'time of flight', 'v(iy) = v&#8320; sin &theta; = 40 &times; sin 30&deg; = 20 m/s\n'
+    'T = 2 v(iy) / g = ( 2 &times; 20 ) / 10 = 4 s', 'B) 4 s')
+sol(32, 'maximum height', 'H = v(iy)&sup2; / ( 2 g ) = 20&sup2; / 20 = 400 / 20 = 20 m', 'B) 20 m')
+sol(33, 'horizontal range', 'v(ix) = 40 cos 30&deg; = 34.64 m/s\nR = v(ix) &times; T = 34.64 &times; 4 = 138.6 m',
+    'R = 138.6 m')
+sol(34, 'maximum range', 'R = v&#8320;&sup2; sin 2&theta; / g   is a maximum when sin 2&theta; = 1\n'
+    '2&theta; = 90&deg;   &rarr;   &theta; = 45&deg;', 'C) 45&deg;')
+sol(35, 'complementary angles', 'sin 2( 90&deg; &minus; &theta; ) = sin ( 180&deg; &minus; 2&theta; ) = sin 2&theta;\n'
+    'so the partner of 25&deg; is  90&deg; &minus; 25&deg; = 65&deg;', 'C) 65&deg;')
+sol(36, 'complete projectile', '(i)   v(ix) = 50 cos 53&deg; = 30 m/s      v(iy) = 50 sin 53&deg; = 40 m/s\n'
+    '(ii)  t(up) = v(iy) / g = 40 / 10 = 4 s\n(iii) T = 2 t(up) = 8 s\n'
+    '(iv)  H = v(iy)&sup2; / 2g = 1600 / 20 = 80 m\n(v)   R = v(ix) &times; T = 30 &times; 8 = 240 m',
+    '30 , 40 m/s ; 4 s ; 8 s ; 80 m ; 240 m')
+sol(37, 'speed at the top', 'at the highest point  v(y) = 0\nv = v(x) = 30 m/s', 'B) 30 m/s')
+sol(38, 'velocity after 2 s', 'v(y) = v(iy) &minus; g t = 40 &minus; 10 &times; 2 = 20 m/s      v(x) = 30 m/s\n'
+    'v = &radic;( 30&sup2; + 20&sup2; ) = &radic;1300 = 36.06 m/s\n'
+    'tan &theta; = 20 / 30   &rarr;   &theta; = 33.7&deg;', '36.06 m/s , 33.7&deg; above the horizontal')
+sol(39, 'thrown from a building', 'v(ix) = 20 cos 30&deg; = 17.32 m/s     v(iy) = 20 sin 30&deg; = 10 m/s\n'
+    'taking upwards positive, the final displacement is &minus; 45 m :\n'
+    '&minus;45 = 10 t &minus; 5 t&sup2;    &rarr;    t&sup2; &minus; 2 t &minus; 9 = 0\n'
+    't = 1 + &radic;10 = 4.16 s        ( the negative root is rejected )\n'
+    'R = v(ix) &times; t = 17.32 &times; 4.16 = 72.05 m', '(i) 4.16 s   (ii) 72.05 m')
+sol(40, 'water jet and a wall', 'v(ix) = 20 cos 40&deg; = 15.32 m/s     v(iy) = 20 sin 40&deg; = 12.86 m/s\n'
+    't = x / v(ix) = 8 / 15.32 = 0.522 s\n'
+    'h = v(iy) t &minus; &frac12; g t&sup2; = ( 12.86 &times; 0.522 ) &minus; ( 5 &times; 0.522&sup2; )\n'
+    'h = 6.71 &minus; 1.36 = 5.35 m', 'h = 5.35 m')
+sol(41, 'acceleration at the top', 'the only force acting is the weight, so the acceleration is g\n'
+    'at the top  v(y) = 0  but  a = 10 m/s&sup2; downwards', 'C) 10 m/s&sup2; vertically downwards')
+sol(42, 'passing over a wall', 'v(ix) = v(iy) = 20 cos 45&deg; = 14.14 m/s\n'
+    't = 30 / 14.14 = 2.12 s\n'
+    'y = v(iy) t &minus; &frac12; g t&sup2; = 30 &minus; ( 5 &times; 4.5 ) = 30 &minus; 22.5 = 7.5 m\n'
+    '7.5 m > 4 m', 'y = 7.5 m , the ball passes over the wall')
+sol(43, 'equal components', 'v(i) = &radic;( 20&sup2; + 20&sup2; ) = 20&radic;2 = 28.3 m/s\n'
+    'tan &theta; = 20 / 20 = 1   &rarr;   &theta; = 45&deg;', 'B) 28.3 m/s and 45&deg;')
+sol(44, 'from T and R', 'v(iy) = g T / 2 = ( 10 &times; 6 ) / 2 = 30 m/s\n'
+    'v(ix) = R / T = 300 / 6 = 50 m/s\n'
+    'v&#8320; = &radic;( 50&sup2; + 30&sup2; ) = &radic;3400 = 58.3 m/s\n'
+    'tan &theta; = 30 / 50 = 0.6   &rarr;   &theta; = 31&deg;', 'v&#8320; = 58.3 m/s , &theta; = 31&deg;')
+sol(45, 'ratio of the components', 'tan &theta; = v(iy) / v(ix) = 2 v(ix) / v(ix) = 2\n&theta; = 63.43&deg;', 'C) 63.43&deg;')
+
+a('<h3>Section 4 &mdash; Moment of a force</h3>')
+sol(46, 'perpendicular force', 'M = F &times; L = 40 &times; 0.5 = 20 N&middot;m\n'
+    'the rod turns clockwise  &rarr;  the sign is negative', 'B) &minus; 20 N&middot;m')
+sol(47, 'force from the moment', 'M = F &times; L   &rarr;   F = M / L\nF = 15 / 0.25 = 60 N', 'F = 60 N')
+sol(48, 'inclined force', 'M = F L sin &theta; = 50 &times; 2 &times; sin 30&deg;\n'
+    '  = 50 &times; 2 &times; 0.5 = 50 N&middot;m      ( anticlockwise )', '+ 50 N&middot;m')
+sol(49, 'obtuse angle', 'sin 120&deg; = sin ( 180&deg; &minus; 120&deg; ) = sin 60&deg; = 0.866\n'
+    'M = 60 &times; 1.5 &times; 0.866 = 77.9 N&middot;m', '+ 77.9 N&middot;m')
+sol(50, 'zero moment', 'M = F &times; d   and here  d = 0\nbecause the line of action passes through the point.',
+    'C) the line of action passes through the point')
+sol(51, 'two forces on a bar', '25 N downwards, 2 m to the LEFT    &rarr; anticlockwise &rarr; + 25 &times; 2   = + 50 N&middot;m\n'
+    '40 N upwards, 1.5 m to the RIGHT  &rarr; anticlockwise &rarr; + 40 &times; 1.5 = + 60 N&middot;m\n'
+    'M(net) = + 50 + 60 = + 110 N&middot;m', '+ 110 N&middot;m (anticlockwise)')
+sol(52, 'three forces on a bar', '30 N up, 2 m LEFT      &rarr; clockwise      &rarr; &minus; 30 &times; 2 = &minus; 60 N&middot;m\n'
+    '50 N down, 1 m RIGHT   &rarr; clockwise      &rarr; &minus; 50 &times; 1 = &minus; 50 N&middot;m\n'
+    '20 N up, 3 m RIGHT     &rarr; anticlockwise  &rarr; + 20 &times; 3 = + 60 N&middot;m\n'
+    'M(net) = &minus;60 &minus; 50 + 60 = &minus; 50 N&middot;m', '&minus; 50 N&middot;m (clockwise)')
+sol(53, 'tangential force', 'the tangent is perpendicular to the radius  &rarr;  &theta; = 90&deg;\n'
+    'M = F &times; r = 45 &times; 0.2 = 9 N&middot;m', '9 N&middot;m')
+sol(54, 'push on a door', 'M = F L sin &theta; = 30 &times; 0.8 &times; sin 40&deg;\n'
+    '  = 30 &times; 0.8 &times; 0.643 = 15.4 N&middot;m', '15.4 N&middot;m')
+sol(55, 'the unit', 'M = force &times; distance = newton &times; metre = N&middot;m', 'B) N&middot;m')
+sol(56, 'finding the angle', 'M = F L sin &theta;   &rarr;   sin &theta; = M / ( F L )\n'
+    'sin &theta; = 24 / ( 40 &times; 1.2 ) = 24 / 48 = 0.5\n&theta; = 30&deg;', '&theta; = 30&deg;')
+sol(57, 'maximum moment', 'M = F L sin &theta;  is a maximum when sin &theta; = 1\n&theta; = 90&deg;', 'D) 90&deg;')
+sol(58, 'comparing two positions', '(a) M = F L = 60 &times; 1 = 60 N&middot;m\n'
+    '(b) M = F L sin 45&deg; = 60 &times; 1 &times; 0.707 = 42.4 N&middot;m\n'
+    'ratio = 60 / 42.4 = 1.41 : 1', 'M(a) = 60 , M(b) = 42.4 N&middot;m , 1.41 : 1')
+sol(59, 'resultant moment', '20 N up, 2.5 m LEFT    &rarr; clockwise &rarr; &minus; 20 &times; 2.5 = &minus; 50 N&middot;m\n'
+    '35 N down, 2 m RIGHT   &rarr; clockwise &rarr; &minus; 35 &times; 2   = &minus; 70 N&middot;m\n'
+    'M(net) = &minus;50 &minus; 70 = &minus; 120 N&middot;m', '&minus; 120 N&middot;m (clockwise)')
+sol(60, 'smallest moment', 'M = F L sin &theta;  , and sin 20&deg; = 0.34 is the smallest of the four values\n'
+    '( sin 45&deg; = 0.71 , sin 60&deg; = 0.87 , sin 90&deg; = 1 )', 'A) 20&deg;')
 
 a('<div class="foot"><span>Physics Question Bank &mdash; 60 Questions &middot; Mr. Gemy</span>'
   '<span>Relative velocity &middot; Projectiles &middot; Moment of a force</span></div>')
