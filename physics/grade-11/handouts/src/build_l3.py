@@ -4,7 +4,7 @@ from docbase import Doc
 
 d = Doc('Unit 1 &middot; Lesson 1&ndash;3', 'Projectile Motion<br>at an Angle',
         'Two-dimensional motion &mdash; analysis, applications and the weekly assessment, fully worked.',
-        ['Grade 11 &middot; Egyptian Baccalaureate', '24 questions', 'Step-by-step solutions',
+        ['Grade 11 &middot; Egyptian Baccalaureate', '27 questions', 'Step-by-step solutions',
          'g = 10 m/s&sup2; unless stated'], 'Projectile Motion at an Angle')
 
 d.kit('The toolkit for this lesson', [
@@ -125,6 +125,14 @@ d.q('A body is projected with an initial velocity v<sub>0</sub> at an angle &the
 d.q('A body is projected from the ground with an initial velocity v<sub>0</sub> at an angle &theta; to the '
     'horizontal. Which angle of projection gives the projectile the <b>greatest horizontal range</b> without '
     'changing the speed of projection?', 'MCQ', ch=['30&deg;', '45&deg;', '60&deg;', '90&deg;'])
+d.q('For the body shown in Figure 7, write a way to <b>double the horizontal range</b> reached by the body, '
+    'and explain it.', 'Explain')
+d.q('A football is kicked with an initial velocity of 20 m/s at 30&deg; to the <b>vertical</b>. '
+    'Find the maximum height reached by the ball.', 'Problem',
+    F.axes_traj('Figure 11', 60, 'v\u2080 = 20 m/s', from_vertical=True))
+d.q('A body is projected from the top of a building of height 50 m with a velocity of 15 m/s at 30&deg; to the '
+    'horizontal. <b>What is its horizontal range</b> measured from the base of the building?', 'Problem',
+    F.building_angle('Figure 12', 'h = 50 m', 'v\u2080 = 15 m/s', '30&deg;'))
 
 # ============================ SOLUTIONS ============================
 d.page()
@@ -257,6 +265,21 @@ d.sol(23, 'the vertical velocity while rising',
       'B) it decreases gradually until it becomes zero at the highest point')
 d.sol(24, 'the angle of greatest range',
       'R = v₀² sin 2θ / g  is a maximum when 2θ = 90°', 'B) 45&deg;')
+
+d.sol(25, 'doubling the horizontal range',
+      'R = v\u2080\u00b2 sin 2\u03b8 / g ,  with \u03b8 fixed at 60\u00b0 :   R is proportional to v\u2080\u00b2\n'
+      'to double R :   v\u2080\u00b2 must double   &rarr;   v\u2080 \u00d7 \u221a2',
+      'multiply the speed of projection by \u221a2',
+      why='Changing the angle alone cannot double it: the largest possible value of sin 2&theta; is 1, while '
+          'sin 120&deg; is already 0.87, so the angle can add at most about 15 %.')
+d.sol(26, 'kicked at 30&deg; to the vertical',
+      'the angle with the horizontal = 90\u00b0 \u2212 30\u00b0 = 60\u00b0\n'
+      'v(0y) = 20 sin 60\u00b0 = 17.32 m/s\n'
+      'H = v(0y)\u00b2 / ( 2 g ) = 300 / 20 = 15 m', 'H = 15 m')
+d.sol(27, 'the range from the top of the building',
+      'v(0x) = 15 cos 30\u00b0 = 12.99 m/s\n'
+      'the total time of flight was found in question 17 :  t = 4 s\n'
+      'x = v(0x) \u00d7 t = 12.99 \u00d7 4 = 51.96 m', 'x \u2248 52 m')
 
 d.foot('Lesson 1&ndash;3 &middot; Projectile Motion at an Angle &middot; Mr. Gemy',
        'H = v₀&sup2;sin&sup2;&theta;/2g &nbsp;&middot;&nbsp; R = v₀&sup2;sin2&theta;/g')
