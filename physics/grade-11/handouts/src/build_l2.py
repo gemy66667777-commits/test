@@ -5,7 +5,7 @@ from docbase import Doc
 
 d = Doc('Unit 1 &middot; Lesson 1&ndash;2', 'Horizontal<br>Projectile Motion',
         'Classwork, home assignments and the weekly assessment &mdash; fully worked, step by step.',
-        ['Grade 11 &middot; Egyptian Baccalaureate', '25 questions', 'Step-by-step solutions',
+        ['Grade 11 &middot; Egyptian Baccalaureate', '28 questions', 'Step-by-step solutions',
          'g = 10 m/s&sup2; unless stated'], 'Horizontal Projectile Motion')
 
 d.kit('The toolkit for this lesson', [
@@ -150,6 +150,15 @@ d.q('The motion of a body projected horizontally from a certain height, while it
     'ground, is characterised by:', 'MCQ',
     ch=['its horizontal velocity increases with time', 'its horizontal velocity decreases with time',
         'its vertical velocity decreases with time', 'its vertical velocity increases with time'])
+d.q('A ball is kicked horizontally from the top of a hill of height 22.0 m and lands at a horizontal distance '
+    'of 35.0 m from the edge of the hill. <b>What is its initial horizontal velocity?</b>', 'Problem',
+    F.cliff_drop('Figure 14', 'h = 22 m', 'v = ?', 'x = 35 m'))
+d.q('What happens to the time the body takes to reach the ground and to its horizontal range if it is '
+    'projected horizontally from a <b>greater height</b> while its initial horizontal velocity stays '
+    'constant? Explain.', 'Explain')
+d.q('A body is projected horizontally with a velocity of 3.0 m/s from a certain height and reaches the ground '
+    'after 3.0 s. Find its horizontal range (x) and the height (h) from which it was projected.', 'Problem',
+    F.cliff_drop('Figure 15', 'h = ?', 'v = 3 m/s', 'x = ?'))
 
 # ============================ SOLUTIONS ============================
 d.page()
@@ -276,6 +285,16 @@ d.sol(24, 'halving the launch speed',
 d.sol(25, 'the velocity during the fall',
       'v(x) = v = constant          (no horizontal force)\nv(y) = g t  &rarr;  grows steadily with time',
       'D) its vertical velocity increases with time')
+
+d.sol(26, 'finding the launch speed from the range',
+      't = &radic;( 2h / g ) = &radic;( 2 &times; 22 / 10 ) = &radic;4.4 = 2.10 s\n'
+      'x = v t   &rarr;   v = x / t = 35 / 2.10 = 16.7 m/s', 'v = 16.7 m/s')
+d.sol(27, 'projecting from a greater height',
+      't = &radic;( 2h / g )   &rarr;   a larger h gives a larger t\n'
+      'x = v t , with v unchanged   &rarr;   x increases too',
+      'both the time of flight and the horizontal range increase')
+d.sol(28, 'range and height from t = 3 s',
+      'x = v t = 3 &times; 3 = 9 m\nh = &frac12; g t&sup2; = &frac12; &times; 10 &times; 9 = 45 m', 'x = 9 m , h = 45 m')
 
 d.foot('Lesson 1&ndash;2 &middot; Horizontal Projectile Motion &middot; Mr. Gemy',
        't = &radic;(2h/g) &nbsp;&middot;&nbsp; x = v t')
