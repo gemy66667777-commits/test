@@ -4,6 +4,8 @@ from css_apple import CSS
 from docbase import WM64
 from bookmeta import LESSONS, UNITS
 
+EN_ONLY = False     # True : drop every Arabic line (for the PowerPoint edition)
+
 EXTRA = """
 @page { size:A4; margin:0; }
 body { background-image:url("data:image/svg+xml;base64,%s"); background-repeat:repeat; }
@@ -66,7 +68,8 @@ def cover(nq, nfig, npages):
             '<span class="chip">Egyptian Baccalaureate &middot; Grade 11</span>'
             '<h1>Physics<br>Performance &amp;<br>Assessment Tasks</h1>'
             '<h2>The complete book, translated and solved &mdash; step by step</h2>'
-            '<div class="ar">كتاب الأداءات والتقييمات &mdash; ترجمة كاملة مع الحل بالخطوات</div>'
+            + ('' if EN_ONLY else
+               '<div class="ar">كتاب الأداءات والتقييمات &mdash; ترجمة كاملة مع الحل بالخطوات</div>') +
             '<div class="rule"></div>'
             '<div class="blurb">Every lesson of the ministry assessments book, rewritten in scientific '
             'English, with every figure redrawn from scratch and every question worked through in full. '
@@ -82,27 +85,28 @@ def contents(rows, nfront):
     h = ['<div class="sheet toc"><h2>Contents</h2>'
          '<p class="lead">The questions of the whole book come first, lesson by lesson; '
          'the full step-by-step answer key follows at the back.</p>'
-         '<table class="toc-t"><tr><th class="n">#</th><th>Lesson</th><th>Title</th>'
-         '<th>العنوان</th><th class="n">Q</th><th class="n">Ans.</th></tr>']
+         '<table class="toc-t"><tr><th class="n">#</th><th>Lesson</th><th>Title</th>' +
+         ('' if EN_ONLY else '<th>العنوان</th>') +
+         '<th class="n">Questions</th><th class="n">Answers</th></tr>']
+    ncol = 5 if EN_ONLY else 6
     cur = None
     i = 0
     for stem, unit, lab, ten, tar, qp, ap in rows:
         if unit != cur:
             cur = unit
             u = UNITS[unit]
-            h.append('<tr class="uhead"><td colspan="6">' + u[0] + ' &middot; ' + u[1] + '</td></tr>')
+            h.append('<tr class="uhead"><td colspan="' + str(ncol) + '">' + u[0] + ' &middot; ' + u[1] + '</td></tr>')
         i += 1
         h.append('<tr><td class="n">' + str(i) + '</td><td class="ls">' + lab + '</td><td>' + ten +
-                 '</td><td class="ar">' + tar + '</td><td class="n">' + str(qp) +
-                 '</td><td class="n">' + str(ap) + '</td></tr>')
+                 '</td>' + ('' if EN_ONLY else '<td class="ar">' + tar + '</td>') +
+                 '<td class="n">' + str(qp) + '</td><td class="n">' + str(ap) + '</td></tr>')
     h.append('</table></div>')
     return ''.join(h)
 
 
 def divider(kicker, title, sub, ar):
     return ('<div class="sheet divider"><div class="k">' + kicker + '</div><h1>' + title + '</h1>'
-            '<div class="rule"></div><div class="s">' + sub + '</div>'
-            '<div class="ar">' + ar + '</div></div>')
+            '<div class="rule"></div><div class="s">' + sub + '</div>' + ('' if EN_ONLY else '<div class="ar">' + ar + '</div>') + '</div>')
 
 
 def front_html(rows, nq, nfig, npages, nfront):

@@ -61,6 +61,22 @@ cd src
 python3 makebook.py          # يقرأ كل ملزمات الدروس ويطلع الكتاب المجمّع
 ```
 
+### 🖥️ نسخة باوربوينت A4 (إنجليزي بالكامل)
+
+| الملف | الوصف |
+|---|---|
+| `Physics-Grade-11-Assessments-Book-Mr-Gemy-A4.pptx` | نفس الكتاب في **باوربوينت مقاس A4 (21 × 29.7 سم)** — 290 سلايد، سلايد لكل صفحة، **من غير ولا كلمة عربي**. كل النصوص **text boxes قابلة للتعديل**، والتصميم والأشكال في خلفية كل سلايد |
+
+لإعادة توليدها:
+
+```bash
+cd src
+python3 makebook.py --en /path/book_en.pdf          # نسخة الكتاب من غير عربي
+python3 pptx/extract.py /path/book_en.pdf out 200   # خلفيات + أماكن النصوص
+node pptx/build.js out book.pptx                    # يحتاج pptxgenjs
+python3 pptx/repack.py book.pptx Physics-Grade-11-Assessments-Book-Mr-Gemy-A4.pptx
+```
+
 ## نطاق ملزمة العزم (حسب الطلب)
 - العزم حول نقطة فقط — **بدون الازدواج (couple) وبدون شروط الاتزان**.
 - القوة العمودية: `M = F × L`

@@ -104,6 +104,9 @@ def stamp(book, rows, nfront):
 
 
 if __name__ == '__main__':
+    if '--en' in sys.argv:              # English-only edition, no Arabic anywhere
+        bookfront.EN_ONLY = True
+        OUT = sys.argv[sys.argv.index('--en') + 1]
     book, rows, nfront = build()
     rows_q = {}
     rows_a = {}
