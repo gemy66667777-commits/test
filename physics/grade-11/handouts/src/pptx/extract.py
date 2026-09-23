@@ -134,7 +134,7 @@ for pno in (PAGES if PAGES is not None else range(doc.page_count)):
                           text=pymupdf.PDF_REDACT_TEXT_REMOVE)
     name = 'bg/p%03d.jpg' % (pno + 1)
     pix = page.get_pixmap(dpi=DPI)
-    pix.save(os.path.join(OUT, name), jpg_quality=86)
+    pix.save(os.path.join(OUT, name), jpg_quality=int(os.environ.get('JPGQ', '80')))
     pages.append({'n': pno + 1, 'bg': name, 'w': page.rect.width, 'h': page.rect.height,
                   'boxes': boxes})
     if (pno + 1) % 25 == 0:
