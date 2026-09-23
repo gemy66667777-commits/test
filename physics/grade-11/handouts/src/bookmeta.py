@@ -1,0 +1,47 @@
+# -*- coding: utf-8 -*-
+"""The ordered contents of the complete translated assessments book."""
+
+# (file stem, unit, lesson label, english title, arabic title)
+LESSONS = [
+ ('Lesson-1-1-Velocity-Vectors-and-Relative-Velocity', 1, '1&ndash;1',
+  'Velocity Vectors and Relative Velocity', 'المتجهات والسرعة النسبية'),
+ ('Lesson-1-2-Horizontal-Projectiles', 1, '1&ndash;2',
+  'Horizontal Projectiles', 'المقذوفات الأفقية'),
+ ('Lesson-1-3-Projectiles-at-an-Angle', 1, '1&ndash;3',
+  'Projectiles at an Angle', 'المقذوفات بزاوية'),
+ ('Lesson-1-4-and-1-5-Moment-and-Equilibrium', 1, '1&ndash;4 &amp; 1&ndash;5',
+  'Moment of a Force and Equilibrium', 'عزم القوة والاتزان'),
+ ('Lesson-1-6-Power-Efficiency-and-Equilibrium-Review', 1, '1&ndash;6',
+  'Power, Efficiency and Equilibrium Review', 'القدرة والكفاءة ومراجعة الاتزان'),
+ ('Lesson-1-7-and-1-8-Momentum-and-Impulse', 1, '1&ndash;7 &amp; 1&ndash;8',
+  'Momentum and Impulse', 'كمية الحركة والدفع'),
+ ('Lesson-1-9-Momentum-and-Mechanical-Energy', 1, '1&ndash;9',
+  'Momentum and Mechanical Energy', 'كمية الحركة والطاقة الميكانيكية'),
+ ('Lesson-1-10-Uniform-Circular-Motion', 1, '1&ndash;10',
+  'Uniform Circular Motion', 'الحركة الدائرية المنتظمة'),
+ ('Lesson-1-11-Horizontal-and-Vertical-Circular-Motion', 1, '1&ndash;11',
+  'Horizontal and Vertical Circular Motion', 'الحركة الدائرية الأفقية والرأسية'),
+ ('Lesson-1-12-Keplers-Laws-and-Gravitation', 1, '1&ndash;12',
+  'Kepler&rsquo;s Laws and Gravitation', 'قوانين كبلر والجاذبية'),
+ ('Lesson-2-1-Simple-Harmonic-Motion', 2, '2&ndash;1',
+  'Simple Harmonic Motion', 'الحركة التوافقية البسيطة'),
+ ('Lesson-2-2-and-2-3-Vertical-Spring-and-Simple-Pendulum', 2, '2&ndash;2 &amp; 2&ndash;3',
+  'The Vertical Spring and the Simple Pendulum', 'الزنبرك الرأسي والبندول البسيط'),
+ ('Lesson-2-4-Sinusoidal-Waves', 2, '2&ndash;4',
+  'Sinusoidal Waves', 'الموجات الجيبية'),
+ ('Lesson-2-5-Wave-Interference-and-Standing-Waves', 2, '2&ndash;5',
+  'Wave Interference and Standing Waves', 'تداخل الموجات والموجات الموقوفة'),
+ ('Lesson-2-6-Refraction-of-Waves', 2, '2&ndash;6',
+  'Refraction of Waves', 'انكسار الموجات'),
+ ('Lesson-2-7-Sound-Interference-and-Doppler-Effect', 2, '2&ndash;7',
+  'Sound Interference and the Doppler Effect', 'تداخل الصوت وظاهرة دوبلر'),
+ ('Lesson-2-8-Doppler-Effect-for-Light', 2, '2&ndash;8',
+  'The Doppler Effect for Light', 'ظاهرة دوبلر للضوء'),
+ ('Lesson-2-9-Refraction-and-Total-Internal-Reflection', 2, '2&ndash;9',
+  'Refraction and Total Internal Reflection', 'الانكسار والانعكاس الكلي'),
+ ('Lesson-2-10-and-2-11-Lenses-and-Youngs-Experiment', 2, '2&ndash;10 &amp; 2&ndash;11',
+  'Lenses and Young&rsquo;s Double-Slit Experiment', 'العدسات وتجربة يونج'),
+]
+
+UNITS = {1: ('Unit One', 'Mechanics', 'الوحدة الأولى &middot; الميكانيكا'),
+         2: ('Unit Two', 'Waves, Sound and Light', 'الوحدة الثانية &middot; الموجات والصوت والضوء')}
