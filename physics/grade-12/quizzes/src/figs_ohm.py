@@ -135,7 +135,7 @@ def two_resistors(cap):
 
 
 # --------------------------------------------------------------------------- 3
-def six_cells(cap):
+def six_cells(cap, rev_label='معكوس', rev_font=AFONT):
     """six identical cells in series, the fourth one connected the wrong way."""
     f = Fig(620, 250, cap, 560)
     x1, y1, x2, y2 = 50, 84, 570, 196
@@ -149,7 +149,7 @@ def six_cells(cap):
             f.line(x - 30, y1, x + 30, y1, WIRE, 2.2)
         bat_h(f, x, y1, pos_left=not bad, c=c)
         f.txt(x, y1 + 36, str(k + 1), c, 12)
-    f.txt(xs[3], y1 - 42, 'معكوس', AR, 12.5, fam=AFONT)
+    f.txt(xs[3], y1 - 42, rev_label, AR, 12.5, fam=rev_font)
     res_h(f, 250, 370, y2)
     f.txt(310, y2 + 30, 'R = 6 Ω', RES, 13)
     return crop(f.render(), (40, 26, 540, 208))
@@ -211,3 +211,48 @@ def mixed_network(cap):
         vb(f, x, y2 + 40, ' = ' + e, c=c, size=12)
         f.txt(x, y2 + 58, 'r = ' + r, c, 12)
     return crop(f.render(), (44, 36, 540, 280))
+
+
+# --------------------------------------------------------------------------- 6
+def rheostat_parallel(cap):
+    """a cell feeding R1 in series with R2 in parallel with a rheostat (a - slider S - b)."""
+    f = Fig(640, 330, cap, 560)
+    xl, xa, xb, xs = 90, 380, 520, 572
+    yt, yb = 70, 290
+    f.line(xl, yt, xb, yt, WIRE, 2.2)               # top wire
+    f.line(xl, yt, xl, yb, WIRE, 2.2)               # left side, with the cell
+    f.line(xl, yb, xs, yb, WIRE, 2.2)               # bottom wire
+    f.line(xa, yt, xa, yb, WIRE, 2.2)               # branch with R2
+    node(f, xa, yt)
+    node(f, xa, yb)
+    bat_v(f, xl, 180, True)
+    vb(f, xl + 26, 176, ' ,  r', anchor='start', size=15)
+    meter(f, 165, yt, 'A')
+    iarrow(f, 118, yt, 'r')
+    res_h(f, 225, 315, yt)
+    f.raw('<text x="270" y="%d" fill="%s" font-size="17" font-weight="700" text-anchor="middle" '
+          'font-family="Helvetica, Arial, sans-serif">R<tspan dy="4" font-size="12">1</tspan></text>'
+          % (yt - 18, RES))
+    # R2 with the voltmeter across it
+    res_v(f, xa, 140, 220)
+    f.raw('<text x="%d" y="186" fill="%s" font-size="17" font-weight="700" text-anchor="start" '
+          'font-family="Helvetica, Arial, sans-serif">R<tspan dy="4" font-size="12">2</tspan></text>'
+          % (xa + 16, RES))
+    f.line(xa, 118, 322, 118, WIRE, 2.2)
+    f.line(322, 118, 322, 242, WIRE, 2.2)
+    f.line(322, 242, xa, 242, WIRE, 2.2)
+    node(f, xa, 118)
+    node(f, xa, 242)
+    meter(f, 322, 180, 'V')
+    # the rheostat : fixed ends a (connected) and b (free), sliding contact S
+    f.line(xb, yt, xb, 128, WIRE, 2.2)
+    res_v(f, xb, 128, 236)
+    f.circle(xb, 128, 4, '#ffffff', WIRE, 2)
+    f.circle(xb, 236, 4, '#ffffff', WIRE, 2)
+    f.txt(xb - 14, 134, 'a', NV, 17, 'end', it=True)
+    f.txt(xb - 14, 242, 'b', NV, 17, 'end', it=True)
+    ys = 190
+    f.line(xs, ys, xs, yb, WIRE, 2.2)
+    f.arrow(xs, ys, xb + 11, ys, DK, 2.4)
+    f.txt(xs + 10, ys + 6, 'S', NV, 17, 'start', it=True)
+    return crop(f.render(), (60, 36, 540, 270))
