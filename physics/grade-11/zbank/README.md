@@ -1,4 +1,36 @@
-# Z BANK — Chapter 2 · Lesson 1 · Moment of a Force
+# Z BANK — Chapter 2 · Lesson 1 · Simple Harmonic Motion
+
+`Z-BANK-Chapter-2-Lesson-1-Simple-Harmonic-Motion.pdf` — بنك أسئلة **الدرس 2-1 الحركة التوافقية البسيطة** بنفس ستايل ملزمة Z BANK، مقاس A4، من غير ووتر مارك.
+
+- **40 سؤال** (94 جزء: 50 اختيار من متعدد + 44 مقالي/مسائل) — أول 5 متوسطين والباقي صعب وجديد.
+- فيجرز مرسومة من الصفر (زنبرك وجسم، رسومات x–t و v–t و F–x و a–x و T²–m، منحنيات الطاقة، المسطرة المهتزة، زنبركين).
+- **نموذج إجابة بالخطوات** لكل جزء في الآخر. π = 3.14.
+
+## القياسات (مأخوذة من صفحة العينة: 984 نقطة = 210 مم)
+البوكس يبدأ 10.2 مم من شمال الصفحة وينتهي 11.7 مم من يمينها · إطار 0.45 مم · ظل #5A9BD5 مزاح 2.2 × 2.1 مم ·
+3 مم بين بوكس السؤال وأول جزء · الكلام يبدأ 12.4 مم من حرف البوكس · دايرة الرقم 12.6 مم.
+
+## الفونتات
+| العنصر | الفونت |
+|---|---|
+| الكلام | **Vintage Vignette** مقاس 12 |
+| الأرقام 0–9 جوه الكلام | **Comfortaa Bold** (النسخة المجانية من Vintage Vignette أرقامها 0–4 مكتوب مكانها "Personal use only") |
+| رقم السؤال و I / II / III وكلمة Block | **Chunk** (أبيض بحدود سودا وظل) |
+
+ملفات **Vintage Vignette** و **Chunk** مش مرفوعة هنا (رخصتها ما تسمحش بإعادة التوزيع) — حطها في `src/ttf` باسم
+`VintageVignette.ttf` و `Chunk.ttf` قبل إعادة التوليد.
+
+## إعادة التوليد
+```bash
+cd src
+python3 zb_build_shm.py      # -> zbank_shm.html
+chrome --headless --no-pdf-header-footer --virtual-time-budget=30000 \
+       --print-to-pdf=out.pdf file://$PWD/zbank_shm.html
+```
+
+---
+
+# (نسخة سابقة) Z BANK — Moment of a Force
 
 `Z-BANK-Chapter-2-Lesson-1-Moment-of-a-Force.pdf` — بنك أسئلة بنفس ستايل ملزمة Z BANK (الهيدر والفوتر والبوكسات وفقاعات الأرقام)، مقاس A4، **من غير أي ووتر مارك**.
 

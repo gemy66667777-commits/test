@@ -121,8 +121,8 @@ def footer_svg(num_placeholder='{{N}}', block='Block', blockno='1'):
       'stroke-dasharray="4 5"/>' % BLUE)
     for (x, y, r) in ((128, 26, 7), (143, 40, 4.5), (22, 104, 5), (130, 104, 4)):
         a('<circle cx="%d" cy="%d" r="%s" fill="none" stroke="%s" stroke-width="2.2"/>' % (x, y, r, BLUE))
-    a('<text x="72" y="80" font-size="50" text-anchor="middle" style="font-family:\'Titan One\'" '
-      'fill="#fff" stroke="#111" stroke-width="2.4" paint-order="stroke">%s</text>' % num_placeholder)
+    a('<text x="72" y="80" font-size="50" text-anchor="middle" style="font-family:\'Chunk\'" '
+      'fill="#fff" stroke="#111" stroke-width="3" paint-order="stroke">%s</text>' % num_placeholder)
     # loop squiggle then the long line
     a('<path d="M122,72 C170,40 200,110 238,70 C262,44 290,52 282,78 C276,94 256,90 262,70 '
       'C270,50 300,58 330,58" fill="none" stroke="%s" stroke-width="3"/>' % BLUE)
@@ -146,12 +146,12 @@ def footer_svg(num_placeholder='{{N}}', block='Block', blockno='1'):
     # Block badge
     a('<rect x="1702" y="30" width="170" height="64" rx="10" fill="url(#hl)" stroke="%s" stroke-width="3" '
       'transform="rotate(-4 1787 62)"/>' % BLUE)
-    a('<text x="1770" y="84" font-size="44" text-anchor="middle" style="font-family:\'Titan One\'" '
+    a('<text x="1770" y="84" font-size="46" text-anchor="middle" style="font-family:\'Chunk\'" '
       'fill="#fff" stroke="%s" stroke-width="3" paint-order="stroke" transform="rotate(-4 1770 70)">%s</text>'
       % (DEEP, block))
     a('<rect x="1832" y="22" width="40" height="66" rx="5" fill="#fff" stroke="%s" stroke-width="3" '
       'transform="rotate(-4 1852 55)"/>' % DEEP)
-    a('<text x="1852" y="78" font-size="46" text-anchor="middle" style="font-family:\'Titan One\'" '
+    a('<text x="1852" y="78" font-size="48" text-anchor="middle" style="font-family:\'Chunk\'" '
       'fill="%s" transform="rotate(-4 1852 60)">%s</text>' % (DEEP, blockno))
     for (x1, y1, x2, y2) in ((1690, 40, 1676, 30), (1686, 62, 1668, 62), (1880, 20, 1892, 8), (1888, 70, 1900, 76)):
         a('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="%s" stroke-width="2.6" stroke-linecap="round"/>'
@@ -161,105 +161,114 @@ def footer_svg(num_placeholder='{{N}}', block='Block', blockno='1'):
 
 
 def fontfaces(path='ttf'):
-    return ''.join("@font-face{font-family:'%s';src:url(%s/%s.ttf)%s}" % (n, path, f, w)
-                   for n, f, w in (('Comfortaa', 'Comfortaa', ';font-weight:300 700'),
-                                   ('Kalam', 'Kalam', ';font-weight:700'),
-                                   ('Titan One', 'TitanOne', ''),
-                                   ('Alfa Slab One', 'AlfaSlabOne', '')))
+    """Vintage Vignette for the text ; its free edition has placeholder glyphs for 0-4, so all the
+    digits 0-9 come from Comfortaa Bold (a very close rounded face).  Jackport College for the question
+    numbers, Chunk Five Print for I / II / III."""
+    return ("@font-face{font-family:'ZB';src:url(%(p)s/VintageVignette.ttf);font-weight:700}"
+            "@font-face{font-family:'ZB';src:url(%(p)s/Comfortaa.ttf);font-weight:700;unicode-range:U+0030-0039}"
+            "@font-face{font-family:'ZBsym';src:url(%(p)s/Comfortaa.ttf);font-weight:300 700}"
+            "@font-face{font-family:'Jackport';src:url(%(p)s/JackportCollege.ttf)}"
+            "@font-face{font-family:'Chunk';src:url(%(p)s/Chunk.ttf)}"
+            "@font-face{font-family:'Kalam';src:url(%(p)s/Kalam.ttf);font-weight:700}"
+            "@font-face{font-family:'Titan One';src:url(%(p)s/TitanOne.ttf)}" % dict(p=path))
 
+
+BORDER = '#82A9D0'
+SHADOW = '#5A9BD5'
+RING = '#46638F'
 
 CSS = """
 @page { size:A4; margin:0; }
 * { box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 html, body { margin:0; padding:0; background:#fff; }
-body { font-family:'Comfortaa', sans-serif; font-weight:700; color:#0d0d0d; }
-#flow { position:absolute; left:-9999px; top:0; width:188mm; }
+body { font-family:'ZB', 'ZBsym', sans-serif; font-weight:700; color:#111; }
+#flow { position:absolute; left:-9999px; top:0; width:188.1mm; }
 .page { width:210mm; height:297mm; position:relative; overflow:hidden; break-after:page; background:#fff; }
 .page:last-child { break-after:auto; }
-.page .hdr { position:absolute; left:10mm; top:6mm; width:190mm; }
-.page .ftr { position:absolute; left:10mm; bottom:5mm; width:190mm; }
-.page .body { position:absolute; left:11mm; right:11mm; top:25mm; bottom:19mm; }
-.txt, .qtext { font-size:12pt; line-height:1.36; letter-spacing:.012em;
-       -webkit-text-stroke:0.32px #0d0d0d; }
+.page .hdr { position:absolute; left:4mm; top:1.2mm; width:202mm; }
+.page .ftr { position:absolute; left:4mm; bottom:1.8mm; width:202mm; }
+.page .body { position:absolute; left:10.2mm; right:11.7mm; top:19.3mm; bottom:18.5mm; }
+.qtext { font-size:12pt; line-height:1.21; }
 
-/* ---- a question ---- */
-.q { position:relative; padding:3.2mm 1.8mm 0 7.5mm; }
-.stem { position:relative; background:#fff; border:1.3px solid %(LINE)s; border-radius:11px;
-        box-shadow:1.3mm 2.1mm 0 %(LIGHT)s; padding:2.4mm 12mm 2.6mm 9.5mm; margin-bottom:3.6mm; }
-.bub { position:absolute; left:-9.8mm; top:-5.2mm; width:14mm; height:14mm; }
-.bub .num { position:absolute; left:0; top:0; width:13mm; height:13mm; display:flex; align-items:center;
-        justify-content:center; font-family:'Titan One'; font-size:17pt; color:#fff;
-        -webkit-text-stroke:1.4px #111; paint-order:stroke fill; letter-spacing:-.5px; }
-.stem .dood { position:absolute; right:-6mm; top:50%%; transform:translateY(-50%%); width:13mm; }
-.part { position:relative; background:#fff; border:1.3px solid %(LINE)s; border-radius:11px;
-        box-shadow:1.3mm 2.1mm 0 %(LIGHT)s; padding:2.1mm 4mm 2.3mm 11.5mm; margin:0 0 3.4mm; }
-.part .rn { position:absolute; left:3mm; top:2.1mm; font-family:'Alfa Slab One'; font-size:12pt;
-        color:#fff; -webkit-text-stroke:1.1px #111; paint-order:stroke fill; letter-spacing:.5px; }
-.space { height:22mm; }
-.space.s { height:6mm; } .space.m { height:15mm; } .space.l { height:32mm; }
-.ch { display:grid; grid-template-columns:repeat(4, 1fr); gap:1.4mm 3mm; margin-top:1.6mm; }
+/* ---- one question ---- */
+.q { position:relative; padding-top:4.6mm; }
+.dg { -webkit-text-stroke:0.55px currentColor; }
+.q.cont { padding-top:0; }
+.stem, .part { position:relative; background:#fff; border:0.45mm solid %(B)s; border-radius:3.2mm;
+        box-shadow:2.2mm 2.1mm 0 %(S)s; }
+.stem { padding:2.3mm 6.8mm 2.3mm 12.4mm; margin-bottom:3mm; }
+.part { padding:2.3mm 5mm 2.3mm 12.4mm; margin-bottom:3mm; }
+.bub { position:absolute; left:-2.6mm; top:-4.5mm; width:12.6mm; height:12.6mm; }
+.bub svg { position:absolute; left:0; top:0; width:12.6mm; height:12.6mm; overflow:visible; }
+.bub .num { position:absolute; left:0; top:0; width:12.6mm; height:12.6mm; display:flex; align-items:center;
+        justify-content:center; font-family:'Chunk'; font-size:23pt; line-height:1; letter-spacing:-0.4pt; }
+.bub .num i { position:relative; font-style:normal; }
+.bub .num .b { position:absolute; left:0.45mm; top:0.45mm; color:#111; -webkit-text-stroke:1.2pt #111; }
+.bub .num .f { position:relative; color:#fff; -webkit-text-stroke:1.2pt #111; paint-order:stroke fill; }
+.stem .dood { position:absolute; right:-11.2mm; top:50%%; transform:translateY(-50%%); width:13mm; height:17mm; }
+.part .rn { position:absolute; left:0; top:2.2mm; width:12.4mm; text-align:center; font-family:'Chunk';
+        font-size:14pt; line-height:1; letter-spacing:-0.4pt; }
+.rn .b { position:absolute; left:0.3mm; top:0.3mm; right:-0.3mm; color:#111; -webkit-text-stroke:0.9pt #111; }
+.rn .f { position:relative; color:#fff; -webkit-text-stroke:0.9pt #111; paint-order:stroke fill; }
+.space { height:26mm; }
+.space.s { height:9mm; } .space.m { height:16mm; } .space.l { height:34mm; } .space.x { height:0.5mm; }
+.q + .q:not(.cont) { margin-top:3mm; }
+.ch { display:grid; grid-template-columns:repeat(4, 1fr); gap:1.2mm 3mm; margin-top:1.4mm; }
 .ch.two { grid-template-columns:1fr 1fr; }
 .ch.one { grid-template-columns:1fr; }
-.ch span { font-size:11pt; }
-.ch b { color:%(BLUE)s; font-family:'Comfortaa'; font-weight:700; margin-right:1.2mm; }
+.ch b { color:#1B3F85; margin-right:1.2mm; }
 .withfig { display:flex; gap:4mm; align-items:flex-start; }
 .withfig .parts { flex:1; min-width:0; }
-.withfig .figcol { flex:none; }
-.figc { text-align:center; margin:0 0 3.4mm; }
+.withfig .figcol { flex:none; padding-top:1mm; }
+.figc { text-align:center; margin:0 0 3mm; }
 svg.fg { display:block; margin:0 auto; }
 .dots { letter-spacing:1px; }
+sub, sup { font-size:66%%; line-height:0; }
+u { text-decoration-thickness:1.4px; text-underline-offset:2px; }
+
+.lesson { position:relative; margin:1mm 0 6mm; background:#fff; border:0.45mm solid %(B)s; border-radius:4mm;
+        box-shadow:2.2mm 2.1mm 0 %(S)s; padding:3.4mm 8mm 3.8mm; text-align:center; }
+.lesson .lk { font-size:13pt; color:#2556A8; }
+.lesson .lt { font-family:'Chunk'; font-size:25pt; color:#1B3F85; margin:1mm 0 1.2mm; letter-spacing:.3px; }
+.lesson .ls { font-size:10.5pt; color:#334155; line-height:1.45; }
+.lesson .ls b { color:#2556A8; }
+.ans { position:relative; padding-top:4.6mm; }
+.abox { position:relative; background:#fff; border:0.45mm solid %(B)s; border-radius:3.2mm;
+        box-shadow:2.2mm 2.1mm 0 %(S)s; padding:2.8mm 5mm 2.6mm 12.4mm; margin-bottom:3.4mm; }
+.ap { position:relative; margin:0 0 2.4mm; }
+.ap:last-child { margin-bottom:0; }
+.ap .rn { position:absolute; left:-12.4mm; top:0.3mm; width:12.4mm; text-align:center; font-family:'Chunk';
+        font-size:12.5pt; line-height:1; letter-spacing:-0.4pt; }
+.ap .st { font-size:10.5pt; line-height:1.42; color:#1F2937; }
+.ap .res { display:inline-block; margin-top:1mm; background:#E8F1FC; border:0.35mm solid %(B)s;
+        border-radius:2mm; padding:0.4mm 2.6mm; font-size:10.5pt; color:#1B3F85; }
 """
 
 
 def css():
-    return CSS % dict(LINE=LINE, LIGHT=LIGHT, BLUE=BLUE)
+    return CSS % dict(B=BORDER, S=SHADOW)
 
 
 def stem_doodle():
-    """the little blue question-mark swirl that hangs off the right end of every stem box."""
-    return ('<svg class="dood" viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">'
-            '<path d="M14,20 C14,4 46,4 46,20 C46,32 30,32 30,44" fill="none" stroke="%s" '
-            'stroke-width="5" stroke-linecap="round"/>'
-            '<circle cx="30" cy="56" r="4.5" fill="%s"/>'
-            '<circle cx="52" cy="9" r="4" fill="none" stroke="%s" stroke-width="2.4"/>'
-            '<path d="M4,40 q6,-8 12,0" fill="none" stroke="%s" stroke-width="3" stroke-linecap="round"/>'
-            '</svg>' % (BLUE, BLUE, LIGHT, LIGHT))
+    """the right end of every stem box : two white lobes with the same blue shadow, and three bubbles."""
+    lobes = ('M10,20 C30,15 58,17 66,27 C76,40 66,53 50,55 C40,56 28,57 21,60 C31,67 52,79 60,91 '
+             'C68,103 60,115 46,113 C34,111 22,105 10,108')
+    return ('<svg class="dood" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">'
+            '<path d="%(p)s Z" transform="translate(6,7)" fill="%(S)s"/>'
+            '<path d="%(p)s Z" fill="#fff"/>'
+            '<path d="%(p)s" fill="none" stroke="%(B)s" stroke-width="1.7"/>'
+            '<circle cx="80" cy="14" r="6.5" fill="#fff" stroke="%(S)s" stroke-width="2.6"/>'
+            '<circle cx="61" cy="76" r="3.8" fill="#fff" stroke="%(S)s" stroke-width="2.2"/>'
+            '<circle cx="76" cy="86" r="4.6" fill="%(S)s"/>'
+            '</svg>' % dict(p=lobes, S=SHADOW, B=BORDER))
 
 
 def bubble(n):
-    """the round number bubble with its speech tail."""
-    return ('<div class="bub"><svg viewBox="0 0 70 70" style="position:absolute;left:0;top:0;width:14mm">'
-            '<path d="M38,6 a28,28 0 1 1 -22,48 l-6,10 l2,-15 a28,28 0 0 1 26,-43 z" fill="%s" '
-            'transform="translate(3,2)"/>'
-            '<path d="M35,4 a28,28 0 1 1 -22,48 l-6,10 l2,-15 a28,28 0 0 1 26,-43 z" fill="#fff" '
-            'stroke="%s" stroke-width="2.6"/></svg><div class="num">%d</div></div>' % (LIGHT, LINE, n))
-
-
-CSS_MORE = """
-.qtext { -webkit-text-stroke:0.42px #0d0d0d; }
-.bub .num { font-size:19pt; }
-.part .rn { font-size:13.5pt; top:1.7mm; -webkit-text-stroke:1.3px #111; }
-.lesson { position:relative; margin:2mm 1.8mm 6mm 1mm; background:#fff; border:1.6px solid %(LINE)s;
-        border-radius:16px; box-shadow:1.6mm 2.6mm 0 %(LIGHT)s; padding:4mm 8mm 4.5mm; text-align:center; }
-.lesson .lk { font-family:'Kalam'; font-weight:700; font-size:19pt; color:%(BLUE)s; line-height:1.1; }
-.lesson .lt { font-family:'Titan One'; font-size:25pt; color:%(DEEP)s; letter-spacing:.5px; margin:1mm 0 1.5mm; }
-.lesson .ls { font-size:10.2pt; color:#334155; line-height:1.5; }
-.lesson .ls b { color:%(BLUE)s; }
-.ans { position:relative; padding:3.4mm 1.8mm 0 7.5mm; }
-.abox { position:relative; background:#fff; border:1.3px solid %(LINE)s; border-radius:11px;
-        box-shadow:1.3mm 2.1mm 0 %(LIGHT)s; padding:3mm 5mm 2.6mm 10mm; margin-bottom:3.6mm; }
-.ap { position:relative; padding-left:10mm; margin:0 0 2.6mm; }
-.ap:last-child { margin-bottom:0; }
-.ap .rn { position:absolute; left:0; top:-0.3mm; font-family:'Alfa Slab One'; font-size:12pt; color:#fff;
-        -webkit-text-stroke:1.2px #111; paint-order:stroke fill; }
-.ap .st { font-size:10.3pt; font-weight:600; line-height:1.5; color:#1F2937; }
-.ap .res { display:inline-block; margin-top:1.2mm; background:#E8F1FC; border:1.2px solid %(LINE)s;
-        border-radius:8px; padding:0.5mm 3mm; font-size:10.4pt; font-weight:700; color:%(DEEP)s;
-        -webkit-text-stroke:0.25px %(DEEP)s; }
-sub, sup { font-size:68%%; line-height:0; }
-u { text-decoration-thickness:1.5px; text-underline-offset:2px; }
-"""
-
-
-def css_more():
-    return CSS_MORE % dict(LINE=LINE, LIGHT=LIGHT, BLUE=BLUE, DEEP=DEEP)
+    """the round number bubble : a dark-blue ring, a light-blue crescent on its right and a small tail."""
+    return ('<div class="bub"><svg viewBox="0 0 60 60">'
+            '<path d="M13,47 L6,58 L20,51 Z" fill="#fff" stroke="%s" stroke-width="2.6" stroke-linejoin="round"/>'
+            '<circle cx="32" cy="31" r="27" fill="#A9CDF0"/>'
+            '<circle cx="30" cy="29" r="27" fill="#fff" stroke="%s" stroke-width="3"/>'
+            '<path d="M14,50 L9,56 L19,52" fill="#fff"/>'
+            '</svg><div class="num"><i><span class="b">%d</span><span class="f">%d</span></i></div></div>'
+            % (RING, RING, n, n))
