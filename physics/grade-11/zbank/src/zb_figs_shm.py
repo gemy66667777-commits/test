@@ -215,3 +215,67 @@ def two_systems(wmm=100, labs=(('k', 'm'), ('4k', 'm')), tags=('A', 'B'), disp=N
             f.arrow(bx, y0 + 24, bx + d * 16, y0 + 24, PU, 2.6)
             lab(f, bx + d * 8 + 8, y0 + 16, '%d cm' % d, PU, 13.5, 'start')
     return _o(f, wmm)
+
+
+# =========================================================================== vertical springs
+def ceiling(f, x0, x1, y):
+    f.rect(x0, y - 16, x1 - x0, 16, 'url(#hWall)', '#64748B', 1.4, 2)
+
+
+def vspring(f, x, y0, y1, n=9, h=11, col='#475569'):
+    """a coil spring hanging from y0 down to y1 at x."""
+    f.raw('<g transform="rotate(90 %.1f %.1f)">' % (x, y0))
+    spring(f, x, x + (y1 - y0), y0, n, h, col)
+    f.raw('</g>')
+
+
+def vertical_spring(wmm=118):
+    """natural length - equilibrium (stretched e) - pulled a further A and released."""
+    f = Fig(660, 330)
+    top = 40
+    ceiling(f, 20, 540, top)
+    y_nat, e, A = 140, 70, 34            # pixels : 10 cm of static stretch, 4 cm more
+    for k, (cx, L, tag) in enumerate(((95, y_nat - top, '(1)'), (280, y_nat - top + e, '(2)'),
+                                      (465, y_nat - top + e + A, '(3)'))):
+        vspring(f, cx, top, top + L, 9, 11)
+        if k:
+            f.raw('<rect x="%d" y="%d" width="64" height="46" rx="7" fill="url(#gBlock)" stroke="#9A3412" '
+                  'stroke-width="2.2"/>' % (cx - 32, top + L))
+            f.txt(cx, top + L + 30, 'm', '#fff', 18, it=True)
+        else:
+            f.raw('<circle cx="%d" cy="%d" r="4.5" fill="#475569"/>' % (cx, top + L))
+        f.txt(cx, 318, tag, NV, 15)
+    # reference lines
+    f.line(60, y_nat, 540, y_nat, GY, 1.5, '6 5')
+    f.line(240, y_nat + e, 540, y_nat + e, GR, 1.5, '6 5')
+    f.dim(210, y_nat, 210, y_nat + e, '', PU)
+    lab(f, 188, y_nat + e / 2 + 5, '10 cm', PU, 13.5)
+    f.dim(395, y_nat + e, 395, y_nat + e + A, '', OR)
+    lab(f, 372, y_nat + e + A / 2 + 5, '4 cm', OR, 13.5)
+    lab(f, 548, y_nat + e + 5, 'equilibrium', GR, 13, 'start')
+    lab(f, 548, y_nat + 5, 'natural length', '#64748B', 13, 'start')
+    return _o(f, wmm)
+
+
+def cut_spring(wmm=112):
+    """(1) the whole spring with the body ; (2) the two halves side by side holding the same body."""
+    f = Fig(520, 300)
+    top = 40
+    ceiling(f, 20, 220, top)
+    ceiling(f, 300, 500, top)
+    vspring(f, 120, top, top + 170, 14, 11)
+    f.raw('<rect x="88" y="%d" width="64" height="46" rx="7" fill="url(#gBlock)" stroke="#9A3412" '
+          'stroke-width="2.2"/>' % (top + 170))
+    f.txt(120, top + 200, 'm', '#fff', 18, it=True)
+    lab(f, 160, top + 80, 'k', NV, 16, 'start')
+    for cx in (365, 435):
+        vspring(f, cx, top, top + 95, 7, 10, '#1E40AF')
+        lab(f, cx + (-26 if cx < 400 else 26), top + 52, 'half', NV, 12.5, 'end' if cx < 400 else 'start')
+    f.rect(340, top + 95, 120, 9, '#64748B', '#334155', 1.4, 2)
+    f.line(400, top + 104, 400, top + 118, '#334155', 2.4)
+    f.raw('<rect x="368" y="%d" width="64" height="46" rx="7" fill="url(#gBlock)" stroke="#9A3412" '
+          'stroke-width="2.2"/>' % (top + 118))
+    f.txt(400, top + 148, 'm', '#fff', 18, it=True)
+    f.txt(120, 290, '(1)', NV, 15)
+    f.txt(400, 290, '(2)', NV, 15)
+    return _o(f, wmm)

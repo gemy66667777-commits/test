@@ -192,7 +192,10 @@ body { font-family:'ZB', 'ZBsym', sans-serif; font-weight:700; color:#111; }
 
 /* ---- one question ---- */
 .q { position:relative; padding-top:4.6mm; }
-.dg { -webkit-text-stroke:0.55px currentColor; }
+.dg { -webkit-text-stroke:0.55px currentColor; text-shadow:0.3px 0.35px 0 rgba(0,0,0,0.5); }
+.rt { display:inline-block; position:relative; padding:0.27em 0.12em 0 0.9em; margin:0 0.04em; line-height:1em; }
+.rt > .sg { position:absolute; left:0; top:0; width:100%%; height:1.2em; overflow:hidden; }
+.rt > .sg > svg { position:absolute; left:0; top:0; width:400em; height:1.2em; }
 .q.cont { padding-top:0; }
 .stem, .part { position:relative; background:#fff; border:0.45mm solid %(B)s; border-radius:3.2mm;
         box-shadow:2.2mm 2.1mm 0 %(S)s; }
@@ -202,13 +205,13 @@ body { font-family:'ZB', 'ZBsym', sans-serif; font-weight:700; color:#111; }
 .bub svg { position:absolute; left:0; top:0; width:12.6mm; height:12.6mm; overflow:visible; }
 .bub .num { position:absolute; left:0; top:0; width:12.6mm; height:12.6mm; display:flex; align-items:center;
         justify-content:center; font-family:'Chunk'; font-size:23pt; line-height:1; letter-spacing:-0.4pt; }
-.bub .num i { position:relative; font-style:normal; }
-.bub .num .b { position:absolute; left:0.45mm; top:0.45mm; color:#111; -webkit-text-stroke:1.2pt #111; }
+.bub .num i { position:relative; font-style:normal; filter:drop-shadow(0.25mm 0.3mm 0.2mm rgba(0,0,0,0.35)); }
+.bub .num .b { position:absolute; left:0.6mm; top:0.6mm; color:#111; -webkit-text-stroke:1.2pt #111; }
 .bub .num .f { position:relative; color:#fff; -webkit-text-stroke:1.2pt #111; paint-order:stroke fill; }
 .stem .dood { position:absolute; right:-11.2mm; top:50%%; transform:translateY(-50%%); width:13mm; height:17mm; }
 .part .rn { position:absolute; left:0; top:2.2mm; width:12.4mm; text-align:center; font-family:'Chunk';
         font-size:14pt; line-height:1; letter-spacing:-0.4pt; }
-.rn .b { position:absolute; left:0.3mm; top:0.3mm; right:-0.3mm; color:#111; -webkit-text-stroke:0.9pt #111; }
+.rn .b { position:absolute; left:0.4mm; top:0.4mm; right:-0.4mm; color:#111; -webkit-text-stroke:0.9pt #111; }
 .rn .f { position:relative; color:#fff; -webkit-text-stroke:0.9pt #111; paint-order:stroke fill; }
 .space { height:26mm; }
 .space.s { height:9mm; } .space.m { height:16mm; } .space.l { height:34mm; } .space.x { height:0.5mm; }
@@ -230,18 +233,23 @@ u { text-decoration-thickness:1.4px; text-underline-offset:2px; }
         box-shadow:2.2mm 2.1mm 0 %(S)s; padding:3.4mm 8mm 3.8mm; text-align:center; }
 .lesson .lk { font-size:13pt; color:#2556A8; }
 .lesson .lt { font-family:'Chunk'; font-size:25pt; color:#1B3F85; margin:1mm 0 1.2mm; letter-spacing:.3px; }
-.lesson .ls { font-size:10.5pt; color:#334155; line-height:1.45; }
+.lesson .ls { font-size:12pt; color:#334155; line-height:1.45; }
 .lesson .ls b { color:#2556A8; }
 .ans { position:relative; padding-top:4.6mm; }
+.ans.cont { padding-top:0; }
+.abox.jb { border-bottom:0; border-bottom-left-radius:0; border-bottom-right-radius:0; margin-bottom:0; padding-bottom:1.4mm; }
+.abox.jt { border-top:0; border-top-left-radius:0; border-top-right-radius:0; padding-top:1.4mm; }
 .abox { position:relative; background:#fff; border:0.45mm solid %(B)s; border-radius:3.2mm;
         box-shadow:2.2mm 2.1mm 0 %(S)s; padding:2.8mm 5mm 2.6mm 12.4mm; margin-bottom:3.4mm; }
 .ap { position:relative; margin:0 0 2.4mm; }
+.abox > .bub + .ap { padding-top:4.6mm; }
+.abox > .bub + .ap > .rn { top:4.9mm; }
 .ap:last-child { margin-bottom:0; }
 .ap .rn { position:absolute; left:-12.4mm; top:0.3mm; width:12.4mm; text-align:center; font-family:'Chunk';
         font-size:12.5pt; line-height:1; letter-spacing:-0.4pt; }
-.ap .st { font-size:10.5pt; line-height:1.42; color:#1F2937; }
+.ap .st { font-size:12pt; line-height:1.26; color:#1F2937; }
 .ap .res { display:inline-block; margin-top:1mm; background:#E8F1FC; border:0.35mm solid %(B)s;
-        border-radius:2mm; padding:0.4mm 2.6mm; font-size:10.5pt; color:#1B3F85; }
+        border-radius:2mm; padding:0.4mm 2.6mm; font-size:12pt; color:#1B3F85; }
 """
 
 

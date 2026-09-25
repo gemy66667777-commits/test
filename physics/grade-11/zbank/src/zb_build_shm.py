@@ -5,7 +5,7 @@ import zb_page as PG
 import zb_content_shm as C
 
 # spread the correct letters : for these parts options (b) and (d) change places
-for qi, pi in ((0, 0), (6, 0), (9, 0), (20, 0), (26, 0), (37, 0)):
+for qi, pi in ((0, 0), (8, 0), (16, 1), (27, 0)):
     p = C.Q[qi]['parts'][pi]
     assert p['ok'] == 1
     p['ch'][1], p['ch'][3] = p['ch'][3], p['ch'][1]
@@ -19,17 +19,17 @@ blocks = ['<div class="lesson"><div class="lk">Chapter 2 &middot; Lesson 1</div>
 for n, q in enumerate(C.Q, 1):
     blocks += PG.question(n, q['stem'], q['parts'], q['fig'], q['figpos'])
 
-blocks.append('<div class="lesson newpage"><div class="lk">Chapter 2 &middot; Lesson 1</div>'
+blocks.append('<div class="lesson keepnext"><div class="lk">Chapter 2 &middot; Lesson 1</div>'
               '<div class="lt">Model Answers</div>'
               '<div class="ls">Every question solved step by step</div></div>')
 for n, q in enumerate(C.Q, 1):
-    rows = []
     for k, p in enumerate(q['parts']):
         res = '%s) %s' % (LET[p['ok']], p['ch'][p['ok']]) if p.get('ch') else p['res']
         rn = '<span class="b">%s</span><span class="f">%s</span>' % (PG.ROMAN[k], PG.ROMAN[k])
-        rows.append('<div class="ap"><span class="rn">%s</span><div class="st">%s</div>'
-                    '<div class="res">%s</div></div>' % (rn, PG.dg('<br>'.join(p['steps'])), PG.dg(res)))
-    blocks.append('<div class="ans"><div class="abox">' + FR.bubble(n) + ''.join(rows) + '</div></div>')
+        row = ('<div class="ap"><span class="rn">%s</span><div class="st">%s</div>'
+               '<div class="res">%s</div></div>' % (rn, PG.dg('<br>'.join(p['steps'])), PG.dg(res)))
+        blocks.append('<div class="ans%s" data-q="%d"><div class="abox">%s%s</div></div>'
+                      % (' cont' if k else '', n, FR.bubble(n) if k == 0 else '', row))
 
 open('zbank_shm.html', 'w', encoding='utf-8').write(
     PG.document(blocks, start=1, title='Z BANK - Chapter 2 Lesson 1 - Simple Harmonic Motion'))

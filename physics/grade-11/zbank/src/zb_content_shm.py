@@ -70,32 +70,13 @@ q('The graph shows the restoring force F acting on a body attached to a spring a
        'F is always opposite to x', 's')],
   G.graph_line(82, through=(0.1, -20), pt=(0.1, -20)), 'right')
 
-# ------------------------------------------------------------------ hard 6 - 40
-q('A body oscillates in simple harmonic motion with an amplitude of 8 cm and a periodic time of 0.4 s:',
-  [mcq('Its maximum speed equals' + DOTS, ['1.256 m/s', '0.2 m/s', '3.14 m/s', '19.7 m/s'], 0,
-       ['ω = 2π / T = 6.28 / 0.4 = 15.7 rad/s', 'v<sub>max</sub> = ωA = 15.7 × 0.08 = 1.256 m/s']),
-   ess('Calculate its maximum acceleration.',
-       ['a<sub>max</sub> = ω² A = (15.7)² × 0.08', 'a<sub>max</sub> = 246.5 × 0.08 = 19.7 m/s²'],
-       'a<sub>max</sub> ≈ 19.7 m/s²', 'm'),
-   mcq('The ratio a<sub>max</sub> / v<sub>max</sub> equals' + DOTS, ['T', 'A', 'ω', 'f'], 2,
-       ['a<sub>max</sub> / v<sub>max</sub> = ω² A / ωA = ω = 15.7 rad/s'])])
-
+# ------------------------------------------------------------------ hard 6 - 30
 q('A body in simple harmonic motion has a maximum speed of 2 m/s and a maximum acceleration of 40 m/s²:',
   [mcq('Its angular frequency equals' + DOTS, ['80 rad/s', '20 rad/s', '0.05 rad/s', '40 rad/s'], 1,
        ['a<sub>max</sub> / v<sub>max</sub> = ω² A / ωA = ω', 'ω = 40 / 2 = 20 rad/s']),
    ess('Find the amplitude and the periodic time.',
        ['A = v<sub>max</sub> / ω = 2 / 20 = 0.1 m', 'T = 2π / ω = 6.28 / 20 = 0.314 s'],
        'A = 0.1 m ,  T = 0.314 s', 'm')])
-
-q('A body of mass m attached to a horizontal spring oscillates with a periodic time of 0.6 s:',
-  [mcq('If another mass of 3m is fixed to the body, the new periodic time is' + DOTS,
-       ['0.3 s', '0.6 s', '2.4 s', '1.2 s'], 3,
-       ['T = 2π √(m / k) → T ∝ √m', 'the mass becomes 4m → T′ = √4 × 0.6 = 1.2 s']),
-   mcq('To make the periodic time 0.3 s with the same spring, the mass must be' + DOTS,
-       ['m / 2', 'm / 4', '2m', '4m'], 1,
-       ['T′ / T = 0.3 / 0.6 = 1/2 = √(m′ / m)', 'm′ / m = 1/4 → m′ = m / 4']),
-   ess('With the original mass, what is the periodic time if the spring is replaced by one 4 times stiffer?',
-       ['T ∝ 1 / √k → T′ = T / √4 = 0.6 / 2 = 0.3 s'], 'T′ = 0.3 s', 's')])
 
 q('Two identical bodies, each of mass m, oscillate horizontally on two springs: spring A of constant k and '
   'spring B of constant 4k, as shown:',
@@ -194,14 +175,6 @@ q('The spring of a mass&ndash;spring oscillator is replaced by one 4 times stiff
        ['T′ / T = √(m′ / m) × √(k / k′) = √2 × √(1/4)', 'T′ / T = √2 / 2 = 1 / √2']),
    ess('How does the frequency change?', ['f ∝ 1 / T → f′ = √2 f ≈ 1.41 f'], 'f′ = √2 f', 's')])
 
-q('A body of mass 0.2 kg is acted upon by a force F that depends on its displacement x:',
-  [mcq('The body moves in simple harmonic motion if the force is' + DOTS,
-       ['F = −5 x²', 'F = 5 x', 'F = −5 x', 'F = −5'], 2,
-       ['SHM needs a force proportional to x and opposite to it : F = −k x.']),
-   ess('For this force, find the angular frequency and the periodic time.',
-       ['k = 5 N/m', 'ω = √(k / m) = √(5 / 0.2) = √25 = 5 rad/s', 'T = 2π / ω = 6.28 / 5 = 1.256 s'],
-       'ω = 5 rad/s ,  T = 1.256 s', 'm')])
-
 q('The graph shows the displacement of a body in simple harmonic motion against time. P, Q, R, S and T are '
   'five points on the curve:',
   [mcq('The speed of the body is maximum at' + DOTS, ['P, R and T', 'Q and S', 'Q only', 'S only'], 0,
@@ -210,29 +183,6 @@ q('The graph shows the displacement of a body in simple harmonic motion against 
        ['a = −ω² x is largest and positive where x = −A : point S.']),
    ess('At which points is the restoring force zero?', ['F = −k x = 0 where x = 0 : P, R and T.'], 'P, R and T', 's')],
   G.graph_xt(86, A=5, T=0.4, cycles=1, points=True), 'right')
-
-q('A body oscillates in simple harmonic motion with an angular frequency of 10 rad/s:',
-  [mcq('When its displacement is −3 cm, its acceleration is' + DOTS, ['−3 m/s²', '+3 m/s²', '−0.3 m/s²', '+30 m/s²'], 1,
-       ['a = −ω² x = −(10)² × (−0.03)', 'a = +3 m/s² (towards the equilibrium position)']),
-   ess('If the mass of the body is 0.5 kg, find the restoring force when x = +3 cm.',
-       ['a = −ω² x = −100 × 0.03 = −3 m/s²', 'F = m a = 0.5 × (−3) = −1.5 N'], 'F = −1.5 N', 's')])
-
-q('A body of mass 2 kg attached to a horizontal spring of constant 200 N/m is pulled 10 cm from its '
-  'equilibrium position and released:',
-  [mcq('The restoring force at the moment of release is' + DOTS, ['2 N', '20 N', '200 N', '2000 N'], 1,
-       ['|F| = k x = 200 × 0.1 = 20 N (towards the equilibrium position)']),
-   ess('Find its acceleration at the moment of release.', ['a = F / m = 20 / 2 = 10 m/s²'], 'a = 10 m/s²', 's'),
-   ess('Find its speed as it passes the equilibrium position.',
-       ['ω = √(k / m) = √(200 / 2) = 10 rad/s', 'v<sub>max</sub> = ωA = 10 × 0.1 = 1 m/s'], 'v = 1 m/s', 's')],
-  G.spring_block(96, mark_labels=('&#8722;10 cm', '0', '+10 cm')))
-
-q('A body oscillates with a frequency of 2.5 Hz and an amplitude of 5 cm, starting from the equilibrium position:',
-  [mcq('The number of complete oscillations it makes in one minute is' + DOTS, ['25', '150', '2.5', '60'], 1,
-       ['N = f × t = 2.5 × 60 = 150 oscillations']),
-   ess('Find the distance it travels in 2 s, and its displacement at the end of these 2 s.',
-       ['in 2 s it makes 2.5 × 2 = 5 complete oscillations', 'each oscillation covers 4A = 20 cm',
-        'distance = 5 × 20 = 100 cm = 1 m', 'after whole oscillations it is back where it started : displacement = 0'],
-       'distance = 1 m ,  displacement = 0', 'm')])
 
 q('A body oscillates with an amplitude of 10 cm and an angular frequency of 10 rad/s:',
   [mcq('Its speed when its displacement is 6 cm equals' + DOTS, ['1 m/s', '0.6 m/s', '0.8 m/s', '0.36 m/s'], 2,
@@ -317,42 +267,11 @@ q('A body of mass 1 kg oscillates on a horizontal spring of constant 100 N/m wit
         'KE + PE = 2 J = ½ k A² = ½ × 100 × (0.2)² ✓'], 'KE = 1.28 J ,  PE = 0.72 J', 'm')],
   G.spring_block(96, mark_labels=('&#8722;20 cm', '0', '+20 cm')))
 
-q('The total energy of a mass&ndash;spring oscillator is 0.9 J. The mass is 0.2 kg and the amplitude is 15 cm:',
-  [ess('Find the maximum speed.', ['½ m v<sub>max</sub>² = E → v<sub>max</sub> = √(2 × 0.9 / 0.2) = 3 m/s'],
-       'v<sub>max</sub> = 3 m/s', 's'),
-   ess('Find the spring constant.', ['E = ½ k A² → k = 2E / A² = 1.8 / 0.0225 = 80 N/m'], 'k = 80 N/m', 's'),
-   mcq('The periodic time equals' + DOTS, ['0.314 s', '0.628 s', '0.05 s', '3.14 s'], 0,
-       ['T = 2π √(m / k) = 6.28 × √(0.2 / 80) = 6.28 × 0.05 = 0.314 s'])])
-
-q('Choose the correct answer:',
-  [mcq('If the mass of a mass&ndash;spring oscillator is made 4 times as large, its frequency becomes' + DOTS,
-       ['4f', '2f', 'f / 2', 'f / 4'], 2, ['f ∝ 1 / √m → f′ = f / √4 = f / 2']),
-   mcq('The SI unit of the spring constant is' + DOTS, ['N·m', 'N/m', 'N/s', 'N'], 1,
-       ['k = F / x → newton / metre = N/m']),
-   mcq('During one complete oscillation, the displacement of the body is' + DOTS, ['4A', '2A', 'A', 'zero'], 3,
-       ['After one complete oscillation the body returns to its starting point, so the displacement is zero',
-        '(the distance travelled is 4A).'])])
-
 q('The displacement of a body is x = 6 sin (π t), where x is in cm and t in seconds:',
   [mcq('The first moment at which x = 3 cm is' + DOTS, ['0.5 s', '1/6 s', '1/3 s', '1/12 s'], 1,
        ['3 = 6 sin (πt) → sin (πt) = 0.5 → πt = π/6', 't = 1/6 s ≈ 0.167 s']),
    ess('Find the speed of the body at that moment.',
        ['v = ω √(A² − x²) = π √(36 − 9) = 3.14 × 5.2', 'v ≈ 16.3 cm/s'], 'v ≈ 16.3 cm/s', 'm')])
-
-q('A body in simple harmonic motion passes its equilibrium position with a speed of 0.6 m/s. Its amplitude is 3 cm:',
-  [mcq('Its angular frequency equals' + DOTS, ['0.2 rad/s', '2 rad/s', '18 rad/s', '20 rad/s'], 3,
-       ['v<sub>max</sub> = ωA → ω = 0.6 / 0.03 = 20 rad/s']),
-   ess('Find its periodic time.', ['T = 2π / ω = 6.28 / 20 = 0.314 s'], 'T = 0.314 s', 's'),
-   ess('Find its acceleration when its displacement is 1.5 cm.', ['a = −ω² x = −400 × 0.015 = −6 m/s²'],
-       'a = −6 m/s²', 's')])
-
-q('A body of mass 0.4 kg is attached to a horizontal spring, pulled 5 cm from its equilibrium position and '
-  'released. It makes 20 complete oscillations in 8 s:',
-  [mcq('The periodic time equals' + DOTS, ['2.5 s', '0.4 s', '160 s', '0.8 s'], 1,
-       ['T = time / number of oscillations = 8 / 20 = 0.4 s']),
-   ess('Find the spring constant.', ['k = 4π² m / T² = 39.44 × 0.4 / 0.16', 'k ≈ 98.6 N/m'], 'k ≈ 98.6 N/m', 'm'),
-   ess('Find its maximum speed.', ['ω = 2π / T = 15.7 rad/s', 'v<sub>max</sub> = ωA = 15.7 × 0.05 ≈ 0.785 m/s'],
-       'v<sub>max</sub> ≈ 0.785 m/s', 's')])
 
 q('A body in simple harmonic motion has an acceleration of magnitude 8 m/s² when its displacement is 2 cm:',
   [mcq('Its angular frequency equals' + DOTS, ['400 rad/s', '4 rad/s', '2 rad/s', '20 rad/s'], 3,
@@ -372,3 +291,155 @@ q('Two bodies, each of mass 1 kg, oscillate on two springs of constants k<sub>1<
    ess('Find the ratio of their maximum speeds.',
        ['v<sub>max</sub> = ωA → v<sub>1</sub> / v<sub>2</sub> = 10 / 20 = 1/2',
         '(v<sub>1</sub> = 0.5 m/s ,  v<sub>2</sub> = 1 m/s)'], '1/2', 's')])
+
+# ------------------------------------------------------------------ challenge 31 - 40 : several steps each
+q('A body oscillates in simple harmonic motion with an amplitude of 10 cm and a periodic time of 2.4 s:',
+  [mcq('The shortest time the body takes to move directly from x = +5 cm to x = −5 cm is' + DOTS,
+       ['0.2 s', '0.8 s', '0.4 s', '1.2 s'], 2,
+       ['from x = 0 to x = A/2 : A/2 = A sin (ωt) → sin (ωt) = ½ → ωt = π/6',
+        't = (π/6) / (2π/T) = T / 12 = 2.4 / 12 = 0.2 s',
+        'from +A/2 to 0 takes 0.2 s and from 0 to −A/2 takes another 0.2 s',
+        't = 0.2 + 0.2 = 0.4 s']),
+   ess('Find the average speed of the body during this interval, and compare it with its maximum speed.',
+       ['average speed = distance / time = 0.1 / 0.4 = 0.25 m/s',
+        'v<sub>max</sub> = ωA = (2π / T) A = (6.28 / 2.4) × 0.1 ≈ 0.262 m/s',
+        'the average is less than v<sub>max</sub> because the speed is maximum only at x = 0'],
+       'average = 0.25 m/s ,  v<sub>max</sub> ≈ 0.262 m/s', 'm'),
+   ess('During one complete oscillation, for how long is the body more than 5 cm away from the equilibrium '
+       'position?',
+       ['in one oscillation the body crosses the region −A/2 < x < +A/2 twice,',
+        'and each crossing takes 2 × T/12 = T/6', 'time inside the region = 2 × T/6 = T/3 = 0.8 s',
+        'time outside = T − T/3 = 2.4 − 0.8 = 1.6 s'], 't = 1.6 s', 'm')])
+
+q('When the displacement of a body in simple harmonic motion is 3 cm, the magnitude of its acceleration is '
+  '12 m/s² and its speed is 0.8 m/s:',
+  [mcq('The angular frequency of the motion is' + DOTS, ['400 rad/s', '20 rad/s', '4 rad/s', '26.7 rad/s'], 1,
+       ['|a| = ω² x → ω² = 12 / 0.03 = 400', 'ω = 20 rad/s']),
+   ess('Find the amplitude and the maximum speed.',
+       ['v = ω √(A² − x²) → 0.8 = 20 √(A² − 0.0009)', '√(A² − 0.0009) = 0.04 → A² = 0.0016 + 0.0009 = 0.0025',
+        'A = 0.05 m = 5 cm', 'v<sub>max</sub> = ωA = 20 × 0.05 = 1 m/s'],
+       'A = 5 cm ,  v<sub>max</sub> = 1 m/s', 'm'),
+   ess('The body is moving away from the equilibrium position. How long does it take to reach the extreme '
+       'position?',
+       ['T = 2π / ω = 6.28 / 20 = 0.314 s', 'x = A sin θ → sin θ = 3 / 5 = 0.6 → θ = 36.87°',
+        'the extreme position is at θ = 90° : the remaining angle is 90° − 36.87° = 53.13°',
+        't = (53.13 / 360) × 0.314 ≈ 0.046 s'], 't ≈ 0.046 s', 'm')])
+
+q('A light spring hangs vertically. When a body of mass 0.4 kg is hung from it, the spring stretches 10 cm and the '
+  'body rests at its equilibrium position. The body is then pulled 4 cm further down and released '
+  '(g = 10 m/s²):',
+  [mcq('The spring constant equals' + DOTS, ['4 N/m', '400 N/m', '0.04 N/m', '40 N/m'], 3,
+       ['at equilibrium the spring force balances the weight : k e = m g', 'k = m g / e = (0.4 × 10) / 0.1 = 40 N/m']),
+   mcq('The periodic time of the oscillation equals' + DOTS, ['0.628 s', '0.2 s', '6.28 s', '0.0628 s'], 0,
+       ['T = 2π √(m / k) = 6.28 × √(0.4 / 40) = 6.28 × 0.1 = 0.628 s',
+        '(the same as 2π √(e / g) = 6.28 × √(0.1 / 10))']),
+   ess('Find the greatest and the smallest tension in the spring during the motion.',
+       ['the amplitude is 4 cm about the equilibrium position (extension 10 cm)',
+        'lowest point : extension = 10 + 4 = 14 cm → T<sub>max</sub> = 40 × 0.14 = 5.6 N',
+        'highest point : extension = 10 − 4 = 6 cm → T<sub>min</sub> = 40 × 0.06 = 2.4 N'],
+       'T<sub>max</sub> = 5.6 N ,  T<sub>min</sub> = 2.4 N', 'm'),
+   ess('What is the largest amplitude for which the spring is never compressed during the motion?',
+       ['at the highest point the extension is 10 cm − A', 'the spring is never compressed if 10 − A ≥ 0',
+        'A ≤ 10 cm (the static extension)'], 'A<sub>max</sub> = 10 cm', 's')],
+  G.vertical_spring(112))
+
+q('The graph shows the displacement of a body of mass 0.5 kg attached to a horizontal spring against time:',
+  [mcq('The spring constant equals' + DOTS, ['157 N/m', '98.6 N/m', '493 N/m', '4930 N/m'], 2,
+       ['from the graph : A = 2 cm , T = 0.2 s', 'ω = 2π / T = 6.28 / 0.2 = 31.4 rad/s',
+        'k = m ω² = 0.5 × (31.4)² = 0.5 × 986 ≈ 493 N/m']),
+   ess('Find the speed of the body when its displacement is 1 cm.',
+       ['v = ω √(A² − x²) = 31.4 × √(0.02² − 0.01²)', 'v = 31.4 × √0.0003 = 31.4 × 0.0173 ≈ 0.544 m/s'],
+       'v ≈ 0.544 m/s', 'm'),
+   ess('Find the first moment after t = 0 at which the kinetic energy equals the potential energy.',
+       ['KE = PE = E/2 → ½ k x² = ¼ k A² → x = A / √2',
+        'the body starts at x = A : x = A cos (ωt) → cos (ωt) = 1 / √2 → ωt = π/4',
+        't = (π/4) / (2π/T) = T / 8 = 0.2 / 8 = 0.025 s'], 't = 0.025 s', 'm')],
+  G.graph_xt(84, A=2, T=0.2, cycles=1.5, fn=math.cos), 'right')
+
+q('A body hung from a spring oscillates vertically with a periodic time of 0.8 s. The spring is then cut into two '
+  'equal halves, as shown:',
+  [mcq('The spring constant of each half is' + DOTS, ['k / 2', '2k', 'k', '4k'], 1,
+       ['the same force F stretches the whole spring x and each half only x/2',
+        'k<sub>half</sub> = F / (x/2) = 2 F / x = 2k']),
+   mcq('If the body is hung from one half only, its periodic time becomes' + DOTS,
+       ['0.566 s', '0.4 s', '1.13 s', '0.8 s'], 0,
+       ['T ∝ 1 / √k → T′ = T / √2 = 0.8 / 1.414 ≈ 0.566 s']),
+   ess('The body is hung from the two halves side by side, as in figure (2). Find its periodic time.',
+       ['both halves stretch the same distance x', 'total force = 2k x + 2k x = 4k x → the pair acts as one spring 4k',
+        'T″ = T / √4 = 0.8 / 2 = 0.4 s'], 'T″ = 0.4 s', 'm')],
+  G.cut_spring(96))
+
+q('A block of mass 0.5 kg on a smooth horizontal surface oscillates on a spring of constant 50 N/m with an amplitude '
+  'of 8 cm. At the moment the block reaches an extreme position, a second block of mass 0.5 kg is placed gently '
+  'on it and moves with it:',
+  [mcq('The amplitude of the new motion is' + DOTS, ['4 cm', '5.66 cm', '11.3 cm', '8 cm'], 3,
+       ['at the extreme position the speed is zero, and adding the block there gives it no speed',
+        'so the body is still at rest at 8 cm from equilibrium : A = 8 cm']),
+   ess('Find the periodic time before and after adding the block.',
+       ['before : T<sub>1</sub> = 2π √(0.5 / 50) = 6.28 × 0.1 = 0.628 s',
+        'after : T<sub>2</sub> = 2π √(1 / 50) = 6.28 × 0.141 ≈ 0.888 s'],
+       'T<sub>1</sub> = 0.628 s ,  T<sub>2</sub> ≈ 0.888 s', 'm'),
+   ess('Find the maximum speed before and after, and show that the total energy has not changed.',
+       ['ω<sub>1</sub> = √(50 / 0.5) = 10 rad/s → v<sub>1</sub> = 10 × 0.08 = 0.8 m/s',
+        'ω<sub>2</sub> = √(50 / 1) ≈ 7.07 rad/s → v<sub>2</sub> = 7.07 × 0.08 ≈ 0.566 m/s',
+        'E = ½ k A² = ½ × 50 × (0.08)² = 0.16 J in both cases (k and A did not change)',
+        'check : ½ × 1 × (0.566)² ≈ 0.16 J'],
+       'v<sub>1</sub> = 0.8 m/s ,  v<sub>2</sub> ≈ 0.566 m/s ,  E = 0.16 J', 'm')])
+
+q('The displacement of a body in simple harmonic motion is x = 0.04 sin (10π t), where x is in metres and t in '
+  'seconds:',
+  [mcq('The first moment at which the speed of the body is half its maximum speed is' + DOTS,
+       ['1/60 s', '1/15 s', '1/20 s', '1/30 s'], 3,
+       ['v = v<sub>max</sub> / 2 → ω √(A² − x²) = ωA / 2 → x = (√3 / 2) A',
+        'sin (10π t) = √3 / 2 → 10π t = π/3', 't = 1/30 s']),
+   ess('Find the second moment at which this happens, and the acceleration of the body at these two moments.',
+       ['sin (10π t) = √3 / 2 again when 10π t = 2π/3 → t = 1/15 s',
+        'at both moments x = (√3 / 2) × 0.04 ≈ 0.0346 m',
+        'a = −ω² x = −(10 × 3.14)² × 0.0346 = −986 × 0.0346 ≈ −34.2 m/s²'],
+       't = 1/15 s ,  a ≈ −34.2 m/s²', 'm'),
+   ess('Find the distance travelled by the body from t = 0 to t = 0.25 s.',
+       ['ω = 10π → T = 2π / ω = 0.2 s', '0.25 s = T + T/4',
+        'one oscillation covers 4A and a quarter oscillation (from x = 0 to x = A) covers A',
+        'distance = 4A + A = 5A = 5 × 4 = 20 cm'], 'distance = 20 cm', 'm')])
+
+q('A body of mass 0.5 kg moves in simple harmonic motion. Its kinetic energy is 0.27 J when its displacement is '
+  '3 cm, and 0.11 J when its displacement is 5 cm:',
+  [mcq('The spring constant equals' + DOTS, ['100 N/m', '200 N/m', '400 N/m', '80 N/m'], 1,
+       ['the total energy is constant : KE<sub>1</sub> + ½ k x<sub>1</sub>² = KE<sub>2</sub> + ½ k x<sub>2</sub>²',
+        '0.27 − 0.11 = ½ k (0.05² − 0.03²) = ½ k × 0.0016', '0.16 = 0.0008 k → k = 200 N/m']),
+   ess('Find the total energy and the amplitude.',
+       ['E = KE<sub>1</sub> + ½ k x<sub>1</sub>² = 0.27 + ½ × 200 × 0.0009 = 0.27 + 0.09 = 0.36 J',
+        'E = ½ k A² → A² = 2 × 0.36 / 200 = 0.0036 → A = 0.06 m'], 'E = 0.36 J ,  A = 6 cm', 'm'),
+   ess('Find the maximum speed and the periodic time.',
+       ['½ m v<sub>max</sub>² = E → v<sub>max</sub> = √(2 × 0.36 / 0.5) = √1.44 = 1.2 m/s',
+        'ω = √(k / m) = √(200 / 0.5) = 20 rad/s → T = 6.28 / 20 = 0.314 s',
+        'check : ωA = 20 × 0.06 = 1.2 m/s'], 'v<sub>max</sub> = 1.2 m/s ,  T = 0.314 s', 'm')])
+
+q('Two mass&ndash;spring oscillators A and B have the same total energy. The mass of A is twice the mass of B, and '
+  'the spring constant of A is 4 times that of B:',
+  [mcq('The ratio of their amplitudes A<sub>A</sub> / A<sub>B</sub> equals' + DOTS, ['2', '1/2', '1/4', '1/√2'], 1,
+       ['E = ½ k A² is the same → k<sub>A</sub> A<sub>A</sub>² = k<sub>B</sub> A<sub>B</sub>²',
+        'A<sub>A</sub> / A<sub>B</sub> = √(k<sub>B</sub> / k<sub>A</sub>) = √(1/4) = 1/2']),
+   mcq('The ratio of their maximum speeds v<sub>A</sub> / v<sub>B</sub> equals' + DOTS,
+       ['√2', '1/2', '2', '1/√2'], 3,
+       ['E = ½ m v<sub>max</sub>² is the same → v<sub>A</sub> / v<sub>B</sub> = √(m<sub>B</sub> / m<sub>A</sub>)',
+        'v<sub>A</sub> / v<sub>B</sub> = √(1/2) = 1/√2']),
+   ess('Find the ratio of their periodic times and the ratio of their maximum accelerations.',
+       ['T = 2π √(m / k) → T<sub>A</sub> / T<sub>B</sub> = √((m<sub>A</sub> / m<sub>B</sub>) × (k<sub>B</sub> / k<sub>A</sub>)) '
+        '= √(2 × 1/4) = 1/√2',
+        'a<sub>max</sub> = ω² A = (k / m) A',
+        'a<sub>A</sub> / a<sub>B</sub> = (k<sub>A</sub> / k<sub>B</sub>) × (m<sub>B</sub> / m<sub>A</sub>) × '
+        '(A<sub>A</sub> / A<sub>B</sub>) = 4 × ½ × ½ = 1'],
+       'T<sub>A</sub> / T<sub>B</sub> = 1/√2 ,  a<sub>A</sub> / a<sub>B</sub> = 1', 'm')])
+
+q('A body of mass 0.3 kg on a spring starts its simple harmonic motion from the equilibrium position '
+  '(x = A sin ωt). It is 2 cm away from the equilibrium position for the first time at t = 0.05 s, and it reaches '
+  'an extreme position for the first time at t = 0.15 s:',
+  [mcq('The periodic time of the motion is' + DOTS, ['0.15 s', '0.3 s', '0.6 s', '1.2 s'], 2,
+       ['from the equilibrium position to an extreme position takes a quarter of a cycle',
+        'T / 4 = 0.15 s → T = 0.6 s']),
+   mcq('The amplitude of the motion is' + DOTS, ['4 cm', '2 cm', '2.83 cm', '8 cm'], 0,
+       ['ω t = (2π / 0.6) × 0.05 = π/6', 'x = A sin (π/6) → 2 = A × 0.5 → A = 4 cm']),
+   ess('Find the spring constant and the total energy of the oscillator.',
+       ['ω = 2π / T = 6.28 / 0.6 ≈ 10.47 rad/s', 'k = m ω² = 0.3 × (10.47)² = 0.3 × 109.6 ≈ 32.9 N/m',
+        'E = ½ k A² = ½ × 32.9 × (0.04)² ≈ 0.0263 J'], 'k ≈ 32.9 N/m ,  E ≈ 0.0263 J', 'm')])
