@@ -53,7 +53,7 @@ def three_forces(cap, f1='F₁ = 10 N', f2='F₂ = 6 N', f3='F₃ = ?', maxw=300
     return f.render()
 
 
-def two_springs(cap, anglab='40°', maxw=340, w=400, h=310):
+def two_springs(cap, anglab='40°', maxw=340, w=400, h=310, mlab='1.5 kg'):
     f = Fig(w, h, cap, maxw)
     f.line(40, 38, w - 40, 38, DK, 3)
     for x in range(48, int(w) - 34, 18):
@@ -83,7 +83,7 @@ def two_springs(cap, anglab='40°', maxw=340, w=400, h=310):
     _a = (-math.degrees(math.atan2(my - 38, mx - 110))) % 360
     f.angle(110, 38, 44, 270, _a, anglab, OR, 64, 12)
     f.rect(mx - 34, my, 68, 40, '#94A3B8', '#334155', 2.4, 4)
-    f.txt(mx, my + 26, '1.5 kg', '#0F172A', 12)
+    f.txt(mx, my + 26, mlab, '#0F172A', 12)
     f.parrow(mx, my + 44, -90, 48, RED, 3)
     f.txt(mx + 12, my + 102, 'W = mg', RED, 12, 'start')
     return f.render()
